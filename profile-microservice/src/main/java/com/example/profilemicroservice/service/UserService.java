@@ -19,4 +19,5 @@ public interface UserService {
     void activateUser(Long id);
     //void activateComment(Long id);
     public User getLoogedIn();
+    public User getLoggedUser();
 }

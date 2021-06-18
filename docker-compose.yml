@@ -55,6 +55,16 @@ services:
       - mysql
 
 
+  frontend-isa:
+    build: ./frontend-isa
+    container_name: frontend-isa
+    restart: on-failure
+    networks:
+      - demo
+    ports:
+      - "8081:8080"
+
+
   zuul:
     image: zuul
     container_name: zuul

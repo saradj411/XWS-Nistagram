@@ -64,6 +64,9 @@ public class UserServiceImpl implements UserService {
 		return u;
 	}
 
+	
+	
+	
 	public User getLoogedIn() throws AccessDeniedException {
 //		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //		String username;
@@ -76,29 +79,26 @@ public class UserServiceImpl implements UserService {
 //
 //		return  findByUsername(username);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
 		Object currentUser = auth.getPrincipal();
-
+		
 		String username = "";
 		if(currentUser instanceof UserDetails){
 			username = ((UserDetails)currentUser).getUsername();
 		}else{
 			username = currentUser.toString();
 		}
-		System.out.println(username);
+		System.out.println("usernameeeee:"+username);
+		System.out.println("nameee:"+auth.getName());
+		System.out.println("autorititii:"+auth.getAuthorities());
 		User u = userRepository.findByUsername(username);
 		return u;
 	}
-/*
-	@Override
-	public List<KomentarDTO> loadAllComments() {
-		List<Komentar> result = komentarRepository.findAll();
-		List<KomentarDTO> komentarDTOS = new ArrayList<>();
-		for(Komentar k: result){
-			komentarDTOS.add(modelMapper.map(k, KomentarDTO.class));
-		}
-		return komentarDTOS;
-	}
-*/
+	
+	
+	
+	
+	
 	public User findById(Long id) throws AccessDeniedException {
 		User u = userRepository.findById(id).orElseGet(null);
 		return u;
@@ -209,5 +209,11 @@ public class UserServiceImpl implements UserService {
 		}
 		userRepository.save(user);
 	}
-
+	@Override
+    public User getLoggedUser() {
+        Authentication loggedUser = SecurityContextHolder.getContext().getAuthentication();
+        String email = loggedUser.getName();
+        User u = userRepository.findByUsername(email);
+        return  u;
+    }
 }

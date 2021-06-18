@@ -22,6 +22,7 @@ import com.example.profilemicroservice.exception.ApiRequestException;
 import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.repository.UserRepository;
 import com.example.profilemicroservice.security.TokenUtils;
+import com.example.profilemicroservice.service.UserService;
 
 // Ovaj servis je namerno izdvojen kao poseban u ovom primeru.
 // U opstem slucaju UserServiceImpl klasa bi mogla da implementira UserDetailService interfejs.
@@ -41,6 +42,9 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private TokenUtils tokenUtils;
+	
+	@Autowired
+	private UserService userService;
 
 	// Funkcija koja na osnovu username-a iz baze vraca objekat User-a
 	@Override
@@ -59,7 +63,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		// Ocitavamo trenutno ulogovanog korisnika
 		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
 		String username = currentUser.getName();
-
+		System.out.println(username);
 		if (authenticationManager != null) {
 			LOGGER.debug("Re-authenticating user '" + username + "' for password change request.");
 
@@ -99,6 +103,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		// Insert username and password into context
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 
+		//
 		// Create token
 		User user = (User) authentication.getPrincipal();
 		String jwt = tokenUtils.generateToken(user.getUsername());
@@ -107,6 +112,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		UserDTO userDto = new UserDTO(user);
 		userDto.setToken(new UserTokenDTO(jwt, expiresIn));
 
+		//User u=userService.getLoogedIn();
+		
 		return userDto;
 	}
 }

@@ -2,14 +2,21 @@ package com.example.profilemicroservice.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.dto.UserRegistrationDTO;
+import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.service.UserService;
+
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -26,5 +33,22 @@ public class UserController {
         userService.addUser(user);
         return ResponseEntity.ok().build();
     }
+    
+    @GetMapping(value = "/findAll")
+   // @PreAuthorize("hasRole('KORISNIK')")
+    public ResponseEntity<List<UserDTO>> findAll() {
+        List<UserDTO> user=userService.findAll();
+        return user == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(user);
+    }
+    @GetMapping(value = "/loggedUser")
+    public ResponseEntity<User> getLoggedUser()
+    {
+        System.out.println("Nasao logovanog usera?");
 
+        User u = userService.getLoogedIn();
+        return  u == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
+                new ResponseEntity<>(u, HttpStatus.OK);
+    }
 }
