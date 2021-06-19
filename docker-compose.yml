@@ -23,7 +23,7 @@ services:
     networks:
       - demo
     ports:
-      - "8084:8084"
+      - "8086:8086"
     environment:
       DATABASE_USERNAME: root
       DATABASE_PASSWORD: root

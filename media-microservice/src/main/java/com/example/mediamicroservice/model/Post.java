@@ -1,44 +1,63 @@
 package com.example.mediamicroservice.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.*;
 
 @Entity
 public class Post {
+
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Long idPost;
 
     @Column
-    private String name;
+    private String description;
 
-	public Post() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    @Column
+    private LocalDate date;
+    
+    @Column
+    private String location;
 
-	public Post(Long id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Column
+    private Integer postLimit;
+    
+    @Column 
+    private Integer numberOfInappropriateVote;
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "profile_tags",
+            joinColumns = @JoinColumn(name = "idPost", referencedColumnName = "idPost"),
+            inverseJoinColumns = @JoinColumn(name = "profileId", referencedColumnName = "id"))
+    private Set<Profile> tags=new HashSet<Profile>();
+    
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "profile_shared",
+            joinColumns = @JoinColumn(name = "idPost", referencedColumnName = "idPost"),
+            inverseJoinColumns = @JoinColumn(name = "profileId", referencedColumnName = "id"))
+    private Set<Profile> shared=new HashSet<Profile>();
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "profile_like",
+            joinColumns = @JoinColumn(name = "idPost", referencedColumnName = "idPost"),
+            inverseJoinColumns = @JoinColumn(name = "profileId", referencedColumnName = "id"))
+    private Set<Profile> like=new HashSet<Profile>();
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "profile_dislike",
+            joinColumns = @JoinColumn(name = "idPost", referencedColumnName = "idPost"),
+            inverseJoinColumns = @JoinColumn(name = "profileId", referencedColumnName = "id"))
+    private Set<Profile> dislike=new HashSet<Profile>();
+    
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile", referencedColumnName = "id")
+    //@JsonBackReference
+    private Profile profile;
+    
+  
+    
 }

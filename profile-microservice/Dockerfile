@@ -7,5 +7,5 @@ RUN ["mvn", "package", "-DskipTests"]
 FROM openjdk:8-jdk-alpine
 WORKDIR /profile-microservice
 COPY --from=profile-dock /usr/src/profile-microservice/target/profile-microservice-0.0.1-SNAPSHOT.jar ./
-EXPOSE 8084
+EXPOSE 8086
 CMD ["java", "-jar", "profile-microservice-0.0.1-SNAPSHOT.jar"]

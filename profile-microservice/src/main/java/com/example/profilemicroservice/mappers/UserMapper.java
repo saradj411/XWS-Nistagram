@@ -2,7 +2,7 @@ package com.example.profilemicroservice.mappers;
 
 import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.dto.UserRegistrationDTO;
-import com.example.profilemicroservice.model.Korisnik;
+//import com.example.profilemicroservice.model.Korisnik;
 import com.example.profilemicroservice.model.User;
 
 public class UserMapper {
@@ -15,7 +15,7 @@ public class UserMapper {
 
         return user;
     }
-
+/*
     public static Korisnik toKorisnikEntity(UserRegistrationDTO userInfo) {
         Korisnik user = new Korisnik();
         user.setUsername(userInfo.getUsername());
@@ -24,7 +24,7 @@ public class UserMapper {
 
         return user;
     }
-
+*/
     public static UserDTO toDto(User user) {
         return new UserDTO(user);
     }
