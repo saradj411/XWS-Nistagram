@@ -92,6 +92,7 @@ export default {
                         if(response.data.role === "USER")
                         {
                           console.log("USER");
+                          window.location.href = "/profile";
                         }
                                
                     }).catch(res => { 
