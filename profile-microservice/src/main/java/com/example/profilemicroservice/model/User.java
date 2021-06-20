@@ -74,8 +74,20 @@ public class User implements UserDetails{
 
 	    @Column(name = "password", nullable = false)
 	    private String password;
+	    
+	    @Column(name = "oldUsername")
+	    private String oldUsername;
+	    
 
-	    @Column
+	    public String getOldUsername() {
+			return oldUsername;
+		}
+
+		public void setOldUsername(String oldUsername) {
+			this.oldUsername = oldUsername;
+		}
+
+		@Column
 	    private boolean isAdmin;
 
 	    @Column(name = "enabled", nullable = false)

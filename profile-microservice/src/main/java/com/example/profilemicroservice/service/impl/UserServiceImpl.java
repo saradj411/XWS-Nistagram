@@ -63,8 +63,25 @@ public class UserServiceImpl implements UserService {
 		User u = userRepository.findByUsername(username);
 		return u;
 	}
-
 	
+	@Override
+    public void update(User user) {
+        User pat = userRepository.getOne(user.getId());
+        Long ids=pat.getId();
+        pat.setName(user.getName());
+        pat.setSurname(user.getSurname());
+        pat.setAddress(user.getAddress());
+        pat.setCity(user.getCity());
+        pat.setCountry(user.getCountry());
+        pat.setPhone(user.getPhone());
+        pat.setPassword(user.getPassword());
+        pat.setEmail(user.getEmail());
+        pat.setOldUsername(user.getOldUsername());
+        pat.setAdmin(false);
+        pat.setUsername(user.getUsername());
+        
+        userRepository.save(pat);
+    }
 	
 	
 	public User getLoogedIn() throws AccessDeniedException {
