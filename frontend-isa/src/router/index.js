@@ -4,8 +4,7 @@ import Welcome from '../components/Welcome.vue'
 import Login from '../components/Login.vue'
 import Registration from '../components/Registration.vue'
 import UpdateAccount from '../components/UpdateAccount.vue'
-
-
+import UserProfile from '../components/UserProfile.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
 
@@ -48,7 +47,13 @@ const routes = [
         path: '/UpdateAccount',
         name: 'UpdateAccount',
         component: UpdateAccount
+      },
+      {
+          path: '/profile',
+        name: 'UserProfile',
+        component: UserProfile
       }
+
 
       
       

@@ -1,6 +1,9 @@
 package com.example.profilemicroservice.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,8 +16,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.profilemicroservice.common.TimeProvider;
 import com.example.profilemicroservice.config.consts.UserRoles;
+import com.example.profilemicroservice.dto.LoginDTO;
 import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.dto.UserRegistrationDTO;
+import com.example.profilemicroservice.enums.Role;
 import com.example.profilemicroservice.exception.ApiRequestException;
 import com.example.profilemicroservice.exception.ResourceNotFoundException;
 import com.example.profilemicroservice.mappers.UserMapper;
@@ -27,9 +32,6 @@ import com.example.profilemicroservice.repository.ConfirmationTokenRepository;
 import com.example.profilemicroservice.repository.UserRepository;
 import com.example.profilemicroservice.service.AuthorityService;
 import com.example.profilemicroservice.service.UserService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -83,6 +85,29 @@ public class UserServiceImpl implements UserService {
         userRepository.save(pat);
     }
 	
+
+	@Override
+	public User LogIn(LoginDTO loginDTO) {
+		User loggedUser = FindUser(loginDTO.getUsername(), loginDTO.getPassword());
+		if(loggedUser == null)
+			return null;
+		else
+			return loggedUser;
+	}
+	
+	public User FindUser(String username, String password)
+	{
+		System.out.println("Find user");
+		for(User u : userRepository.findAll())
+		{
+			if(u.getUsername().equals(username) && u.getPassword().equalsIgnoreCase(password))
+			{
+				System.out.println("Nasao korisnika za logovanje!");
+				return u;
+			}
+		}
+		return null;
+	}
 	
 	public User getLoogedIn() throws AccessDeniedException {
 //		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -187,7 +212,7 @@ public class UserServiceImpl implements UserService {
 	private User createNewUserObject(UserRegistrationDTO userInfo) {
 		//Korisnik user = UserMapper.toKorisnikEntity(userInfo);
 		User user = UserMapper.toUserEntity(userInfo);
-		user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+		user.setPassword(userInfo.getPassword());
 		user.setLastPasswordResetDate(timeProvider.nowTimestamp());
 		user.getUserAuthorities().add(authorityRepository.findByName(UserRoles.ROLE_KORISNIK));
 		user.setName(userInfo.getName());
@@ -197,6 +222,7 @@ public class UserServiceImpl implements UserService {
 		user.setCity(userInfo.getCity());
 		user.setPhone(userInfo.getPhone());
 		user.setCountry(userInfo.getCountry());
+		user.setRole(Role.USER);
 
 		//aktivacija naloga
 		user.setEnabled(true);
@@ -233,4 +259,9 @@ public class UserServiceImpl implements UserService {
         User u = userRepository.findByUsername(email);
         return  u;
     }
+
+
+
+
+	
 }

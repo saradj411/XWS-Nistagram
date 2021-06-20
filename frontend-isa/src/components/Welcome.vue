@@ -1,23 +1,45 @@
 <template>
+    <div class="home">
 
+      <img src="../assets/nistagram.png" width="300" height="250" style="position: relative; margin: 0 auto; margin-top: 60px;"> 
+      <table style=" margin-top: 20px; width: 50%;" >
+        <tr>
+          <td style="color: black;"> Username: </td>
+        </tr>
+        <tr>
+          <td><input type="text " 
+            placeholder="Enter username.." class="form-control form-rounded"  style=" margin-top: 20px; " v-model="username"> </td>
+        </tr>
+        <tr>
+          <td ><label style="margin-top: 10px;  color: black;"  >Password:</label>  </td>
+        </tr>
+        <tr>          
+          <td><input type="password"  style="margin-top: 10px;  " placeholder="Enter password.." class="form-control form-rounded" v-model="password" > </td>
+        </tr>
+        <tr>
+          <td>
+            <button class="btn btn-dark" id="btnSignIn" style=" margin-top: 20px; width: 80%;" :disabled="!username || !password" 
+            v-on:click = "signIn"> Sign in</button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label style="color: black; margin-top: 20px; font-size: 15px;"  >You dont have account? </label>
+          </td>
+          </tr>
+          <tr>
+          <td>
+            <button class="btn btn-dark" id="btnRegister" style=" margin-top: 0px; width: 80%;" v-on:click = "registrationForm"> Registration </button>
+          </td>
+        </tr>
 
-  <div  id="registration" style="background-image: url(https://image.freepik.com/free-photo/pharmacists-showing-medicine-bottle-discussing-prescription-drug-pharmacy_8087-2630.jpg);background-repeat: no-repeat;
-  background-size: 150% 111%;  height: 1100px">
-
-   <div style="background: #B0B3D6; height: 70px; margin-top: 10px">
-
-      <span  style="float:right;margin:15px">
-           <button class="btn btn-info btn-xs" v-on:click = "loginForm">Login</button>
-           <button class="btn btn-info btn-xs" style="margin:10px;" v-on:click = "registrationForm">Register</button>
-                      <button class="btn btn-info btn-xs" v-on:click = "update">Update my account</button>
-
-      </span>
-
-    </div>
         
-    
-            
-        </div>
+      
+      </table>
+      
+      <br>
+     
+  </div>
 
 </template>
 
@@ -27,6 +49,8 @@
 export default {
   data() {
     return {
+      username:"",
+      password:"",
        pharmacies : [],
        pharmacies1 : [],
        drugs:[],
@@ -56,8 +80,38 @@ export default {
       },
       update : function(){
         window.location.href = "/UpdateAccount";
-      }
+      },
     
+      signIn: function(){
+        const loginInfo = 
+                {
+                    username: this.username,
+                    password: this.password
+                }
+                this.axios.post('/profile/api/users/login', loginInfo, {
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                        
+                        console.log(response.data);
+                        if(response.data.role === "USER")
+                        {
+                          console.log("USER");
+                          window.location.href = "/profile";
+                        }
+                               
+                    }).catch(res => { 
+                        if(res.response.status === 400)
+                           alert("Wrong password or email.");
+                        
+                        console.log(res.response);
+                        this.errorMessage = res.response.data.message;
+                       
+                    });    
+              
+                }
     
 },
 mounted() {
@@ -71,4 +125,40 @@ mounted() {
 </script>
 
 <style>
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+.input--error
+    {
+    border-color:red;
+    }
+.home
+{
+  margin: 0 auto;
+  
+  width: 100%;
+
+}
+
+table
+{
+
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+
+
+.btn:hover
+{
+  background-color: gray;
+}
+
+.form-rounded {
+  border-radius: 30px 30px 30px 30px;
+}
+
 </style>

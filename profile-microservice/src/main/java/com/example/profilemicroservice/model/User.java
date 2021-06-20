@@ -2,6 +2,12 @@ package com.example.profilemicroservice.model;
 
 
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -19,15 +25,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.profilemicroservice.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -95,6 +96,9 @@ public class User implements UserDetails{
 
 	    @Column(name = "last_password_reset_date")
 	    private Timestamp lastPasswordResetDate;
+	    
+	    @Column(name ="role")
+	    private Role role;
 
 	   
 	    @JsonIgnore
@@ -109,6 +113,7 @@ public class User implements UserDetails{
 
 	    public User(String name, String surname, String address, String city, String country, String email,
 	                String phone, String password, List<Authority> authorities, String username) {
+	    	this.role = Role.USER;
 	        this.name = name;
 	        this.surname = surname;
 	        this.address = address;
@@ -120,6 +125,21 @@ public class User implements UserDetails{
 	        this.authorities = authorities;
 	        this.username = username;
 	    }
+	    
+	    public User(Role role, String name, String surname, String address, String city, String country, String email,
+                String phone, String password, String username) {
+	    	this.role = role;
+	        this.name = name;
+	        this.surname = surname;
+	        this.address = address;
+	        this.city = city;
+	        this.country = country;
+	        this.email = email;
+	        this.phone = phone;
+	        this.password = password;
+	        this.username = username;
+    }
+	    
 
 	    public Long getId() {
 	        return id;
@@ -255,11 +275,29 @@ public class User implements UserDetails{
 	        this.phone = phone;
 	    }
 
-	    public boolean isAdmin() {
+	    public Role getRole() {
+			return role;
+		}
+
+		public void setRole(Role role) {
+			this.role = role;
+		}
+
+		public boolean isAdmin() {
 	        return isAdmin;
 	    }
 
 	    public void setAdmin(boolean admin) {
 	        isAdmin = admin;
 	    }
+
+		@Override
+		public String toString() {
+			return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", username=" + username
+					+ ", address=" + address + ", city=" + city + ", country=" + country + ", email=" + email
+					+ ", phone=" + phone + ", password=" + password + ", isAdmin=" + isAdmin + ", enabled=" + enabled
+					+ ", lastPasswordResetDate=" + lastPasswordResetDate + ", role=" + role + ", authorities="
+					+ authorities + "]";
+		}
+	    
 }
