@@ -9,7 +9,6 @@ import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.model.UserRequest;
 
 public interface UserService {
-    User findById(Long id);
     User findByUsername(String username);
     List<UserDTO> findAll();
     List<UserDTO> findAllKorisnike();
@@ -20,4 +19,7 @@ public interface UserService {
     //void activateComment(Long id);
     public User getLoogedIn();
     public User getLoggedUser();
+    void update(User user);
+	User findById(Long id);
+
 }
