@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.profilemicroservice.connections.MediaConnection;
 import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.dto.UserRegistrationDTO;
 import com.example.profilemicroservice.model.User;
@@ -29,11 +30,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MediaConnection mediaConnection;
+    
     @PostMapping("/public/register")
     public ResponseEntity add(@Valid @RequestBody UserRegistrationDTO user) {
         userService.addUser(user);
+        mediaConnection.add(user.getUsername());
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/updateUser")
     ResponseEntity<String> update(@RequestBody User user)
     {
@@ -49,9 +55,14 @@ public class UserController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 ResponseEntity.ok(d);
     }
+    
+    
     @GetMapping(value = "/findAll")
    // @PreAuthorize("hasRole('KORISNIK')")
     public ResponseEntity<List<UserDTO>> findAll() {
+    	
+    	User u=userService.getLoogedIn();
+    	
         List<UserDTO> user=userService.findAll();
         return user == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
