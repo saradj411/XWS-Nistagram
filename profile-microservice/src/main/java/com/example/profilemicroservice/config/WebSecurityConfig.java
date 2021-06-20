@@ -103,8 +103,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 				.authorizeRequests()
 				.antMatchers(HttpMethod.OPTIONS).permitAll()
-				.antMatchers("/h2-console/**", "/**")
-				.permitAll()
+				.antMatchers("/h2-console/**", "/**").permitAll()
+				.antMatchers("/api/users/login").permitAll()
+				.antMatchers("/api/users/*").permitAll()
 				.anyRequest().authenticated();
 
 		http.addFilterAfter(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);

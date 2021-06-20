@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import Welcome from '../components/Welcome.vue'
 import Login from '../components/Login.vue'
 import Registration from '../components/Registration.vue'
+import UserProfile from '../components/UserProfile.vue'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
@@ -41,6 +42,13 @@ const routes = [
         name: 'Registration',
         component: Registration
       }
+      ,
+      {
+        path: '/profile',
+        name: 'UserProfile',
+        component: UserProfile
+      }
+
 
 
       
