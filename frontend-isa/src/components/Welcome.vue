@@ -9,6 +9,8 @@
       <span  style="float:right;margin:15px">
            <button class="btn btn-info btn-xs" v-on:click = "loginForm">Login</button>
            <button class="btn btn-info btn-xs" style="margin:10px;" v-on:click = "registrationForm">Register</button>
+                      <button class="btn btn-info btn-xs" v-on:click = "update">Update my account</button>
+
       </span>
 
     </div>
@@ -51,6 +53,9 @@ export default {
       },
       loginForm : function(){
         window.location.href = "/login";
+      },
+      update : function(){
+        window.location.href = "/UpdateAccount";
       }
     
     
