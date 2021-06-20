@@ -7,4 +7,5 @@ import com.example.mediamicroservice.model.Profile;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
+	Profile getOneByUsername(String username);
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.profilemicroservice.connections.MediaConnection;
 import com.example.profilemicroservice.dto.LoginDTO;
+import com.example.profilemicroservice.dto.ProfileDTO;
 import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.dto.UserRegistrationDTO;
 import com.example.profilemicroservice.model.User;
@@ -42,16 +43,22 @@ public class UserController {
     private MediaConnection mediaConnection;
     
     @PostMapping("/public/register")
-    public ResponseEntity add(@Valid @RequestBody UserRegistrationDTO user) {
-        userService.addUser(user);
+    public ResponseEntity<User> add(@Valid @RequestBody UserRegistrationDTO user) {
+        User u=userService.addUser(user);
         mediaConnection.add(user.getUsername());
-        return ResponseEntity.ok().build();
+        return  u == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
+            new ResponseEntity<User>(u,HttpStatus.CREATED);
     }
 
     @PostMapping("/updateUser")
-    ResponseEntity<String> update(@RequestBody User user)
+    ResponseEntity<String> update(@RequestBody User user, HttpSession session)
     {
-        userService.update(user);
+    	System.out.println("uslo u kontroler");
+        User u=userService.update(user);
+        session.setAttribute("loggedInUser", u);
+        loggedUser = u;
+        ProfileDTO profile=new ProfileDTO(u.getUsername(),user.getOldUsername());
+        mediaConnection.update(profile);
         return new ResponseEntity<>("ajdeee", HttpStatus.CREATED);
     }
     @GetMapping(value = "/findOneById/{id}")

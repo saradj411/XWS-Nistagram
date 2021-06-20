@@ -91,6 +91,7 @@ export default {
     return {
 
     user: {},
+    user1:{},
    
     name : "",
     id:"",
@@ -105,12 +106,36 @@ export default {
         newPasswordRepeat : "",
         sifra:"",
         usernamee:"",
+        newUsername:"",
         oldUsername:""
     }
   },
   
   mounted() {
-        this.axios.get('profile/api/users/findOneById/'+1,{ 
+      
+        this.axios.get('/profile/api/users/getLoggedUser',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                        
+                       this.user= response.data;
+                      
+                               
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
+
+               
+        
+    
+},
+  methods:{
+    korisnik: function(){
+ this.axios.get('profile/api/users/findOneById/'+this.user1.id,{ 
              
          }).then(response => {
                this.user=response.data;
@@ -118,9 +143,7 @@ export default {
                        alert("ne valja.");
                        console.log(res);
                  });
-               
-},
-  methods:{
+    },
      update: function(){
         if(this.newPassword != this.newPasswordRepeat) {
             alert("New passwords must be equal.")
@@ -138,6 +161,16 @@ export default {
             }else{
           this.sifra=this.user.password
         }
+
+        if(this.usernamee==""){
+          this.newUsername=this.user.username
+        }else{
+           this.newUsername=this.usernamee
+        }
+
+        alert(this.user.id)
+        alert(this.user.username)
+        alert(this.usernamee)
            const info = {
                     id : this.user.id,
                     name: this.user.name,
@@ -149,15 +182,17 @@ export default {
                     password: this.sifra,
                     email:this.user.email,
                     oldUsername:this.user.username,
-                    username:this.usernamee,
+                    username:this.newUsername
                     
           }
     this.axios.post('/profile/api/users/updateUser',info,{
       }).then(response => {
                this.nesto=response.data;
                 alert("Changes have been saved!");
+                  window.location.href = "/profile";
           }).catch(res => {
                        //alert("Please first choose allergy!");
+                      
                        console.log(res);
                  });
       }

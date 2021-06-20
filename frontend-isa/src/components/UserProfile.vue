@@ -1,6 +1,7 @@
 <template>
     <div>
     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "logOut"> Log out </button>
+     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "update"> Update </button>
         <h2> User profile:  {{loggedUser.name}} {{loggedUser.surname}} </h2>
         
     </div>
@@ -32,10 +33,13 @@ export default {
                         window.location.href = "/"
                        
                     });    
-              
+        },
+     update: function(){
+        window.location.href = "/UpdateAccount";
+      }
                 
     
-}
+
       },
       
 mounted() {

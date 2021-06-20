@@ -67,9 +67,11 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-    public void update(User user) {
+    public User update(User user) {
+		System.out.println("uslo u kontroler");
         User pat = userRepository.getOne(user.getId());
         Long ids=pat.getId();
+        System.out.println("id:"+ids);
         pat.setName(user.getName());
         pat.setSurname(user.getSurname());
         pat.setAddress(user.getAddress());
@@ -82,7 +84,8 @@ public class UserServiceImpl implements UserService {
         pat.setAdmin(false);
         pat.setUsername(user.getUsername());
         
-        userRepository.save(pat);
+        User u=userRepository.save(pat);
+        return u;
     }
 	
 

@@ -22,7 +22,7 @@ public interface UserService {
     
     public User getLoogedIn();
     public User getLoggedUser();
-    void update(User user);
+    User update(User user);
 	User findById(Long id);
 
     
