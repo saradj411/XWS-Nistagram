@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Welcome from '../components/Welcome.vue'
 import Login from '../components/Login.vue'
-//import Registration from '../components/Registration.vue'
+import Registration from '../components/Registration.vue'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 
@@ -35,13 +35,13 @@ const routes = [
         name: 'Login',
         component: Login
       }
-      /*,
+      ,
       {
         path: '/registration',
         name: 'Registration',
         component: Registration
       }
-*/
+
 
       
 
