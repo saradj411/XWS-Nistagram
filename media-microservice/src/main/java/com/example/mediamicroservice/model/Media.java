@@ -10,48 +10,53 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-
 @Entity
-public class PostContent {
+public class Media {
 
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long idContent;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column
-    private String url;
-    
+    @Column(name="fileName")
+    private String fileName;
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "post", referencedColumnName = "idPost")
     //@JsonBackReference
     private Post post;
-
-	public PostContent() {
+    
+	public Media() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public PostContent(Long idContent, String url, Post post) {
+	public Media(Long id, String fileName) {
 		super();
-		this.idContent = idContent;
-		this.url = url;
+		this.id = id;
+		this.fileName = fileName;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public Media(Long id, String fileName, Post post) {
+		super();
+		this.id = id;
+		this.fileName = fileName;
 		this.post = post;
-	}
-
-	public Long getIdContent() {
-		return idContent;
-	}
-
-	public void setIdContent(Long idContent) {
-		this.idContent = idContent;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public Post getPost() {
