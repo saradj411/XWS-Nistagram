@@ -80,12 +80,27 @@ public class PostController {
 		Set<Profile> oldLikes=p.getLike();
 		oldLikes.add(profileRepo.getOneByUsername(username));
 		p.setLike(oldLikes);
+		p.setNumberOfLikes(p.getNumberOfLikes()+1);
+		
 		
 		Post response=postRepository.save(p);
-		Integer integer=0;
-		for(Profile pg:response.getLike()) {
-			integer++;
-		}
+		Integer integer=response.getNumberOfLikes();
+		
+		return  integer == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
+            new ResponseEntity<Integer>(integer,HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/dislike/{username}/{post}")
+	public ResponseEntity<Integer> dislike(@PathVariable String username,@PathVariable Long post){
+		Post p=postRepository.getOne(post);
+		Set<Profile> oldLikes=p.getDislike();
+		oldLikes.add(profileRepo.getOneByUsername(username));
+		p.setDislike(oldLikes);
+		p.setNumberOfDislikes(p.getNumberOfDislikes()+1);
+		
+		
+		Post response=postRepository.save(p);
+		Integer integer=response.getNumberOfDislikes();
 		
 		return  integer == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
             new ResponseEntity<Integer>(integer,HttpStatus.CREATED);
@@ -106,6 +121,8 @@ public class PostController {
         	front.setIdPost(p.getIdPost());
         	front.setLocation(p.getLocation());
         	front.setUsername(p.getProfile().getUsername());
+        	front.setNumberOfDislikes(p.getNumberOfDislikes());
+        	front.setNumberOfLikes(p.getNumberOfLikes());
         	
         	List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
         	List<FrontMediaDTO> ee=new ArrayList<FrontMediaDTO>();

@@ -23,12 +23,9 @@ public class FrontPostDTO {
 
     private Long idPost;
 
-
     private String description;
 
- 
     private LocalDate date;
-    
 
     private String location;
 
@@ -38,6 +35,11 @@ public class FrontPostDTO {
 
 
     private String username;
+    
+    private Integer numberOfLikes;
+    
+   
+    private Integer numberOfDislikes;
 
 	public FrontPostDTO() {
 		super();
@@ -52,6 +54,41 @@ public class FrontPostDTO {
 
 	public void setTags(List<FrontTagDTO> tags) {
 		this.tags = tags;
+	}
+
+
+	public FrontPostDTO(Long idPost, String description, LocalDate date, String location, List<FrontMediaDTO> media,
+			List<FrontTagDTO> tags, String username, Integer numberOfLikes, Integer numberOfDislikes) {
+		super();
+		this.idPost = idPost;
+		this.description = description;
+		this.date = date;
+		this.location = location;
+		this.media = media;
+		this.tags = tags;
+		this.username = username;
+		this.numberOfLikes = numberOfLikes;
+		this.numberOfDislikes = numberOfDislikes;
+	}
+
+
+	public Integer getNumberOfLikes() {
+		return numberOfLikes;
+	}
+
+
+	public void setNumberOfLikes(Integer numberOfLikes) {
+		this.numberOfLikes = numberOfLikes;
+	}
+
+
+	public Integer getNumberOfDislikes() {
+		return numberOfDislikes;
+	}
+
+
+	public void setNumberOfDislikes(Integer numberOfDislikes) {
+		this.numberOfDislikes = numberOfDislikes;
 	}
 
 

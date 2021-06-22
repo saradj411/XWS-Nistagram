@@ -50,6 +50,8 @@ public class PostServiceImpl implements PostService{
 		post.setDescription(postDTO.getDescription());
 		post.setLocation(postDTO.getLocation());
 		post.setNumberOfInappropriateVote(0);
+		post.setNumberOfLikes(0);
+		post.setNumberOfDislikes(0);
 		post.setPostLimit(10);
 		post.setProfile(profileRep.getOneByUsername("saki"));
 		

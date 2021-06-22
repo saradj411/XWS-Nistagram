@@ -29,6 +29,13 @@ public class Post {
     
     @Column 
     private Integer numberOfInappropriateVote;
+    
+    @Column 
+    private Integer numberOfLikes;
+    
+    @Column 
+    private Integer numberOfDislikes;
+    
     /*
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonBackReference
@@ -96,6 +103,26 @@ public class Post {
 		this.profile = profile;
 	}
 
+	public Post(Long idPost, String description, LocalDate date, String location, Integer postLimit,
+			Integer numberOfInappropriateVote, Integer numberOfLikes, Integer numberOfDislikes, Set<Media> media,
+			Set<Tag> tags, Set<Profile> shared, Set<Profile> like, Set<Profile> dislike, Profile profile) {
+		super();
+		this.idPost = idPost;
+		this.description = description;
+		this.date = date;
+		this.location = location;
+		this.postLimit = postLimit;
+		this.numberOfInappropriateVote = numberOfInappropriateVote;
+		this.numberOfLikes = numberOfLikes;
+		this.numberOfDislikes = numberOfDislikes;
+		this.media = media;
+		this.tags = tags;
+		this.shared = shared;
+		this.like = like;
+		this.dislike = dislike;
+		this.profile = profile;
+	}
+
 	public Long getIdPost() {
 		return idPost;
 	}
@@ -110,6 +137,22 @@ public class Post {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getNumberOfLikes() {
+		return numberOfLikes;
+	}
+
+	public void setNumberOfLikes(Integer numberOfLikes) {
+		this.numberOfLikes = numberOfLikes;
+	}
+
+	public Integer getNumberOfDislikes() {
+		return numberOfDislikes;
+	}
+
+	public void setNumberOfDislikes(Integer numberOfDislikes) {
+		this.numberOfDislikes = numberOfDislikes;
 	}
 
 	public LocalDate getDate() {

@@ -4,9 +4,9 @@
            <span style="float: left; margin: 15px;">
                 <img class="image_style space_style" title="Nistagram" style="width: 50px; height: 50px; margin-right:10px;"
                 src="../assets/nistagram.png">
-
-               
-               
+</span>
+               </div>
+             <div style="float: left; margin: 15px;">  
          <!--FRIEND'S POSTS-->
              <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
                   <b-row >
@@ -24,10 +24,18 @@
                                         #{{tag.tagText}}
                                     </span>
                         </h5>
-             <h5 align="left"><b-icon icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{likesNumber}}likes 
-             </h5>   
+             <h5 v-if="numberOfLikes==0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
+              <h5 v-if="numberOfLikes!=0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{numberOfLikes}} likes </h5>
+            <h5 v-if="numberOfDislikes==0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{post.numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            </h5>
+            <h5 v-if="numberOfDislikes!=0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            </h5>
+            
+            
+            <h5> <b-icon icon="bookmark" aria-hidden="true" align="right"></b-icon></h5>
+               
         </b-card>
-         </span> 
+        
         </div> 
     </div>
 </template>
@@ -42,11 +50,28 @@ export default {
         usernameTo:'',
         usernameFrom:'',
         videoText: "mp4",
-        likesNumber:0
+        //likesNumber:0,
+        numberOfLikes:0,
+        numberOfDislikes:0,
+        loggedUser: {} 
        
         }
     },
     async mounted(){
+        this.axios.get('/profile/api/users/getLoggedUser',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                        
+                       this.loggedUser = response.data;
+                               
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
      
             this.axios.get('/media/post/getPostByUsername/saki')
             .then(response => {
@@ -87,26 +112,40 @@ export default {
     
     likePost: async function(event,post){
         console.log(post)
-            /*const postInfo = {
-                usernameTo : post.username,
-                usernameFrom : this.loggeduser.username,
-                fileName : post.fileName,
-                fileNames : post.fileNames,
-                postId: post.id,
-            }*/
-            this.axios.post('media/post/like/'+"caja123"+"/"+post.idPost,{ 
+         
+            this.axios.post('media/post/like/'+this.loggedUser.username+"/"+post.idPost,{ 
                 }).then(response => {
                     alert("Picture is liked!");
                     this.likesNumber = response.data
-                    //this.numberOfLikes = this.likesNumber
-                    
-                   // this.$router.push('/generalProfiles/choosenUsername') 
+                    this.numberOfLikes = this.likesNumber
+                     
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
                     console.log(res.response.data.message);
 
                 });
+
+
+        },
+
+         dislikePost: async function(event,post){
+        console.log(post)
+         
+            this.axios.post('media/post/dislike/'+this.loggedUser.username+"/"+post.idPost,{ 
+                }).then(response => {
+                    alert("Picture is disliked!");
+                    this.dislikesNumber = response.data
+                    this.numberOfDislikes = this.dislikesNumber
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already liked this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
         }
     
 }
