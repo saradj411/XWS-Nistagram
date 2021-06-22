@@ -168,9 +168,9 @@ export default {
            this.newUsername=this.usernamee
         }
 
-        alert(this.user.id)
-        alert(this.user.username)
-        alert(this.usernamee)
+        //alert(this.user.id)
+        //alert(this.user.username)
+        //alert(this.usernamee)
            const info = {
                     id : this.user.id,
                     name: this.user.name,
