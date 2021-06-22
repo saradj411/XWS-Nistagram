@@ -5,6 +5,10 @@ import Login from '../components/Login.vue'
 import Registration from '../components/Registration.vue'
 import UpdateAccount from '../components/UpdateAccount.vue'
 import UserProfile from '../components/UserProfile.vue'
+import AddPost from '../components/AddPost.vue'
+
+import Proba from '../components/Proba.vue'
+
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VerificationRequest from '../components/VerificationRequest.vue'
 import AdminProfile from '../components/AdminProfile.vue'
@@ -51,6 +55,16 @@ const routes = [
           path: '/profile',
         name: 'UserProfile',
         component: UserProfile
+      },
+      {
+          path: '/AddPost',
+        name: 'AddPost',
+        component: AddPost
+      },
+      {
+          path: '/Proba',
+        name: 'Proba',
+        component: Proba
       }
       ,
       {

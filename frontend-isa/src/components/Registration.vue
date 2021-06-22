@@ -187,6 +187,7 @@ export default{
                 {
                     alert("Successfully registered new patient. Please check your email for verification!");
                     console.log(response.data);
+                    window.location.href = "/";
                     //this.$router.push('ProfilePatient/'+ response.data.id);
                     //Odkomentarisati ovo kad se obavi verifikacija mejla
                 }).catch(res => {
