@@ -24,7 +24,7 @@
                                         #{{tag.tagText}}
                                     </span>
                         </h5>
-             <h5 align="left"><b-icon icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>6 likes 
+             <h5 align="left"><b-icon icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{likesNumber}}likes 
              </h5>   
         </b-card>
          </span> 
@@ -42,6 +42,7 @@ export default {
         usernameTo:'',
         usernameFrom:'',
         videoText: "mp4",
+        likesNumber:0
        
         }
     },
@@ -92,12 +93,12 @@ export default {
                 fileName : post.fileName,
                 fileNames : post.fileNames,
                 postId: post.id,
-            }
-            this.axios.post('http://localhost:8083/mediaMicroservice/post/likePost',postInfo,{ 
+            }*/
+            this.axios.post('media/post/like/'+"caja123"+"/"+post.idPost,{ 
                 }).then(response => {
                     alert("Picture is liked!");
                     this.likesNumber = response.data
-                    this.numberOfLikes = this.likesNumber
+                    //this.numberOfLikes = this.likesNumber
                     
                    // this.$router.push('/generalProfiles/choosenUsername') 
                     console.log(response);                
@@ -105,7 +106,7 @@ export default {
                     alert("You have already liked this post");
                     console.log(res.response.data.message);
 
-                });*/
+                });
         }
     
 }

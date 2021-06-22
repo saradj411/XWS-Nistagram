@@ -26,8 +26,10 @@ import com.example.mediamicroservice.dto.FrontTagDTO;
 import com.example.mediamicroservice.dto.PostDTO;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Post;
+import com.example.mediamicroservice.model.Profile;
 import com.example.mediamicroservice.model.Tag;
 import com.example.mediamicroservice.repository.PostRepository;
+import com.example.mediamicroservice.repository.ProfileRepository;
 import com.example.mediamicroservice.service.PostService;
 import com.example.mediamicroservice.service.impl.MediaUpload;
 import com.example.mediamicroservice.service.impl.PostServiceImpl;
@@ -46,6 +48,9 @@ public class PostController {
 	
 	@Autowired
 	PostRepository postRepository;
+	
+	@Autowired
+	ProfileRepository profileRepo;
 	
 	private static String uploadDir="user-photos";
 	
@@ -67,6 +72,23 @@ public class PostController {
 		
 		return  response == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
             new ResponseEntity<Post>(response,HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/like/{username}/{post}")
+	public ResponseEntity<Integer> like(@PathVariable String username,@PathVariable Long post){
+		Post p=postRepository.getOne(post);
+		Set<Profile> oldLikes=p.getLike();
+		oldLikes.add(profileRepo.getOneByUsername(username));
+		p.setLike(oldLikes);
+		
+		Post response=postRepository.save(p);
+		Integer integer=0;
+		for(Profile pg:response.getLike()) {
+			integer++;
+		}
+		
+		return  integer == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
+            new ResponseEntity<Integer>(integer,HttpStatus.CREATED);
 	}
 	
 	@GetMapping(value = "/getPostByUsername/{username}")
