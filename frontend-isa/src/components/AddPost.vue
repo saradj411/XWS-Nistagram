@@ -70,7 +70,7 @@
 
 <script>
 export default {
-    name: 'AddingStories',
+    //name: 'AddingStories',
     data() {
     return {
         file: [],
@@ -113,8 +113,7 @@ export default {
     methods:{
        
         saveMedia : function() {
-           // let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-            let formData = new FormData();
+           let formData = new FormData();
             
             for( var i = 0; i < this.$refs.file.files.length; i++ ){
                 let file = this.$refs.file.files[i];
@@ -141,22 +140,20 @@ export default {
                     });  
         },
         postPicture :function(){  
-            alert(this.tags)
+            //alert(this.tags)
             const storyInfo= {
                 description : this.description,
                 location : this.selectedLocation,
                 tags : this.tags,
                 //username: this.user.username,
                 //userId: this.user.id,
-                fileName : this.fileNames,
-                //highlighted: this.highlight,
-                //closeFriends: this.closeFriends,
+                fileName : this.fileNames
                  }
           
 
           this.axios.post('/media/post/addNewPost',storyInfo,{ 
                 }).then(response => {
-                    alert("Story is posted!");
+                    alert("Post is shared!");
 
                     console.log(response);                
                 }).catch(res => {

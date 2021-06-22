@@ -33,6 +33,9 @@ public class FrontPostDTO {
     private String location;
 
     private List<FrontMediaDTO> media=new ArrayList<FrontMediaDTO>();
+    
+    private List<FrontTagDTO> tags=new ArrayList<FrontTagDTO>();
+
 
     private String username;
 
@@ -41,16 +44,29 @@ public class FrontPostDTO {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	public List<FrontTagDTO> getTags() {
+		return tags;
+	}
+
+
+	public void setTags(List<FrontTagDTO> tags) {
+		this.tags = tags;
+	}
+
+
 	public FrontPostDTO(Long idPost, String description, LocalDate date, String location, List<FrontMediaDTO> media,
-			String username) {
+			List<FrontTagDTO> tags, String username) {
 		super();
 		this.idPost = idPost;
 		this.description = description;
 		this.date = date;
 		this.location = location;
 		this.media = media;
+		this.tags = tags;
 		this.username = username;
 	}
+
 
 	public Long getIdPost() {
 		return idPost;

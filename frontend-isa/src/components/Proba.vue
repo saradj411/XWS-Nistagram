@@ -4,16 +4,28 @@
            <span style="float: left; margin: 15px;">
                 <img class="image_style space_style" title="Nistagram" style="width: 50px; height: 50px; margin-right:10px;"
                 src="../assets/nistagram.png">
+
+               
                
          <!--FRIEND'S POSTS-->
              <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
+                  <b-row >
+                        <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
+                        </b-row>
+             <h6 align="left">{{post.location}}</h6>
+                        
                  <div v-for="m in post.media" v-bind:key="m.imageBytes">
                     <b-img v-if="!m.fileName.includes(videoText)" thumbnail  v-bind:src="m.imageByte" alt="Image 1"></b-img>
                              <video v-if="m.fileName.includes(videoText)" autoplay controls v-bind:src="m.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
 
                  </div>      
-                      
-                      
+                  <h4 align="left" style="margin-top:-5px;">{{post.description}}</h4>
+                   <h5 align="left"><span v-for="(tag,t) in post.tags" :key="t">
+                                        #{{tag.tagText}}
+                                    </span>
+                        </h5>
+             <h5 align="left"><b-icon icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>6 likes 
+             </h5>   
         </b-card>
          </span> 
         </div> 
@@ -27,7 +39,8 @@ export default {
     return {
         
         posts: [],
-        
+        usernameTo:'',
+        usernameFrom:'',
         videoText: "mp4",
        
         }
@@ -70,10 +83,33 @@ export default {
                 
    },
     methods:{
-     
-    }
-}
+    
+    likePost: async function(event,post){
+        console.log(post)
+            /*const postInfo = {
+                usernameTo : post.username,
+                usernameFrom : this.loggeduser.username,
+                fileName : post.fileName,
+                fileNames : post.fileNames,
+                postId: post.id,
+            }
+            this.axios.post('http://localhost:8083/mediaMicroservice/post/likePost',postInfo,{ 
+                }).then(response => {
+                    alert("Picture is liked!");
+                    this.likesNumber = response.data
+                    this.numberOfLikes = this.likesNumber
+                    
+                   // this.$router.push('/generalProfiles/choosenUsername') 
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already liked this post");
+                    console.log(res.response.data.message);
 
+                });*/
+        }
+    
+}
+}
 </script>
 
 <style scoped>

@@ -38,13 +38,17 @@ public class Post {
     //@JsonBackReference
     private Set<Media> media = new HashSet<Media>();
     
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    //@JsonBackReference
+    private Set<Tag> tags = new HashSet<Tag>();
     
+    /*
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "profile_tags",
             joinColumns = @JoinColumn(name = "idPost", referencedColumnName = "idPost"),
             inverseJoinColumns = @JoinColumn(name = "profileId", referencedColumnName = "id"))
     private Set<Profile> tags=new HashSet<Profile>();
-    
+    */
    
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "profile_shared",
@@ -75,7 +79,7 @@ public class Post {
 	}
 
 	public Post(Long idPost, String description, LocalDate date, String location, Integer postLimit,
-			Integer numberOfInappropriateVote, Set<PostContent> content, Set<Profile> tags, Set<Profile> shared,
+			Integer numberOfInappropriateVote, Set<PostContent> content, Set<Tag> tags, Set<Profile> shared,
 			Set<Profile> like, Set<Profile> dislike, Profile profile) {
 		super();
 		this.idPost = idPost;
@@ -148,11 +152,11 @@ public class Post {
 	}
 */
 	
-	public Set<Profile> getTags() {
+	public Set<Tag> getTags() {
 		return tags;
 	}
 
-	public void setTags(Set<Profile> tags) {
+	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
 	}
 

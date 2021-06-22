@@ -22,9 +22,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.FrontPostDTO;
+import com.example.mediamicroservice.dto.FrontTagDTO;
 import com.example.mediamicroservice.dto.PostDTO;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Post;
+import com.example.mediamicroservice.model.Tag;
 import com.example.mediamicroservice.repository.PostRepository;
 import com.example.mediamicroservice.service.PostService;
 import com.example.mediamicroservice.service.impl.MediaUpload;
@@ -82,6 +84,7 @@ public class PostController {
         	front.setIdPost(p.getIdPost());
         	front.setLocation(p.getLocation());
         	front.setUsername(p.getProfile().getUsername());
+        	
         	List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
         	List<FrontMediaDTO> ee=new ArrayList<FrontMediaDTO>();
         	for(Media a:p.getMedia()) {
@@ -95,6 +98,15 @@ public class PostController {
         	}
         	
         	front.setMedia(ee);
+        	
+        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+        	for(Tag t:p.getTags()) {
+        		FrontTagDTO tt=new FrontTagDTO();
+        		tt.setIdPost(t.getPost().getIdPost());
+        		tt.setTagText(t.getTagText());
+        		lista1.add(tt);
+        	}
+        	front.setTags(lista1);
         	
         	fronts.add(front);
         	
