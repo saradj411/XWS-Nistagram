@@ -1,25 +1,9 @@
 <template>
     <div>
-
-    <h2>Profile of {{loggedUser.name}} {{loggedUser.surname}} </h2>
+    <h2>Admin profile </h2>
         
-     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "update"> Update </button>
-     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "request">Sent a request for verification </button>
+     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "request">See requests for verification </button>
     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "logOut"> Log out </button>
-
-       <span  style="float:right;margin:1px">
-                    <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" style="margin-right:20px;" v-on:click = "logOut">Log Out</b-button>
-                </span>
-  
-      <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "post">
-                    <b-icon icon="image" aria-hidden="true"></b-icon> Posts</b-button>
-
-      <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "addPosts">
-                    <b-icon icon="image" aria-hidden="true"></b-icon> Add post</b-button>
-       <b-button  pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "update">
-                    <b-icon icon="person" aria-hidden="true"></b-icon>Update profile</b-button>
-        <h2> User profile:  {{loggedUser.name}} {{loggedUser.surname}} </h2>
-
         
     </div>
 </template>
@@ -54,17 +38,10 @@ export default {
      update: function(){
         window.location.href = "/UpdateAccount";
       },
-
       request: function(){
-        window.location.href = "/VerificationRequest";
-      },
+        window.location.href = "/AllRequest";
+      }
                 
-        addPosts: function(){
-        window.location.href = "/AddPost";
-      },
-      post: function(){
-        window.location.href = "/Proba";
-      },     
     
 
       },

@@ -33,14 +33,13 @@ public class UserController {
 
     @Autowired
     private UserServiceImpl userService;
-    
-    //@Context
-	HttpServletRequest request;
-	
-	User loggedUser;
 
     @Autowired
     private MediaConnection mediaConnection;
+    
+    //@Context
+	HttpServletRequest request;
+	User loggedUser;
     
     @PostMapping("/public/register")
     public ResponseEntity<User> add(@Valid @RequestBody UserRegistrationDTO user) {

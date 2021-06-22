@@ -10,12 +10,11 @@ import AddPost from '../components/AddPost.vue'
 import Proba from '../components/Proba.vue'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-
+import VerificationRequest from '../components/VerificationRequest.vue'
+import AdminProfile from '../components/AdminProfile.vue'
+import AllRequest from '../components/AllRequest.vue'
 
 import moment from 'moment'
-
-
-
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -66,6 +65,22 @@ const routes = [
           path: '/Proba',
         name: 'Proba',
         component: Proba
+      }
+      ,
+      {
+        path: '/VerificationRequest',
+        name: 'VerificationRequest',
+        component: VerificationRequest
+      },
+      {
+        path: '/AdminProfile',
+        name: 'AdminProfile',
+        component: AdminProfile
+      },
+      {
+        path: '/AllRequest',
+        name: 'AllRequest',
+        component: AllRequest
       }
 
 

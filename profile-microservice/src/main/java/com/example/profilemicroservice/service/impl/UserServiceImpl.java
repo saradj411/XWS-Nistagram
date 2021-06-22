@@ -33,7 +33,7 @@ import com.example.profilemicroservice.repository.UserRepository;
 import com.example.profilemicroservice.service.AuthorityService;
 import com.example.profilemicroservice.service.UserService;
 
-@Service
+@Service("UserServiceImpl")
 public class UserServiceImpl implements UserService {
 
 	@Autowired
