@@ -155,7 +155,8 @@ export default {
                 }).then(response => {
                     alert("Post is shared!");
 
-                    console.log(response);                
+                    console.log(response);  
+                      window.location.href = "/proba";              
                 }).catch(res => {
                     console.log(storyInfo.fileNames);
                     alert("Error"+res.response.data.message);

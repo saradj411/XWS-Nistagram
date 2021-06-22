@@ -32,7 +32,7 @@
             </h5>
             
             
-            <h5> <b-icon icon="bookmark" aria-hidden="true" align="right"></b-icon></h5>
+            <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right"></b-icon></h5>
                
         </b-card>
         
@@ -66,7 +66,8 @@ export default {
                     }}).then(response => 
                     {                        
                        this.loggedUser = response.data;
-                               
+
+                               alert(this.loggedUser.username)
                     }).catch(res => {                        
                                          
                         console.log(res.response);
@@ -199,7 +200,7 @@ export default {
     }
     .post_look {
         background: #e4e4e4; 
-        width: 30%;
+        width: 60%;
         height: 80%;
         margin-left: 20%;
         margin-bottom: 4%;
