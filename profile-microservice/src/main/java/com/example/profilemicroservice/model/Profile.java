@@ -1,11 +1,12 @@
 package com.example.profilemicroservice.model;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.*;
+
+import com.example.profilemicroservice.enums.Role;
 
 @Entity
 public class Profile extends User{
@@ -19,7 +20,10 @@ public class Profile extends User{
 	    @Column
 	    private Boolean tagFromUnfollowers;
 	    
-	    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	    @ManyToMany(cascade = {
+	            CascadeType.PERSIST, 
+	            CascadeType.MERGE
+	        }, fetch = FetchType.LAZY)
 	    @JoinTable( name = "closeFriends", joinColumns = @JoinColumn(name="id", nullable = true,referencedColumnName="id"), inverseJoinColumns = @JoinColumn(name = "idCloseFriend", referencedColumnName = "id"))
 	    //@JsonBackReference
 	    private Set<Profile> closeFriends = new HashSet<Profile>();
@@ -45,6 +49,24 @@ public class Profile extends User{
 	    //@JsonBackReference
 	    private Set<Profile> following = new HashSet<Profile>();
 
+		public Profile() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
+		public Profile(Role role, String name, String surname, String address, String city, String country,
+				String email, String phone, String password, String username) {
+			super(role, name, surname, address, city, country, email, phone, password, username);
+			// TODO Auto-generated constructor stub
+		}
+
+		public Profile(String name, String surname, String address, String city, String country, String email,
+				String phone, String password, List<Authority> authorities, String username) {
+			super(name, surname, address, city, country, email, phone, password, authorities, username);
+			// TODO Auto-generated constructor stub
+		}
+        
+	    
 //lajkovani postovi
-	    //dislajkovani psotovi
+//dislajkovani psotovi
 }

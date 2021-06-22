@@ -14,6 +14,8 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -72,6 +74,12 @@ public class User implements UserDetails{
 
 	    @Column
 	    private String phone;
+	    
+	    
+	    @Column
+	    @Enumerated(EnumType.STRING)
+	    private Category category;
+	    
 
 	    @Column(name = "password", nullable = false)
 	    private String password;
@@ -290,6 +298,17 @@ public class User implements UserDetails{
 	    public void setAdmin(boolean admin) {
 	        isAdmin = admin;
 	    }
+
+	    
+	    
+	    
+		public Category getCategory() {
+			return category;
+		}
+
+		public void setCategory(Category category) {
+			this.category = category;
+		}
 
 		@Override
 		public String toString() {
