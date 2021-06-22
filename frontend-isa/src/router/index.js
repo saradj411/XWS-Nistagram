@@ -6,12 +6,11 @@ import Registration from '../components/Registration.vue'
 import UpdateAccount from '../components/UpdateAccount.vue'
 import UserProfile from '../components/UserProfile.vue'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
-
+import VerificationRequest from '../components/VerificationRequest.vue'
+import AdminProfile from '../components/AdminProfile.vue'
+import AllRequest from '../components/AllRequest.vue'
 
 import moment from 'moment'
-
-
-
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -52,6 +51,22 @@ const routes = [
           path: '/profile',
         name: 'UserProfile',
         component: UserProfile
+      }
+      ,
+      {
+        path: '/VerificationRequest',
+        name: 'VerificationRequest',
+        component: VerificationRequest
+      },
+      {
+        path: '/AdminProfile',
+        name: 'AdminProfile',
+        component: AdminProfile
+      },
+      {
+        path: '/AllRequest',
+        name: 'AllRequest',
+        component: AllRequest
       }
 
 

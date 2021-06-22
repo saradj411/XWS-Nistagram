@@ -1,9 +1,8 @@
 <template>
     <div>
-    <h2>Profile of {{loggedUser.name}} {{loggedUser.surname}} </h2>
+    <h2>Admin profile </h2>
         
-     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "update"> Update </button>
-     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "request">Sent a request for verification </button>
+     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "request">See requests for verification </button>
     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "logOut"> Log out </button>
         
     </div>
@@ -40,7 +39,7 @@ export default {
         window.location.href = "/UpdateAccount";
       },
       request: function(){
-        window.location.href = "/VerificationRequest";
+        window.location.href = "/AllRequest";
       }
                 
     
