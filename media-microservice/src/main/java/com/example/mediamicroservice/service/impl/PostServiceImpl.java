@@ -18,6 +18,7 @@ import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.PostDTO;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Post;
+import com.example.mediamicroservice.model.Profile;
 import com.example.mediamicroservice.repository.MediaRepository;
 import com.example.mediamicroservice.repository.PostRepository;
 import com.example.mediamicroservice.repository.ProfileRepository;
@@ -39,9 +40,23 @@ public class PostServiceImpl implements PostService{
 	public Post addNewPost(PostDTO postDTO) {
 		Post post=new Post();
 		
+		Set<Profile> profiles=new HashSet<Profile>();
+		
+		List<String> lista=new ArrayList<>();
+		lista=postDTO.getTags();
+		for(String tag:lista) {
+			System.out.println(tag);
+			Profile p=profileRep.getOneByUsername(tag);
+			if(p!=null) {
+				profiles.add(p);
+			}
+			
+		}
+		
+		post.setTags(profiles);
 		post.setDate(LocalDate.now());
-		post.setDescription("Stara ali draga");
-		post.setLocation("Menta ns");
+		post.setDescription(postDTO.getDescription());
+		post.setLocation(postDTO.getLocation());
 		post.setNumberOfInappropriateVote(0);
 		post.setPostLimit(10);
 		post.setProfile(profileRep.getOneByUsername("saki"));
