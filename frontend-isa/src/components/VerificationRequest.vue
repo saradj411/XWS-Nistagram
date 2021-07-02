@@ -107,6 +107,7 @@ export default {
       }).then(response => { 
                this.nesto=response.data;
                 alert("Request send!");
+                window.location.href = "/profile";
           }).catch(res => {
                       alert("neceeee!");
 

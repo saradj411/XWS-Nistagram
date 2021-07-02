@@ -99,7 +99,12 @@ export default {
                         if(response.data.role === "USER")
                         {
                           console.log("USER");
+                          
                           window.location.href = "/profile";
+
+
+                        }else if(response.data.role === "ADMIN"){
+                            window.location.href = "/AdminProfile";
                         }
                                
                     }).catch(res => { 

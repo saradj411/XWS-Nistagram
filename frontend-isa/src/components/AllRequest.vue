@@ -105,6 +105,7 @@ export default {
       }).then(response => { 
                this.nesto=response.data;
                 alert("Accepted!");
+                 window.location.href = "/AdminProfile";
           }).catch(res => {
                       alert("neceeee!");
 
@@ -118,6 +119,7 @@ export default {
       }).then(response => { 
                this.nesto=response.data;
                 alert("Refused!");
+                 window.location.href = "/AdminProfile";
           }).catch(res => {
                       alert("neceeee!");
 
