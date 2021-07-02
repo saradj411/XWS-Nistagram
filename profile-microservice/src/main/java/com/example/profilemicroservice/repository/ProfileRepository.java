@@ -10,7 +10,7 @@ import com.example.profilemicroservice.model.Request;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long>{
 	
-    List<Profile>findAll();
+    List<Profile> findAll();
     Profile findOneByUsername(String username);
 
 

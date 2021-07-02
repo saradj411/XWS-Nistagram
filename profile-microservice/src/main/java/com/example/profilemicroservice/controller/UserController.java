@@ -1,6 +1,8 @@
 package com.example.profilemicroservice.controller;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +25,6 @@ import com.example.profilemicroservice.dto.ProfileDTO;
 import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.dto.UserRegistrationDTO;
 import com.example.profilemicroservice.model.User;
-import com.example.profilemicroservice.service.UserService;
 import com.example.profilemicroservice.service.impl.UserServiceImpl;
 
 // Primer kontrolera cijim metodama mogu pristupiti samo autorizovani korisnici
@@ -123,5 +124,15 @@ public class UserController {
 		session.invalidate();
 		return new ResponseEntity<String>("Logged Out!!", HttpStatus.OK);
 	}
+    
+    @PostMapping(value = "/searhUsername")
+	public ResponseEntity searhUsername(@RequestBody HashMap<String,String> username, HttpSession session){
+		/*if (loggedUser == null) {
+			return new ResponseEntity<String>("No user logged in!", HttpStatus.BAD_REQUEST);
+		}*/
+		ArrayList<User> users = userService.searchUsername(username.get("username"));
+				
+		return new ResponseEntity<ArrayList<User>>(users, HttpStatus.OK);
+	}  
     
 }

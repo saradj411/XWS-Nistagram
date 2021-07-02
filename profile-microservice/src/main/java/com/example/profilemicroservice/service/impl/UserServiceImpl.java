@@ -263,7 +263,23 @@ public class UserServiceImpl implements UserService {
         return  u;
     }
 
+	@Override
+	public ArrayList<User> searchUsername(String username) {
+		ArrayList<User> newList = new ArrayList<User>();
+		for(User r : getAllUsers())
+		{
+			if((r.getUsername()).startsWith(username))
+				newList.add(r);			
+		}
+		
+		return newList;
+	}
 
+	public ArrayList<User> getAllUsers()
+	{
+		return (ArrayList<User>) userRepository.findAll();
+
+	}
 
 
 	
