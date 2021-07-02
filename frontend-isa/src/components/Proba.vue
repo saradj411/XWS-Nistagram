@@ -67,14 +67,8 @@ export default {
                     {                        
                        this.loggedUser = response.data;
 
-                               alert(this.loggedUser.username)
-                    }).catch(res => {                        
-                                         
-                        console.log(res.response);
-                       
-                    });   
-     
-            this.axios.get('/media/post/getPostByUsername/saki')
+                               //alert(this.loggedUser.username)
+            this.axios.get('/media/post/getPostByUsername/'+this.loggedUser.username)
             .then(response => {
                 this.posts = response.data;
                 let video = "mp4";
@@ -106,6 +100,13 @@ export default {
                             console.log(res);
                     });
         
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
+     
+           
          
                 
    },
