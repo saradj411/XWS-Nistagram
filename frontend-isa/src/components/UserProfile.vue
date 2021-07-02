@@ -13,6 +13,8 @@
 
       <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "addPosts">
                     <b-icon icon="image" aria-hidden="true"></b-icon> Add post</b-button>
+       <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "addStory">
+                    <b-icon icon="image" aria-hidden="true"></b-icon> Add story</b-button>
        <b-button  pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "update">
                     <b-icon icon="person" aria-hidden="true"></b-icon>Update profile</b-button>
        <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "request">
@@ -60,6 +62,9 @@ export default {
                 
         addPosts: function(){
         window.location.href = "/AddPost";
+      },
+      addStory: function(){
+        window.location.href = "/AddStory";
       },
       post: function(){
         window.location.href = "/Proba";

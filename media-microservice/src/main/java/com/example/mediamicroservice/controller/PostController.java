@@ -65,10 +65,10 @@ public class PostController {
 		return fileName;
 		
 	}
-	@PostMapping("/addNewPost")
-	public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO){
+	@PostMapping("/addNewPost/{username}")
+	public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO,@PathVariable String username){
 		
-		Post response=postService.addNewPost(postDTO);
+		Post response=postService.addNewPost(postDTO,username);
 		
 		return  response == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
             new ResponseEntity<Post>(response,HttpStatus.CREATED);

@@ -6,7 +6,7 @@ import Registration from '../components/Registration.vue'
 import UpdateAccount from '../components/UpdateAccount.vue'
 import UserProfile from '../components/UserProfile.vue'
 import AddPost from '../components/AddPost.vue'
-
+import AddStory from '../components/AddStory.vue'
 import Proba from '../components/Proba.vue'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
@@ -61,6 +61,11 @@ const routes = [
         name: 'AddPost',
         component: AddPost
       },
+      {
+        path: '/AddStory',
+      name: 'AddStory',
+      component: AddStory
+    },
       {
           path: '/Proba',
         name: 'Proba',

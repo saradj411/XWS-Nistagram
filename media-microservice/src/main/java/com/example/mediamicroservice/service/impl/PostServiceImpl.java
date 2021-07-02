@@ -42,7 +42,7 @@ public class PostServiceImpl implements PostService{
 	TagRepository tagRepo;
 	
 	@Override
-	public Post addNewPost(PostDTO postDTO) {
+	public Post addNewPost(PostDTO postDTO,String username) {
 		Post post=new Post();
 		
 		
@@ -53,7 +53,7 @@ public class PostServiceImpl implements PostService{
 		post.setNumberOfLikes(0);
 		post.setNumberOfDislikes(0);
 		post.setPostLimit(10);
-		post.setProfile(profileRep.getOneByUsername("saki"));
+		post.setProfile(profileRep.getOneByUsername(username));
 		
 		Media media=new Media();
 		media.setFileName(postDTO.getFileName());
