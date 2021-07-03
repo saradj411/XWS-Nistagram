@@ -60,6 +60,8 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private ModelMapper modelMapper;
 
+	private User loggedUser;
+	
 	@Override
 	public User findByUsername(String username) throws UsernameNotFoundException {
 		User u = userRepository.findByUsername(username);
@@ -91,7 +93,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User LogIn(LoginDTO loginDTO) {
-		User loggedUser = FindUser(loginDTO.getUsername(), loginDTO.getPassword());
+		loggedUser = FindUser(loginDTO.getUsername(), loginDTO.getPassword());
 		if(loggedUser == null)
 			return null;
 		else
@@ -113,16 +115,7 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	public User getLoogedIn() throws AccessDeniedException {
-//		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		String username;
-//		if (principal instanceof UserDetails) {
-//			 username = ((UserDetails)principal).getUsername();
-//		} else {
-//			 username = principal.toString();
-//		}
-//		System.out.println(username+"userko");
-//
-//		return  findByUsername(username);
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		
 		Object currentUser = auth.getPrincipal();
@@ -255,12 +248,10 @@ public class UserServiceImpl implements UserService {
 		}
 		userRepository.save(user);
 	}
+	
 	@Override
     public User getLoggedUser() {
-        Authentication loggedUser = SecurityContextHolder.getContext().getAuthentication();
-        String email = loggedUser.getName();
-        User u = userRepository.findByUsername(email);
-        return  u;
+        return loggedUser; 
     }
 
 	@Override
@@ -281,6 +272,10 @@ public class UserServiceImpl implements UserService {
 
 	}
 
+	/*public void setLoggedUser(User u)
+	{
+		loggedUser = u;
+	}*/
 
 	
 }

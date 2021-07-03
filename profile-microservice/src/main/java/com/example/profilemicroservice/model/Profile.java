@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 import com.example.profilemicroservice.enums.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "profile")
@@ -39,36 +40,44 @@ public class Profile{
 	            CascadeType.MERGE
 	        }, fetch = FetchType.LAZY)
 	    @JoinTable( name = "closeFriends", joinColumns = @JoinColumn(name="id", nullable = true,referencedColumnName="id"), inverseJoinColumns = @JoinColumn(name = "idCloseFriend", referencedColumnName = "id"))
-	    //@JsonBackReference
+	    @JsonBackReference
 	    private Set<Profile> closeFriends = new HashSet<Profile>();
 
 	    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	    @JoinTable( name = "blockedProfiles", joinColumns = @JoinColumn(name="id", nullable = true,referencedColumnName="id"), inverseJoinColumns = @JoinColumn(name = "idBlockedProfile", referencedColumnName = "id"))
-	    //@JsonBackReference
+	    @JsonBackReference
 	    private Set<Profile> blockedProfiles = new HashSet<Profile>();
 
 	    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	    @JoinTable( name = "mutedProfiles", joinColumns = @JoinColumn(name="id", nullable = true,referencedColumnName="id"), inverseJoinColumns = @JoinColumn(name = "idMutedProfile", referencedColumnName = "id"))
-	    //@JsonBackReference
+	    @JsonBackReference
 	    private Set<Profile> mutedProfiles = new HashSet<Profile>();
 
 	    
 	    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	    @JoinTable( name = "followers", joinColumns = @JoinColumn(name="id", nullable = true,referencedColumnName="id"), inverseJoinColumns = @JoinColumn(name = "follower", referencedColumnName = "id"))
-	    //@JsonBackReference
+	    @JsonBackReference
 	    private Set<Profile> followers = new HashSet<Profile>();
 
 	    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	    @JoinTable( name = "following", joinColumns = @JoinColumn(name="id", nullable = true,referencedColumnName="id"), inverseJoinColumns = @JoinColumn(name = "following", referencedColumnName = "id"))
-	    //@JsonBackReference
+	    @JsonBackReference
 	    private Set<Profile> following = new HashSet<Profile>();
 	    
 	    
 	    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	    @JoinTable( name = "request4Follow", joinColumns = @JoinColumn(name="id", nullable = true,referencedColumnName="id"), inverseJoinColumns = @JoinColumn(name = "following", referencedColumnName = "id"))    
-	    @Column
+	    @JsonBackReference
 	    private Set<Profile> request4Follow = new HashSet<Profile>();
-
+	  
+	    
+	    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	    @JoinTable( name = "request2Follow", joinColumns = @JoinColumn(name="id", nullable = true,referencedColumnName="id"), inverseJoinColumns = @JoinColumn(name = "following", referencedColumnName = "id"))    
+	    @JsonBackReference
+	    private Set<Profile> request2Follow = new HashSet<Profile>();
+	  
+	    
+	    
 		public Profile() {
 			super();
 			// TODO Auto-generated constructor stub
@@ -78,7 +87,7 @@ public class Profile{
 		public Profile(String username, Boolean privateProfil, Boolean messageFromUnfollowes,
 				Boolean tagFromUnfollowers, String biography, String webSite, Set<Profile> closeFriends,
 				Set<Profile> blockedProfiles, Set<Profile> mutedProfiles, Set<Profile> followers,
-				Set<Profile> following, Set<Profile> request4Follow) {
+				Set<Profile> following, Set<Profile> request4Follow, Set<Profile> request2Follow) {
 			super();
 			this.username = username;
 			this.privateProfil = privateProfil;
@@ -92,6 +101,7 @@ public class Profile{
 			this.followers = followers;
 			this.following = following;
 			this.request4Follow = request4Follow;
+			this.request2Follow = request2Follow;
 		}
 		
 	public Profile(String username, Boolean privateProfil, Boolean messageFromUnfollowes,
@@ -109,14 +119,29 @@ public class Profile{
 		this.mutedProfiles = null;
 		this.followers = null;
 		this.following = null;
+		this.request2Follow = null;
 	}
+	
+
+
+	public Set<Profile> getRequest2Follow() {
+		return request2Follow;
+	}
+
+
+	public void setRequest2Follow(Set<Profile> request2Follow) {
+		this.request2Follow = request2Follow;
+	}
+
+
 	@Override
 	public String toString() {
 		return "Profile [id=" + id + ", username=" + username + ", privateProfil=" + privateProfil
 				+ ", messageFromUnfollowes=" + messageFromUnfollowes + ", tagFromUnfollowers=" + tagFromUnfollowers
 				+ ", biography=" + biography + ", webSite=" + webSite + ", closeFriends=" + closeFriends
 				+ ", blockedProfiles=" + blockedProfiles + ", mutedProfiles=" + mutedProfiles + ", followers="
-				+ followers + ", following=" + following + "]";
+				+ followers + ", following=" + following + ", request4Follow=" + request4Follow + ", request2Follow="
+				+ request2Follow + "]";
 	}
 
 

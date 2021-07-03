@@ -1,6 +1,10 @@
 package com.example.profilemicroservice.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,7 @@ import com.example.profilemicroservice.dto.UserProfileDTO;
 import com.example.profilemicroservice.model.Profile;
 import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.service.impl.ProfileService;
+import com.example.profilemicroservice.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping(value = "/api/profile")
@@ -22,6 +27,7 @@ public class ProfileController {
 	
 @Autowired
 private ProfileService profileService;
+
 
 User loggedUser;
 
@@ -39,5 +45,54 @@ User loggedUser;
 		ArrayList<Profile> allProfile = (ArrayList<Profile>) profileService.findAll();
 		return new ResponseEntity<>(allProfile, HttpStatus.OK);
 	}
-
+	
+	@PostMapping(value ="/getAllRequest")
+	public ResponseEntity<Set<Profile>> getRequstForFollow(@RequestBody HashMap<String,String> username)	
+	{
+		Set<Profile> request = profileService.request4follow(username.get("username"));	
+		return new ResponseEntity<>(request, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/getAllRequestTo")
+	public ResponseEntity<Set<Profile>> getAllRequestTo(@RequestBody HashMap<String,String> username)	
+	{
+		Set<Profile> request = profileService.request2follow(username.get("username"));	
+		return new ResponseEntity<>(request, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/getAllFollowing")
+	public ResponseEntity<Set<Profile>> getAllFollowing(@RequestBody HashMap<String,String> username)	
+	{
+		Set<Profile> request = profileService.getFollowing(username.get("username"));	
+		return new ResponseEntity<>(request, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/getAllFollowers")
+	public ResponseEntity<Set<Profile>> getAllFollowers(@RequestBody HashMap<String,String> username)	
+	{
+		Set<Profile> request = profileService.getFollowers(username.get("username"));	
+		return new ResponseEntity<>(request, HttpStatus.OK);
+	}
+	
+	
+	
+	//Ovo gadja i kad je profil privatan i kad nije, samo odredi koju funckiju poziva posle
+	@PostMapping(value ="/addRequest4follow")
+	public ResponseEntity<Profile> addRequest4follow(@RequestBody HashMap<String,String> username)	
+	{
+		System.out.println("STA IAM");
+		Profile prof = profileService.addRequest4follow(username.get("username"));
+		System.out.println(prof.getUsername());
+		return new ResponseEntity<>(prof, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/deleteRequestAndFollow")
+	public ResponseEntity<Profile> deleteRequestAndFollow(@RequestBody HashMap<String,String> username)	
+	{		
+		Profile prof = profileService.deleteRequestOrFollow(username.get("username"));
+		System.out.println(prof.getUsername());
+		return new ResponseEntity<>(prof, HttpStatus.OK);
+	}
+	
+	
 }

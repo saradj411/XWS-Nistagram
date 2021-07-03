@@ -50,7 +50,7 @@
                 <button type="button" class="close  btn pull-right"  @click="changeVisibilityFalse" aria-label="Close">
                     <span aria-hidden="true"> X </span>                    
                   </button>
-                  <div v-for="user in this.searchUsername" class="userDiv" v-bind:key="user.username">
+                  <div v-for="user in this.searchUsername" class="userDiv" v-bind:key="user.username" @click="lookProfile(user.username)">
                    @{{user.username}} - {{user.name}} {{user.surname}}
 
                  </div>
@@ -134,6 +134,10 @@ export default {
           document.getElementsByClassName('suggestions').style.visibility = 'visible';          
           document.getElementsByClassName('fotos').style.visibility = 'hidden';
             
+      },
+      lookProfile: function(username)
+      {
+        window.location.href = "/AnotherUserProfile/"+username;
       },
       changeVisibility() {
         this.visible = true;

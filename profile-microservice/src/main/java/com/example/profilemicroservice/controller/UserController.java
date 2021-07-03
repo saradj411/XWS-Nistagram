@@ -94,8 +94,9 @@ public class UserController {
         		if(u != null){
         			System.out.println("NEKO SE ULOGOVAO.");
         				session.setAttribute("loggedInUser", u);
+        				
         				loggedUser = u;
-        				//return Response.status(200).entity(u).build();
+        				
         				return new ResponseEntity<>(u, HttpStatus.OK);
         			}
         		
@@ -107,8 +108,11 @@ public class UserController {
 	{
 		System.out.println("Get logged user, pozvan");
 		User user = (User) session.getAttribute("loggedUser");
-		System.out.println(user);
-		System.out.println(loggedUser);
+		System.out.println("PREKO SERVICE LOG");
+		
+		System.out.println(userService.getLoggedUser());
+		
+		//userService.setLoggedUser(loggedUser);
 		if(loggedUser != null)
 			return new ResponseEntity<User>(loggedUser, HttpStatus.OK);
 		else
