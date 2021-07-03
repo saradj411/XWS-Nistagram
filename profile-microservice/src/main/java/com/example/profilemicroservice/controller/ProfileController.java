@@ -74,6 +74,13 @@ User loggedUser;
 		return new ResponseEntity<>(request, HttpStatus.OK);
 	}
 	
+	@PostMapping(value ="/getProfileByUsername")
+	public ResponseEntity<Profile> getProfileByUsername(@RequestBody HashMap<String,String> username)	
+	{
+		Profile profile = profileService.findByUsername(username.get("username"));	
+		return new ResponseEntity<>(profile, HttpStatus.OK);
+	}
+	
 	
 	
 	//Ovo gadja i kad je profil privatan i kad nije, samo odredi koju funckiju poziva posle
