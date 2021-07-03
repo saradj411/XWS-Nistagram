@@ -115,7 +115,7 @@ public class ProfileService  implements IProfileService {
 		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());		
 		Profile toDelete = findByUsername(usernameForFollow);
 		
-		if(toDelete.getPrivateProfil()==true)
+		if(toDelete.getPrivateProfil() == true)
 		{
 			Set<Profile> forfollow = loggedUserProfile.getRequest4Follow();
 			forfollow.remove(toDelete);
@@ -123,8 +123,18 @@ public class ProfileService  implements IProfileService {
 			Set<Profile> tofollow = toDelete.getRequest2Follow();
 			tofollow.remove(loggedUserProfile);
 			
+			Set<Profile> following = loggedUserProfile.getFollowing();
+			following.remove(toDelete);
+			
+			Set<Profile> followers = toDelete.getFollowers();
+			followers.remove(loggedUserProfile);
+			
+			
+			
 			loggedUserProfile.setRequest4Follow(forfollow);
-			toDelete.setRequest2Follow(tofollow);		
+			toDelete.setRequest2Follow(tofollow);	
+			loggedUserProfile.setFollowing(following);
+			toDelete.setFollowers(followers);
 			
 		}
 		else
@@ -144,6 +154,50 @@ public class ProfileService  implements IProfileService {
 		profileRepository.save(toDelete);	
 		
 		return loggedUserProfile;		
+	}
+	
+	public void acceptFollowRequest(String username)
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());		
+		Profile addToFollowers = findByUsername(username);
+		
+		Set<Profile>  newFollower = loggedUserProfile.getFollowers();
+		newFollower.add(addToFollowers);
+		
+		Set<Profile> deleteFromRequst = loggedUserProfile.getRequest2Follow();
+		deleteFromRequst.remove(addToFollowers);
+		
+		Set<Profile> newFollowing = addToFollowers.getFollowing();
+		newFollowing.add(loggedUserProfile);
+		
+		Set<Profile> deleteReq  = addToFollowers.getRequest4Follow();
+		deleteReq.remove(loggedUserProfile);
+		
+		
+		profileRepository.save(loggedUserProfile);
+		profileRepository.save(addToFollowers);		
+			
+		
+	}
+	
+	public void declineFollowRequest(String username)
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());		
+		Profile delete = findByUsername(username);
+		
+		
+		
+		Set<Profile> deleteFromRequst = loggedUserProfile.getRequest2Follow();
+		deleteFromRequst.remove(delete);	
+				
+		Set<Profile> deleteReq  = delete.getRequest4Follow();
+		deleteReq.remove(loggedUserProfile);
+		
+		
+		profileRepository.save(loggedUserProfile);
+		profileRepository.save(delete);		
+			
+		
 	}
 	
 	

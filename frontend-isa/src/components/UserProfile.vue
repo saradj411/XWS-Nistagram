@@ -20,12 +20,13 @@
                 </div>           
                 <p>{{loggedUser.name}} {{loggedUser.surname}} </p>
                 <p><i> @{{loggedUser.username}}</i></p>
-                <p><i>Bio: {{loggedUser.getBiography}}</i></p>
-                <p><i>Category: {{loggedUser.category}}</i></p>
+                <p>Biography:<br> {{this.myProfile.biography}}</p>
+                <p><i>Category: {{this.myProfile.category}}</i></p>
                 
             </div>
             
             <b-button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "update"><b-icon icon="person" aria-hidden="true"></b-icon> Update </b-button>
+            <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "requestPage"><b-icon icon="emoji-wink" aria-hidden="true"></b-icon> Request for follow  </b-button>
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "request">
                 <b-icon icon="tools" aria-hidden="true"></b-icon> Sent a request for verification </b-button>
 
@@ -57,6 +58,60 @@
 
             </div>
         </div>  
+
+        <div class="requestPageClass"  v-show="!requestVisible">
+            <div style="width: 100%; " >
+                <h3 style="margin-top: 20px; color: black;"> Your follow request: </h3>
+                <button type="button" style=" margin-top: -40px; color: black;" class="close  btn pull-right"  @click="requestVisible = !requestVisible" aria-label="Close">
+                    <span aria-hidden="true"> X </span>                    
+                  </button>
+
+                  <div class="container" style="">
+                    <div class="row" style="margin-left: -10px;
+                    margin-right: -10px;
+                    padding: 5px;
+                    margin-top: 5px;
+                     border-width: 2px; background-color: black; color: white;
+                    border-color: black;
+                    border-style: solid;" v-for="req in this.followerRequest" v-bind:key="req.username">
+                      <div class="col-2">
+                        <img src="../assets/gizmo.jpg" width="100px" height="100px"/>
+                        
+                        
+                      </div>
+                      <div class="col-8">
+                        <h4 style="position: relative;
+                        float: left;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);">@{{req.username}}</h4>
+                      </div>
+                      <div class="col" >
+                        <button  type="button" @click="acceptRequest(req.username)"  style="position: relative;
+                        float: left;
+                        top: 100%;
+                        left: 50%;
+                        transform: translate(-50%, -50%); margin-left:-5px;" class="close  btn pull-right" aria-label="Add">
+                            <b-icon icon="check-square" aria-hidden="true"></b-icon>          
+                          </button>
+                      </div>
+                      <div class="col">
+                        <button  type="button"   @click="declineRequest(req.username)" style="position: relative;
+                        float: left;
+                        top: 100%;
+                        left: 50%;
+                        transform: translate(-50%, -50%); margin-left:-10px;" class="close  btn pull-right" aria-label="Add">
+                            <b-icon icon="x-square" aria-hidden="true"></b-icon>          
+                          </button>
+                      </div>
+                    </div>
+                   
+                  </div>
+
+
+
+            </div>
+        </div>  
               
 
         
@@ -67,7 +122,7 @@ export default {
   data() {
     return {   
         loggedUser: {} ,
-      
+        myProfile: {},
         searchUsername: [],
         search: "",
         selected: null,
@@ -84,8 +139,10 @@ export default {
 
         value: "",
        
+        
+        requestVisible: true,
 
-
+        followerRequest: [],
         visible: false
     }
   },
@@ -95,7 +152,59 @@ export default {
             return this.visibility;
         }
   },
-  methods:{   
+  methods:{ 
+      acceptRequest: function(username)
+      {
+        console.log(username);  
+        const accept =
+        {
+            username: username
+        }
+
+        this.axios.post('/profile/api/profile/acceptFollowRequest',accept,{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {  //this.$router.go(this.$router.currentRoute)                      
+                       console.log(response);
+                       window.location.reload();
+                               
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });    
+      },
+      declineRequest: function(username)
+      {
+        console.log(username);  
+        const decline =
+        {
+            username: username
+        }
+
+        this.axios.post('/profile/api/profile/declineFollowRequest',decline,{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {    
+                        window.location.reload();                   
+                       console.log(response);
+                               
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });    
+      },
+    requestPage: function()
+    {
+        this.requestVisible = !this.requestVisible;
+    }  ,
         logOut: function(){
       this.axios.post('/profile/api/users/logout',{
                     headers: 
@@ -168,25 +277,47 @@ export default {
 
       },
       
-mounted() {
-      
-      this.axios.get('/profile/api/users/getLoggedUser',{
-                    headers: 
-                    {          
-                         
-                        
-                    }}).then(response => 
+mounted() { 
+    this.axios.get('/profile/api/users/getLoggedUser',{
+                    headers:{}}).then(response => 
                     {                        
                        this.loggedUser = response.data;
-                               
-                    }).catch(res => {                        
-                                         
-                        console.log(res.response);
-                       
-                    });   
+                       const info = 
+                    {
+                        username: this.loggedUser.username
+                    }    
+                    this.axios.post('/profile/api/profile/getProfileByUsername',info ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                this.myProfile = response.data;
 
-        
-    }
+
+                                this.axios.post('/profile/api/profile/getAllRequestTo',info ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                this.followerRequest = response.data; 
+                                
+                                console.log("IZVUCE LI ISTA");
+                                    console.log(this.followerRequest); 
+
+                            }).catch(res => {                        
+                                    console.log(res.response.data.message);
+                                    });
+                            }).catch(res => { console.log(res.response.data.message); });
+/*****************************************************************************************************************************/
+
+
+                                    }).catch(res => {                        
+                                                        
+                                        console.log(res.response);
+                                        
+                                    
+                                    });  
+            }
      
 }
 
@@ -199,7 +330,7 @@ mounted() {
     color: white;
     background-color: black;
     width: 25%;
-    height: 100%;
+    height: 100vh;
     position: absolute;
     margin-top: -60px;
 }
@@ -219,7 +350,7 @@ margin: -50px 38%;
     background-color: gray;
     color: black;
 width: 80%;
-height: 100%;
+height: 100vh;
 position: absolute;
 display: -webkit-inline-box;
 margin-left: -25%;
@@ -231,7 +362,7 @@ margin-top: -60px;
 background-color: gray;
 color: black;
 width: 80%;
-height: 100%;
+height: 100vh;
 position: absolute;
 display: -webkit-inline-box;
 margin-left: -25%;
@@ -254,5 +385,16 @@ visibility: hidden;
     padding: 10px;
     width: 80%;
     margin-top: 10px;
+}
+.requestPageClass
+{
+    margin: 0 auto;
+    width: 75%;
+    height: 100vh;
+    background-color: gray;
+    position: absolute;
+    margin-left: 25%;    
+    margin-top: -60px;
+    
 }
 </style>
