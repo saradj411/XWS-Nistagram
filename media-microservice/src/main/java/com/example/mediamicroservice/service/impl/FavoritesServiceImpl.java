@@ -1,7 +1,5 @@
 package com.example.mediamicroservice.service.impl;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -9,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.mediamicroservice.model.CollectionFavourites;
-import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Post;
 import com.example.mediamicroservice.model.Profile;
-import com.example.mediamicroservice.model.Tag;
 import com.example.mediamicroservice.repository.FavoritesRepository;
 import com.example.mediamicroservice.service.FavoritesService;
 
@@ -44,7 +40,7 @@ public class FavoritesServiceImpl implements FavoritesService {
 		System.out.println(username);
 		CollectionFavourites collection=favoritesRepository.findByNameAndUser("All",username);
 		System.out.println("Kolekcija:"+collection.getIdFavourites());
-		/*
+		
 		Set<Post> posts=collection.getTags();
 		posts.add(post);
 		collection.setTags(posts);
@@ -52,11 +48,18 @@ public class FavoritesServiceImpl implements FavoritesService {
 		CollectionFavourites p=favoritesRepository.save(collection);
 		
 		
-		*/
-		return null;
+		
+		return p;
 		
 		
 		
+	}
+
+	@Override
+	public List<CollectionFavourites> findAllByProfile(String username) {
+		// TODO Auto-generated method stub
+		List<CollectionFavourites> collection=favoritesRepository.findByUser(username);
+		return collection;
 	}
 
 }

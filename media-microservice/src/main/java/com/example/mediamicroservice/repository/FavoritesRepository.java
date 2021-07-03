@@ -11,4 +11,7 @@ public interface FavoritesRepository extends JpaRepository<CollectionFavourites,
 
 	@Query("select ex from CollectionFavourites  ex where ex.name = ?1 and ex.profile.username=?2")
     CollectionFavourites findByNameAndUser(String name,String username);
+	
+	@Query("select ex from CollectionFavourites ex where ex.profile.username=?1")
+    List<CollectionFavourites> findByUser(String username);
 }

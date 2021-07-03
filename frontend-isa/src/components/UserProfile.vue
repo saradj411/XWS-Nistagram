@@ -19,6 +19,9 @@
                     <b-icon icon="person" aria-hidden="true"></b-icon>Update profile</b-button>
        <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "request">
                     <b-icon icon="tools" aria-hidden="true"></b-icon>Sent a request for verification </b-button>
+ <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "favorites">
+                    <b-icon icon="heart-fill" aria-hidden="true"></b-icon>Favorites</b-button>
+
 
 
         
@@ -69,7 +72,9 @@ export default {
       post: function(){
         window.location.href = "/Proba";
       },     
-    
+    favorites: function(){
+        window.location.href = "/Favorites";
+      }, 
 
       },
       

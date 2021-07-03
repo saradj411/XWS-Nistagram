@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.commons.util.IdUtils;
 import org.springframework.stereotype.Service;
 
+import com.example.mediamicroservice.dto.FavoritesDTO;
 import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.PostDTO;
 import com.example.mediamicroservice.model.Media;
@@ -104,6 +105,33 @@ public class PostServiceImpl implements PostService{
 	}
 	public FrontMediaDTO imageFile(FrontMediaDTO front,String filePath) {
 		FrontMediaDTO frontDTO=front;
+		//List<byte[]> imageBytes=new ArrayList<byte[]>();
+		//front.setImageByte(imageBytes);
+		File in=new File(filePath+"/"+front.getFileName());
+		try {
+			frontDTO.setImageByte(IOUtils.toByteArray(new FileInputStream(in)));
+		}catch(IOException e){
+			e.printStackTrace();
+			
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+		}
+		return frontDTO;
+	}
+
+	public List<FavoritesDTO> getPicturesFiles(List<FavoritesDTO> fronts) {
+		List<FavoritesDTO> listaDTO=new ArrayList<FavoritesDTO>();
+		if(fronts!=null) {
+			String filePath=new File("").getAbsolutePath();
+			filePath=filePath.concat("/"+"user-photos"+"/");
+			for(FavoritesDTO m:fronts) {
+				listaDTO.add(pictureFile(m, filePath));
+			}
+		}
+		return listaDTO;
+	}
+	public FavoritesDTO pictureFile(FavoritesDTO front,String filePath) {
+		FavoritesDTO frontDTO=front;
 		//List<byte[]> imageBytes=new ArrayList<byte[]>();
 		//front.setImageByte(imageBytes);
 		File in=new File(filePath+"/"+front.getFileName());
