@@ -10,6 +10,7 @@ import com.example.mediamicroservice.model.CollectionFavourites;
 import com.example.mediamicroservice.model.Post;
 import com.example.mediamicroservice.model.Profile;
 import com.example.mediamicroservice.repository.FavoritesRepository;
+import com.example.mediamicroservice.repository.ProfileRepository;
 import com.example.mediamicroservice.service.FavoritesService;
 
 @Service
@@ -17,6 +18,9 @@ public class FavoritesServiceImpl implements FavoritesService {
 
 	@Autowired
 	FavoritesRepository favoritesRepository;
+	
+	@Autowired
+	ProfileRepository profileRepository;
 	
 	@Override
 	public CollectionFavourites save(Profile profile) {
@@ -60,6 +64,19 @@ public class FavoritesServiceImpl implements FavoritesService {
 		// TODO Auto-generated method stub
 		List<CollectionFavourites> collection=favoritesRepository.findByUser(username);
 		return collection;
+	}
+
+	@Override
+	public CollectionFavourites addNew(String username, String name) {
+		CollectionFavourites collection=new CollectionFavourites();
+		Profile profile=profileRepository.getOneByUsername(username);
+				
+		collection.setName(name);
+		collection.setProfile(profile);
+		
+		CollectionFavourites p=favoritesRepository.save(collection);
+		
+		return p;
 	}
 
 }

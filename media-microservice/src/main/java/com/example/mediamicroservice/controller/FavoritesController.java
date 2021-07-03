@@ -46,6 +46,16 @@ public class FavoritesController {
             new ResponseEntity<CollectionFavourites>(collection,HttpStatus.CREATED);
 	}
 	
+	@PostMapping("/addNewCollection/{username}/{name}")
+	public ResponseEntity<CollectionFavourites> addNewCollection(@PathVariable String username,@PathVariable String name){
+		
+		CollectionFavourites collection=favoritesService.addNew(username, name);
+		
+		
+		return  collection == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
+            new ResponseEntity<CollectionFavourites>(collection,HttpStatus.CREATED);
+	}
+	
 	@GetMapping(value = "/findAllByProfile/{username}")
     public ResponseEntity<List<FavoritesDTO>> findAllByProfile(@PathVariable String username) {
 		System.out.println("uslooo");

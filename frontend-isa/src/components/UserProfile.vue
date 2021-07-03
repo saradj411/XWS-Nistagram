@@ -20,7 +20,7 @@
        <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "request">
                     <b-icon icon="tools" aria-hidden="true"></b-icon>Sent a request for verification </b-button>
  <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "favorites">
-                    <b-icon icon="heart-fill" aria-hidden="true"></b-icon>Favorites</b-button>
+                    <b-icon icon="heart-fill" aria-hidden="true"></b-icon> Favorites</b-button>
 
 
 

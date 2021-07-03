@@ -5,6 +5,12 @@
                 <img class="image_style space_style" title="Nistagram" style="width: 50px; height: 50px; margin-right:10px;"
                 src="../assets/nistagram.png">
 </span>
+
+ <span  style="float:right;margin:30px">
+                    <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" style="margin-right:20px;" v-on:click = "addCollecion">
+                        <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add new collection</b-button>
+                </span>
+                
                </div>
              <div style="float: left; margin: 15px;">  
          <!--Favorites-->
