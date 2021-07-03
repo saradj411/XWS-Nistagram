@@ -1,6 +1,7 @@
 package com.example.profilemicroservice.service;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.profilemicroservice.dto.LoginDTO;
@@ -23,9 +24,8 @@ public interface UserService {
     public User getLoogedIn();
     public User getLoggedUser();
     User update(User user);
-	User findById(Long id);
-
-    
+	User findById(Long id);    
     
     public User LogIn(LoginDTO loginDTO);
+    public ArrayList<User> searchUsername(String username);
 }
