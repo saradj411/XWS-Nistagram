@@ -161,4 +161,58 @@ public class PostController {
     }
 	
 	
+	@GetMapping(value = "/getPublicPost")
+    public ResponseEntity<List<FrontPostDTO>> findAllById() {
+		System.out.println("javni profili ");
+        List<Post> drugs=postRepository.findAll();
+        List<FrontPostDTO> fronts=new ArrayList<FrontPostDTO>();
+        
+        for(Post p:drugs) {
+        
+        	
+        	FrontPostDTO front=new FrontPostDTO();
+        	front.setDate(p.getDate());
+        	front.setDescription(p.getDescription());
+        	front.setIdPost(p.getIdPost());
+        	front.setLocation(p.getLocation());
+        	front.setUsername(p.getProfile().getUsername());
+        	front.setNumberOfDislikes(p.getNumberOfDislikes());
+        	front.setNumberOfLikes(p.getNumberOfLikes());
+        	
+        	List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+        	List<FrontMediaDTO> ee=new ArrayList<FrontMediaDTO>();
+        	for(Media a:p.getMedia()) {
+        		FrontMediaDTO ff=new FrontMediaDTO();
+        		
+        		ff.setFileName(a.getFileName());
+        		ff.setId(a.getId());
+        		ff.setIdPost(a.getPost().getIdPost());
+        		lista.add(ff);
+        		 ee=postImpl.getImagesFiles(lista);
+        	}
+        	
+        	front.setMedia(ee);
+        	
+        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+        	for(Tag t:p.getTags()) {
+        		FrontTagDTO tt=new FrontTagDTO();
+        		tt.setIdPost(t.getPost().getIdPost());
+        		tt.setTagText(t.getTagText());
+        		lista1.add(tt);
+        	}
+        	front.setTags(lista1);
+        	
+        	fronts.add(front);
+        	
+        	/*Set<Media> medias=p.getMedia();
+        	for(Media m:medias) {
+        	System.out.println("nestoo:0"+m.getFileName());
+        	}*/
+        }
+        //List<FrontMediaDTO> ee=postImpl.getImagesFiles(lista);
+        return fronts == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(fronts);
+    }
+	
 }

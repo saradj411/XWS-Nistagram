@@ -1,7 +1,7 @@
 <template>
    <div >
     <div class="loginHolder">
-    <h1 >Register patient: </h1>
+    <h1 >Register user: </h1>
     <br>
         <div class="loginDiv">
             <table id="loginTable">
