@@ -29,22 +29,17 @@
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "requestPage"><b-icon icon="emoji-wink" aria-hidden="true"></b-icon> Request for follow  </b-button>
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "request">
                 <b-icon icon="tools" aria-hidden="true"></b-icon> Sent a request for verification </b-button>
-  <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "addPosts">
-                    <b-icon icon="image" aria-hidden="true"></b-icon> Add post</b-button>
-       <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "addStory">
-                    <b-icon icon="image" aria-hidden="true"></b-icon> Add story</b-button>
-       <b-button  pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "update">
-                    <b-icon icon="person" aria-hidden="true"></b-icon>Update profile</b-button>
-       <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "request">
-                    <b-icon icon="tools" aria-hidden="true"></b-icon>Sent a request for verification </b-button>
- <b-button pill variant="outline-danger" class = "btn btn-lg space_style" v-on:click = "favorites">
-                    <b-icon icon="heart-fill" aria-hidden="true"></b-icon> Favorites</b-button>
+ 
+                    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "addStory">
+                    <b-icon icon="camera" aria-hidden="true"></b-icon> Add story</b-button> 
                     
-                    
-                <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "post">
-                    <b-icon icon="image" aria-hidden="true"></b-icon> Posts</b-button>   
                     <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "addPosts">
                         <b-icon icon="camera" aria-hidden="true"></b-icon> Add post</b-button>   
+                <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "post">
+                    <b-icon icon="image" aria-hidden="true"></b-icon> Posts</b-button>   
+                    
+                      <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "favorites">
+                    <b-icon icon="heart-fill" aria-hidden="true"></b-icon> Favorites</b-button> 
             <button class="btn btn-dark" style=" margin-top: 10px; width: 80%; " v-on:click = "logOut"> Log out </button>
            
             
