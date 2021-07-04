@@ -15,7 +15,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VerificationRequest from '../components/VerificationRequest.vue'
 import AdminProfile from '../components/AdminProfile.vue'
 import AllRequest from '../components/AllRequest.vue'
-
+import AnotherUserProfile from '../components/AnotherUserProfile'
 import moment from 'moment'
 
 Vue.use(VueRouter)
@@ -100,6 +100,15 @@ const routes = [
         name: 'CollectionPosts',
         component: CollectionPosts
       }
+
+      ,
+      {
+        path: '/AnotherUserProfile/:username',
+        name: 'AnotherUserProfile',
+        component: AnotherUserProfile
+      }
+
+
 
       
       
