@@ -224,8 +224,9 @@ export default {
             this.axios.post('media/favorites/saveInOtherCollection/'+this.loggedUser.username+"/"+post.idPost+"/"+collection,{ 
                 }).then(response => {
                     alert("Picture is saved!");
-                     
-                    console.log(response);                
+                     this.showAdd=false;  
+                    console.log(response);  
+                                
                 }).catch(res => {
                     alert("You have already saved this post");
                     console.log(res)

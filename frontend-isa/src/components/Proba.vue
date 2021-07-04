@@ -113,15 +113,13 @@ export default {
     methods:{
     saveInFavorites: async function(event,post){
         console.log(post)
-         alert(this.loggedUser.username)
-         alert(post.idPost)
+         //alert(this.loggedUser.username)
+         //alert(post.idPost)
             this.axios.post('media/favorites/saveInFavorites/'+this.loggedUser.username+"/"+post.idPost,{ 
                 
 
                 }).then(response => {
                     alert("Post saved in favorites!");
-                    //this.likesNumber = response.data
-                    //this.numberOfLikes = this.likesNumber
                      
                     console.log(response);                
                 }).catch(res => {
