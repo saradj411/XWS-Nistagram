@@ -41,6 +41,8 @@ public class UserRegistrationDTO {
     @NotNull(message = "Phone must be provided")
     private String phone;
 
+    private Boolean privateProfile;
+
     public UserRegistrationDTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -55,7 +57,7 @@ public class UserRegistrationDTO {
 			@NotNull(message = "Address must be provided") String address,
 			@NotNull(message = "City must be provided") String city,
 			@NotNull(message = "Country must be provided") String country,
-			@NotNull(message = "Phone must be provided") String phone) {
+			@NotNull(message = "Phone must be provided") String phone,Boolean privateProfile) {
 		super();
 		this.username = username;
 		this.email = email;
@@ -67,6 +69,7 @@ public class UserRegistrationDTO {
 		this.city = city;
 		this.country = country;
 		this.phone = phone;
+		this.privateProfile=privateProfile;
 	}
 
 	public String getUsername() {
@@ -87,6 +90,14 @@ public class UserRegistrationDTO {
 
 	public String getPassword() {
 		return password;
+	}
+
+	public Boolean getPrivateProfile() {
+		return privateProfile;
+	}
+
+	public void setPrivateProfile(Boolean privateProfile) {
+		this.privateProfile = privateProfile;
 	}
 
 	public void setPassword(String password) {
