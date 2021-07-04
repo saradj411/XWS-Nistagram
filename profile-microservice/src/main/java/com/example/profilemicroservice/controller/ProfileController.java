@@ -114,5 +114,70 @@ User loggedUser;
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@GetMapping(value ="/getAllCloseFriends")
+	public ResponseEntity<Set<Profile>> getAllCloseFriends()	
+	{		
+		Set<Profile> closeFriends = profileService.getCloseFriend();
+		return new ResponseEntity<Set<Profile>>(closeFriends, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/addNewCloseFriend")
+	public ResponseEntity<Profile> addNewCloseFriend(@RequestBody HashMap<String,String> username)	
+	{		
+		Profile closeFriends = profileService.addCloseFriend(username.get("username"));
+		return new ResponseEntity<Profile>(closeFriends, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/deleteNewCloseFriend")
+	public ResponseEntity deleteNewCloseFriend(@RequestBody HashMap<String,String> username)	
+	{		
+		profileService.deleteCloseFriend(username.get("username"));
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(value ="/getBlockedProfiles")
+	public ResponseEntity<Set<Profile>> getBlockedProfiles()	
+	{		
+		Set<Profile> blockedProfile = profileService.getBlockedPforile();
+		return new ResponseEntity<Set<Profile>>(blockedProfile, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/blockProfile")
+	public ResponseEntity<Set<Profile>> blockProfile(@RequestBody HashMap<String,String> username)	
+	{		
+		Set<Profile> blockedList = profileService.addBlockProfile(username.get("username"));
+		return new ResponseEntity<>(blockedList, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/unblockProfile")
+	public ResponseEntity unblockProfile(@RequestBody HashMap<String,String> username)	
+	{		
+		profileService.deleteBlockedProfile(username.get("username"));
+		return new ResponseEntity<>( HttpStatus.OK);
+	}
+	
+	@GetMapping(value ="/getMutedProfiles")
+	public ResponseEntity<Set<Profile>> getMutedProfiles()	
+	{		
+		Set<Profile> mutedProfile = profileService.getMutedPforile();
+		return new ResponseEntity<Set<Profile>>(mutedProfile, HttpStatus.OK);
+	}
+	
+	
+	@PostMapping(value ="/muteProfile")
+	public ResponseEntity<Set<Profile>> muteProfile(@RequestBody HashMap<String,String> username)	
+	{		
+		Set<Profile> blockedList = profileService.addMutedProfile(username.get("username"));
+		return new ResponseEntity<>(blockedList, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/unmuteProfile")
+	public ResponseEntity unmuteProfile(@RequestBody HashMap<String,String> username)	
+	{		
+		profileService.deleteMutedProfile(username.get("username"));
+		return new ResponseEntity<>( HttpStatus.OK);
+	}
+	
 	
 }

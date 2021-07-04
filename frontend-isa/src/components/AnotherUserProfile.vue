@@ -5,12 +5,39 @@
         <td>
             <img src="../assets/gizmo.jpg" width="200px" height="200px" style="margin-left: -50px; position: absolut;"/></td>
         <td>
-         <h1 style="color:white;"> {{this.userProfile[0].name}} {{this.userProfile[0].surname }} </h1>
+         <h1 style="color:white;">{{this.userProfile[0].name}} {{this.userProfile[0].surname }} </h1>
     <p><i> @{{ this.userProfile[0].username }} </i></p>
-    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%; color:white;" v-on:click = "follow()"> 
+    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%; color:white;" :disabled="isBlocked" v-on:click = "follow()"> 
     <b-icon icon="plus" aria-hidden="true"></b-icon>
      {{ text }} 
     <b-icon icon="lock" v-show="this.userProfileClassInfo.privateProfil == true && this.requestStatus == false && this.followingStatus == false" aria-hidden="true"></b-icon> </b-button> 
+    <b-button class="btn btn-dark" v-if="this.followingStatus && !this.isBlocked" style=" margin-left: 10px;  margin-top: 10px; width: 15%; color:white;" v-on:click = "closeFriend()">
+     <b-icon icon="star" v-if="this.isCloseFriend == false" aria-hidden="true"></b-icon> 
+     <b-icon icon="star-fill" v-if="this.isCloseFriend  == true" aria-hidden="true" color="green"></b-icon>  </b-button>
+
+ <b-button class="btn btn-dark" v-if="this.followingStatus && !this.isBlocked" v-on:click="mute()" style="margin-top: 10px; width: 31%; color:white;" >
+     <b-icon icon="eye-fill" v-if="!this.isMuted" aria-hidden="true"></b-icon> 
+     <b-icon icon="eye-slash" v-if="this.isMuted" aria-hidden="true"></b-icon> Mute </b-button>
+
+
+
+      <!--<b-button class="btn btn-dark" v-if="this.followingStatus && !this.isBlocked" style="margin-top: 10px; margin-left:10px; margin-right:10px; width: 31%; color:white;" >
+     <b-icon icon="bell-fill" aria-hidden="true"></b-icon>
+     <b-icon icon="bell" aria-hidden="true"></b-icon>  Notification  </b-button>-->
+      <b-button class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 31%; color:white;" v-on:click="block()" >
+     <b-icon icon="exclamation-circle" v-if="!this.isBlocked" aria-hidden="true"> </b-icon>
+    <b-icon icon="exclamation-circle-fill" v-if="this.isBlocked" color="red" aria-hidden="true"> </b-icon> {{ this.blockText }} </b-button>
+
+
+
+
+    </td>
+    
+        </tr>
+        <tr>
+        <td></td>
+        <td>
+   
     </td>
         </tr>
     </table>
@@ -39,14 +66,152 @@
             loggedUser: {},
             exists: false,
             text: "Follow",
+            blockText: "Block",
             followingStatus: false,
             requestStatus: false,
             following: [],
-            userProfileClassInfo: {}
+            userProfileClassInfo: {},
+
+            closeFriends:[],
+            isCloseFriend: false,
+
+            mutedProfiles:[],
+            isMuted: false,
+
+            blockedProfile:[],
+            isBlocked:false
 
         }
       },
       methods:{
+          mute:function()
+          { 
+              const userForFollow = 
+            {
+                username: this.userProfile[0].username
+            }              
+            if(this.isMuted == true)
+              {
+                  //unmute
+                  this.axios.post('/profile/api/profile/unmuteProfile', userForFollow ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+
+                                this.isMuted = false;      
+                                console.log(response.data);                              
+                             
+                            }).catch(res => {
+                                        console.log(res.response.data.message);
+                                    });
+              }
+              else
+              {
+                  this.axios.post('/profile/api/profile/muteProfile', userForFollow ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                                                
+                                this.isMuted = true;      
+                                console.log(response.data);                              
+                             
+                            }).catch(res => {
+                                        console.log(res.response.data.message);
+                                    });
+
+              }
+
+
+
+
+          },
+          block: function()
+          {
+               const userForFollow = 
+            {
+                username: this.userProfile[0].username
+            }
+              if(this.isBlocked == true)
+              {
+                  //odblokiraj
+                  console.log("ODBLOKIRA");
+                  this.axios.post('/profile/api/profile/unblockProfile', userForFollow ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                this.text = "Follow";
+                                this.blockText = "Block";
+                                this.isMuted = false;                                  
+                                this.followingStatus = false;                              
+                                this.isCloseFriend = false;
+                                console.log(response.data);
+                                this.isBlocked = false;                                
+                             
+                            }).catch(res => {
+                                        console.log(res.response.data.message);
+                                    });
+              }
+              else
+              {
+                  //blokiraj
+                   this.axios.post('/profile/api/profile/blockProfile', userForFollow ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                console.log(response.data);
+                                this.isBlocked = true;   
+                                this.text = "This user is blocked!";
+                                this.blockText = "Unblock"  
+                                this.isCloseFriend = false;
+                                this.followingStatus = false;
+                                this.isMuted = false;                           
+                             
+                            }).catch(res => {
+                                        console.log(res.response.data.message);
+                                    });
+              }
+          },
+          
+          closeFriend: function(){
+
+              const userForFollow = 
+            {
+                username: this.userProfile[0].username
+            }
+
+            if(this.isCloseFriend == true)
+            {
+                console.log("Izbaci iz bliskih");
+              this.axios.post('/profile/api/profile/deleteNewCloseFriend', userForFollow ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                console.log(response.data);
+                                this.isCloseFriend = false;                                
+                             
+                            }).catch(res => {
+                                        console.log(res.response.data.message);
+                                    });
+            }else{
+              console.log("Add close friend.");
+              this.axios.post('/profile/api/profile/addNewCloseFriend', userForFollow ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                console.log(response.data);
+                                this.isCloseFriend = true;                                
+                             
+                            }).catch(res => {
+                                        console.log(res.response.data.message);
+                                    });
+            }
+          },
         follow: function(){
             const userForFollow = 
             {
@@ -123,6 +288,20 @@
                                                         console.log(response.data);
                                                         this.followingStatus = false;
                                                         this.text = " Follow ";
+                                                        //obrisi i sa bliskih
+                                this.axios.post('/profile/api/profile/deleteNewCloseFriend', userForFollow ,{ 
+                                                            headers: {
+                                                                'Content-Type': 'application/json;charset=utf-8' 
+                                                                }
+                                                            }).then(response => {
+                                                                console.log(response.data);
+                                                                this.isCloseFriend = false;                                
+                                                            
+                                                            }).catch(res => {
+                                                                        console.log(res.response.data.message);
+                                                                    });
+
+
                                                     }).catch(res => {                                                                
                                                                 console.log(res.response.data.message);
                                                             });
@@ -166,10 +345,7 @@
                    'Content-Type': 'application/json;charset=utf-8' 
                 }
             }).then(response => {
-                  this.userProfileClassInfo = response.data; 
-                                    
-                     console.log("STASTA");                   
-                     console.log(this.userProfileClassInfo); 
+                  this.userProfileClassInfo = response.data;
 
             }).catch(res => {                        
                      console.log(res.response.data.message);
@@ -203,9 +379,7 @@
                                                      break;
                                                  }
                                              }
-                                             
-                                             //console.log("PRONADJENI ZAHTEV"); 
-                                             //console.log(this.sendedRequest);   
+                                               
                                         }).catch(res => {   
                                             console.log(res.response);
                                         
@@ -224,9 +398,64 @@
                                                      break;
                                                  }
                                              }
-                                             
-                                             //console.log("PRONADJENI ZAHTEV"); 
-                                             //console.log(this.sendedRequest);   
+                                              
+                                        }).catch(res => {   
+                                            console.log(res.response);
+                                        
+                                        });   
+
+                        this.axios.get('/profile/api/profile/getAllCloseFriends' ,{
+                                        headers: {}} ).then(response => 
+                                        {     
+                                             this.closeFriends = response.data;
+                                              console.log(this.closeFriends);
+                                             for(var u in this.closeFriends)
+                                             { 
+                                                 if(this.closeFriends[u].username == this.userProfile[0].username)
+                                                 {
+                                                    
+                                                     this.isCloseFriend = true;                                                    
+                                                     break;
+                                                 }
+                                             } 
+                                        }).catch(res => {   
+                                            console.log(res.response);
+                                        
+                                        });   
+
+                          this.axios.get('/profile/api/profile/getMutedProfiles' ,{
+                                        headers: {}} ).then(response => 
+                                        {     
+                                             this.mutedProfiles = response.data;
+                                              console.log(this.closeFriends);
+                                             for(var u in this.closeFriends)
+                                             { 
+                                                 if(this.mutedProfiles[u].username == this.userProfile[0].username)
+                                                 {
+                                                    
+                                                     this.isMuted = true;                                                    
+                                                     break;
+                                                 }
+                                             } 
+                                        }).catch(res => {   
+                                            console.log(res.response);
+                                        
+                                        });  
+                             this.axios.get('/profile/api/profile/getBlockedProfiles' ,{
+                                        headers: {}} ).then(response => 
+                                        {     
+                                             this.blockedProfile = response.data;
+                                              console.log(this.closeFriends);
+                                             for(var u in this.closeFriends)
+                                             { 
+                                                 if(this.blockedProfile[u].username == this.userProfile[0].username)
+                                                 {                                                    
+                                                     this.isBlocked = true; 
+                                                     this.text = "This user is blocked!"
+                                                     this.blockText = "Unblock"                                                   
+                                                     break;
+                                                 }
+                                             } 
                                         }).catch(res => {   
                                             console.log(res.response);
                                         
