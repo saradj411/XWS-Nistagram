@@ -70,7 +70,6 @@
 
 <script>
 export default {
-    //name: 'AddingStories',
     data() {
     return {
         file: [],
