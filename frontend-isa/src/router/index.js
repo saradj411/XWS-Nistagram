@@ -9,6 +9,7 @@ import AddPost from '../components/AddPost.vue'
 import AddStory from '../components/AddStory.vue'
 import Proba from '../components/Proba.vue'
 import Favorites from '../components/Favorites.vue'
+import CollectionPosts from '../components/CollectionPosts.vue'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VerificationRequest from '../components/VerificationRequest.vue'
@@ -93,7 +94,12 @@ const routes = [
         name: 'Favorites',
         component: Favorites
       }
-
+      ,
+      {
+        path: '/CollectionPosts/:id',
+        name: 'CollectionPosts',
+        component: CollectionPosts
+      }
 
       
       

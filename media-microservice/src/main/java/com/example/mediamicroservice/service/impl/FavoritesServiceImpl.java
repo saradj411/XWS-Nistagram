@@ -79,4 +79,12 @@ public class FavoritesServiceImpl implements FavoritesService {
 		return p;
 	}
 
+	@Override
+	public Set<Post> findAllPosts(Long idFavourites) {
+		CollectionFavourites collection=favoritesRepository.getOne(idFavourites);
+		Set<Post> posts=collection.getTags();
+		
+		return posts;
+	}
+
 }

@@ -6,4 +6,6 @@ import com.example.mediamicroservice.model.Post;
 public interface PostService {
 
 	Post addNewPost(PostDTO postDTO,String username);
+	
+	
 }

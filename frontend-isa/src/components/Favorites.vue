@@ -32,10 +32,16 @@
                         <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add</b-button>
                 </div>
              <div style="float: left; margin: 15px;">  
+
          <!--Favorites-->
              <b-card class="post_look" v-for="f in favorites" v-bind:key="f.idFavourites">
                   <b-row >
-                        <h4 align="left"><b-icon icon="bookmark" aria-hidden="true"></b-icon>  {{f.name}}</h4>
+                        <h4 align="left"><b-icon style="font-size: 30px;margin-top:10px;" icon="bookmark" aria-hidden="true"></b-icon></h4>
+                        <td><router-link :to="{ path: '/CollectionPosts/'+f.idFavourites}" v-slot="{href, navigate}" custom>
+           <b-link style="font-size: 30px;margin-bottom:10px;" :href="href" @click="navigate"  elevation="1">
+              {{f.name}}
+            </b-link >
+         </router-link></td>
                         </b-row>
                        
                  <div>
