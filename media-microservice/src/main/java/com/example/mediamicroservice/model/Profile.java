@@ -1,5 +1,8 @@
 package com.example.mediamicroservice.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,47 +11,58 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Profile {
 
 
+	  
+			@Id
+			@Column
+			@GeneratedValue(strategy = GenerationType.AUTO)
+			private int id;
+		 		
+			@Column(name="username")
+			private String username;
+			
+			@Column
+		    private Boolean privateProfil;
 
-		@Id
-	    @Column(name = "id")
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Long id;
+			public int getId() {
+				return id;
+			}
 
-	    @Column(name = "username", unique = true, nullable = false)
-	    private String username;
+			public void setId(int id) {
+				this.id = id;
+			}
 
-	    public Profile() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	    
-		public Profile(Long id, String username) {
-			super();
-			this.id = id;
-			this.username = username;
-		}
+			public String getUsername() {
+				return username;
+			}
 
-		public Long getId() {
-			return id;
-		}
+			public void setUsername(String username) {
+				this.username = username;
+			}
 
-		public void setId(Long id) {
-			this.id = id;
-		}
+			public Boolean getPrivateProfil() {
+				return privateProfil;
+			}
 
-		public String getUsername() {
-			return username;
-		}
-
-		public void setUsername(String username) {
-			this.username = username;
-		}
-	    
+			public void setPrivateProfil(Boolean privateProfil) {
+				this.privateProfil = privateProfil;
+			}
+			
+			
+		    
+		   
+		    
+	//lajkovani postovi
+	//dislajkovani psotovi
+		
 	    
 }

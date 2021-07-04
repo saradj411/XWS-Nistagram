@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.profilemicroservice.connections.MediaConnection;
+import com.example.profilemicroservice.dto.ProfileeDTO;
 import com.example.profilemicroservice.dto.UserProfileDTO;
 import com.example.profilemicroservice.model.Profile;
 import com.example.profilemicroservice.model.User;
@@ -23,11 +25,14 @@ import com.example.profilemicroservice.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping(value = "/api/profile")
+
 public class ProfileController {
 	
 @Autowired
 private ProfileService profileService;
 
+@Autowired
+private MediaConnection mediaConnection;
 
 User loggedUser;
 
@@ -42,8 +47,31 @@ User loggedUser;
 	@GetMapping(value ="/getAllProfiles")
 	public ResponseEntity<ArrayList<Profile>> getAllProfiles()	
 	{
+		ArrayList<ProfileeDTO>dtos=new ArrayList<>();
 		ArrayList<Profile> allProfile = (ArrayList<Profile>) profileService.findAll();
+		for(Profile p:allProfile) {
+			ProfileeDTO d=new ProfileeDTO(p.getId(),p.getUsername(),p.getPrivateProfil());
+			dtos.add(d);
+			System.out.println("svi profili u profile controller su   "+p.getUsername());;
+		}
+		//mediaConnection.getAllProfiles(dtos);
 		return new ResponseEntity<>(allProfile, HttpStatus.OK);
+	}
+	@GetMapping(value ="/getAllPublicProfiles")
+	public ArrayList<ProfileeDTO> getAllPublicProfiles()	
+	{
+		ArrayList<ProfileeDTO>dtos=new ArrayList<>();
+		ArrayList<Profile> allProfile = (ArrayList<Profile>) profileService.findAll();
+		for(Profile p:allProfile) {
+			if(p.getPrivateProfil().equals(false)) {
+				ProfileeDTO d=new ProfileeDTO(p.getId(),p.getUsername(),p.getPrivateProfil());
+				dtos.add(d);
+				System.out.println("svi javni profili su"+p.getUsername());
+			}
+			
+		}
+		//mediaConnection.getAllProfiles(dtos);
+		return dtos;
 	}
 	
 	@PostMapping(value ="/getAllRequest")
@@ -113,6 +141,7 @@ User loggedUser;
 		profileService.declineFollowRequest(username.get("username"));
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
 	
 	
 }

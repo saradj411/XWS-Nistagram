@@ -16,6 +16,9 @@ import VerificationRequest from '../components/VerificationRequest.vue'
 import AdminProfile from '../components/AdminProfile.vue'
 import AllRequest from '../components/AllRequest.vue'
 import AnotherUserProfile from '../components/AnotherUserProfile'
+import PublicProfile from '../components/PublicProfile'
+
+
 import moment from 'moment'
 
 Vue.use(VueRouter)
@@ -32,6 +35,11 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 const routes = [
     {
       path: '/',
+      name: 'PublicProfile',
+      component: PublicProfile
+    },
+    {
+      path: '/Welcome',
       name: 'Welcome',
       component: Welcome
     },
@@ -107,10 +115,14 @@ const routes = [
         name: 'AnotherUserProfile',
         component: AnotherUserProfile
       }
+      ,
+      {
+        path: '/PublicProfile',
+        name: 'PublicProfile',
+        component: PublicProfile
+      }
 
 
-
-      
       
 
       
