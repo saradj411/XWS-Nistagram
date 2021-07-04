@@ -6,12 +6,31 @@
                 src="../assets/nistagram.png">
 </span>
 
- <span  style="float:right;margin:30px">
-                    <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" style="margin-right:20px;" v-on:click = "addCollecion">
+            <span  style="float:right;margin:30px">
+                    <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" style="margin-right:20px;" v-on:click = "addNewCollecion">
                         <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add new collection</b-button>
                 </span>
                 
                </div>
+                <div   v-if="showAdd" style="float:right;margin-top:30px;margin-right:10px">
+           <h4 for="textarea-large" 
+            class="text-left" 
+            style="margin-bottom:2%; 
+            margin-left:20%;
+                margin-top: 5% !important;">Name:</h4>
+                <b-col sm="12">
+                    <b-form-textarea
+                    style=" 
+                    margin-left:-10%;"
+
+                    id="textarea-large"
+                    v-model="name"
+                    placeholder="type here.."
+                    ></b-form-textarea>
+                </b-col>
+                    <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" style="margin:10px;" v-on:click = "addCollecion">
+                        <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add</b-button>
+                </div>
              <div style="float: left; margin: 15px;">  
          <!--Favorites-->
              <b-card class="post_look" v-for="f in favorites" v-bind:key="f.idFavourites">
@@ -45,7 +64,10 @@ export default {
         //likesNumber:0,
         numberOfLikes:0,
         numberOfDislikes:0,
-        loggedUser: {} 
+        loggedUser: {} ,
+        name: "",
+        rez:"",
+        showAdd:false
        
         }
     },
@@ -93,7 +115,32 @@ export default {
                 
    },
     methods:{
-  
+        
+        addCollecion: function() {
+          
+            this.axios.post('/media/favorites/addNewCollection/'+this.loggedUser.username+"/"+this.name,{
+                headers: {
+                   
+                }
+                }).then(response => {
+                       this.rez = response.data;
+                       alert("Success");
+                       this.showAdd=false;
+                    window.location.href = "/Favorites";
+                       
+                       
+                  
+                    })
+                    .catch(response => {
+                    console.log(response.data)
+                    alert("Eror")
+                    
+                    });  
+        },
+        addNewCollecion:function(){
+            this.showAdd=true;
+        }
+
 }
 }
 </script>
