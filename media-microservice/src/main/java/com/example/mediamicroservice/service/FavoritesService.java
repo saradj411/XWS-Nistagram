@@ -11,6 +11,8 @@ public interface FavoritesService {
 	CollectionFavourites save(Profile profile);
 	CollectionFavourites addNew(String username,String name);
 	CollectionFavourites addPost(Post post,String username);
+	CollectionFavourites addPostInOtherCollection(Post post,String username,String collectionName);
+
 	 
 	List<CollectionFavourites> findAllByProfile(String username);
 	

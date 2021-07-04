@@ -11,9 +11,35 @@
              <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
                   <b-row >
                         <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
-                        </b-row>
+                         <h4 align="right" style="margin-left:200px">  <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" v-on:click = "addNewCollecion">
+                        <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add in other collection</b-button></h4>
+            <div v-if="showAdd" style="float:right;margin-top:2px;margin-left:300px">
+           <h4 for="textarea-large" 
+            class="text-left" 
+            style="margin-bottom:2%; 
+            margin-left:20%;
+                margin-top: 5% !important;">Collection:</h4>
+                <b-col sm="12">
+                    <input 
+                list="my-list-id" 
+                v-model="selectedCollection" 
+                class="input_style" 
+                placeholder="enter collection.."
+                style="margin-top: 1% !important; width:200px; margin-left:10%;">
+                    <datalist id="my-list-id">
+                        <option v-for="loc in favorites" v-bind:key="loc.idFavourites">
+                            {{ loc.name}}
+                        </option>
+                    </datalist>
+                </b-col>
+                    <b-button pill variant="outline-danger" class = "btn btn-light" style="margin:10px;"  @click="addCollection($event,selectedCollection,post) ">
+                        <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add</b-button>
+                </div>
+                  </b-row>
+                   
              <h6 align="left">{{post.location}}</h6>
-                        
+            
+                
                  <div v-for="m in post.media" v-bind:key="m.imageBytes">
                     <b-img v-if="!m.fileName.includes(videoText)" thumbnail  v-bind:src="m.imageByte" alt="Image 1"></b-img>
                              <video v-if="m.fileName.includes(videoText)" autoplay controls v-bind:src="m.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
@@ -42,7 +68,6 @@
 
 <script>
 export default {
-    name: 'Homepage',
     data() {
     return {
         id : this.$route.params.id,
@@ -53,7 +78,11 @@ export default {
         //likesNumber:0,
         numberOfLikes:0,
         numberOfDislikes:0,
-        loggedUser: {} 
+        loggedUser: {} ,
+        favorites:"",
+        showAdd:false,
+        selectedCollection:[''],
+        rez:""
        
         }
     },
@@ -68,7 +97,36 @@ export default {
                        this.loggedUser = response.data;
 
                                //alert(this.loggedUser.username)
-            this.axios.get('/media/post/getPostByCollection/'+this.id)
+            this.axios.get('/media/favorites/findAllByProfile/'+this.loggedUser.username)
+            .then(response => {
+                this.favorites = response.data;
+                let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                    if(!this.favorites[k].fileName.includes(video)){
+                                console.log("usao je u if");
+                                this.favorites[k].imageByte = 'data:image/jpeg;base64,' + this.favorites[k].imageByte;
+                            }else{
+                                this.favorites[k].imageByte = 'data:video/mp4;base64,' + this.favorites[k].imageByte;       
+                            }  
+                            console.log("uslo");
+                        
+                 }
+                
+                
+              
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
+            
+        
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
+     
+           this.axios.get('/media/post/getPostByCollection/'+this.id)
             .then(response => {
                 this.posts = response.data;
                 let video = "mp4";
@@ -99,18 +157,13 @@ export default {
                         alert("greskaa");
                             console.log(res);
                     });
-        
-                    }).catch(res => {                        
-                                         
-                        console.log(res.response);
-                       
-                    });   
-     
-           
          
                 
    },
     methods:{
+        addNewCollecion:function(){
+            this.showAdd=true;
+        },
     saveInFavorites: async function(event,post){
         console.log(post)
          alert(this.loggedUser.username)
@@ -158,13 +211,24 @@ export default {
             this.axios.post('media/post/dislike/'+this.loggedUser.username+"/"+post.idPost,{ 
                 }).then(response => {
                     alert("Picture is disliked!");
-                    this.dislikesNumber = response.data
-                    this.numberOfDislikes = this.dislikesNumber
                      
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
-                    console.log(res.response.data.message);
+                    console.log(res);
+
+                });
+         },
+        addCollection: async function(event,collection,post){
+         
+            this.axios.post('media/favorites/saveInOtherCollection/'+this.loggedUser.username+"/"+post.idPost+"/"+collection,{ 
+                }).then(response => {
+                    alert("Picture is saved!");
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already saved this post");
+                    console.log(res)
 
                 });
 

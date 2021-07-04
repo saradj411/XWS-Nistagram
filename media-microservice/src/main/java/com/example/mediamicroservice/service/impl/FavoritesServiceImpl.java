@@ -87,4 +87,21 @@ public class FavoritesServiceImpl implements FavoritesService {
 		return posts;
 	}
 
+	@Override
+	public CollectionFavourites addPostInOtherCollection(Post post, String username, String collectionName) {
+		System.out.println(username);
+		CollectionFavourites collection=favoritesRepository.findByNameAndUser(collectionName,username);
+		System.out.println("Kolekcija:"+collection.getIdFavourites());
+		
+		Set<Post> posts=collection.getTags();
+		posts.add(post);
+		collection.setTags(posts);
+		
+		CollectionFavourites p=favoritesRepository.save(collection);
+		
+		
+		
+		return p;
+	}
+
 }

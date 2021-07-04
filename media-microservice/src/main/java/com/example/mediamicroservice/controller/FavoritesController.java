@@ -46,6 +46,21 @@ public class FavoritesController {
             new ResponseEntity<CollectionFavourites>(collection,HttpStatus.CREATED);
 	}
 	
+	@PostMapping("/saveInOtherCollection/{username}/{post}/{collectionName}")
+	public ResponseEntity<CollectionFavourites> saveInOtherCollection(@PathVariable String username,
+			@PathVariable Long post,@PathVariable String collectionName){
+		
+		System.out.println("POST:"+post);
+		System.out.println("USERNAME:"+username);
+		System.out.println("COLLECTION NAME:"+collectionName);
+		Post post1=postRepository.getOne(post);
+		CollectionFavourites collection=favoritesService.addPostInOtherCollection(post1,username,collectionName);
+		
+		
+		return  collection == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
+            new ResponseEntity<CollectionFavourites>(collection,HttpStatus.CREATED);
+	}
+	
 	@PostMapping("/addNewCollection/{username}/{name}")
 	public ResponseEntity<CollectionFavourites> addNewCollection(@PathVariable String username,@PathVariable String name){
 		
