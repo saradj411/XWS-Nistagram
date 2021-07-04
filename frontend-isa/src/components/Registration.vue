@@ -74,6 +74,20 @@
                     <input type="Password" v-model="rePassword" :class="{'input--error':!rePassword}" class="form-control" placeholder="Enter password"  aria-label="Enter password" aria-describedby="addon-wrapping">
                     </td>   
                 </tr>
+
+<tr>
+                    <td> <h4> Type of profile: </h4> </td>
+                    <td>
+<b-dropdown id="ddCommodity"  name="ddCommodity" text="Choose">
+                                <b-dropdown-item  v-for="item in this.types" v-on:click ="typeIsSelected($event, item.categoryType)" v-bind:key="item.categoryType"> {{item.categoryType }}</b-dropdown-item>
+                            </b-dropdown>       <span>{{this.choosenType}}</span>           </td>   
+                            
+                </tr>
+
+
+
+
+                 
                 <tr>
                     <td colspan="2">
                         <div id="errorMessage" > 
@@ -100,7 +114,12 @@ import { required, sameAs } from 'vuelidate/lib/validators'
 export default{
     data()
     {
+        
         return{
+             types: [
+          { categoryType: 'PRIVATE' },
+          { categoryType: 'PUBLIC' }
+      ],
             name : "",
             surname : "",
             email : "",
@@ -111,7 +130,11 @@ export default{
             city : "",
             country : "",
             rePassword : "",
-            errorMessage : ""
+            errorMessage : "",
+                categoryType : "",
+                    choosenType : ""   ,
+
+
         }
     },
     validations:
@@ -150,8 +173,23 @@ export default{
     },
     methods:
     {
+
+        typeIsSelected : function(event, type) { 
+           this.choosenType = type;
+      },
         registerPatient : function()
         {
+
+
+            if(this.choosenType=='PUBLIC'){
+                this.privateProfile=false;
+                alert("profil je javan");
+            }
+            
+            if(this.choosenType=='PRIVATE'){
+                this.privateProfile=true;
+                alert("profil je privatan");
+            }
             console.log(this.name);
             if(this.password != this.rePassword)
             {
@@ -176,7 +214,8 @@ export default{
                 address : this.address,
                 city : this.city,
                 country : this.country,
-                 phone : this.phone
+                 phone : this.phone,
+                 privateProfile:this.privateProfile
             }            
             this.axios.post('/profile/api/users/public/register', patientInfo,
             {
