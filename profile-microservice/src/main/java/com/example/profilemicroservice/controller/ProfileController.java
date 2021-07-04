@@ -102,6 +102,13 @@ User loggedUser;
 		return new ResponseEntity<>(request, HttpStatus.OK);
 	}
 	
+	@PostMapping(value ="/getProfileByUsername")
+	public ResponseEntity<Profile> getProfileByUsername(@RequestBody HashMap<String,String> username)	
+	{
+		Profile profile = profileService.findByUsername(username.get("username"));	
+		return new ResponseEntity<>(profile, HttpStatus.OK);
+	}
+	
 	
 	
 	//Ovo gadja i kad je profil privatan i kad nije, samo odredi koju funckiju poziva posle
@@ -120,6 +127,19 @@ User loggedUser;
 		Profile prof = profileService.deleteRequestOrFollow(username.get("username"));
 		System.out.println(prof.getUsername());
 		return new ResponseEntity<>(prof, HttpStatus.OK);
+	}
+	
+	@PostMapping(value ="/acceptFollowRequest")
+	public ResponseEntity acceptFollowRequest(@RequestBody HashMap<String,String> username)	
+	{		
+		profileService.acceptFollowRequest(username.get("username"));
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	@PostMapping(value ="/declineFollowRequest")
+	public ResponseEntity declineFollowRequest(@RequestBody HashMap<String,String> username)	
+	{		
+		profileService.declineFollowRequest(username.get("username"));
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	

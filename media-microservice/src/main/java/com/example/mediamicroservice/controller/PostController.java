@@ -32,6 +32,7 @@ import com.example.mediamicroservice.model.Profile;
 import com.example.mediamicroservice.model.Tag;
 import com.example.mediamicroservice.repository.PostRepository;
 import com.example.mediamicroservice.repository.ProfileRepository;
+import com.example.mediamicroservice.service.FavoritesService;
 import com.example.mediamicroservice.service.PostService;
 import com.example.mediamicroservice.service.impl.MediaUpload;
 import com.example.mediamicroservice.service.impl.PostServiceImpl;
@@ -56,6 +57,9 @@ public class PostController {
 	
 	@Autowired
 	ProfileConnection profileConnection;
+
+	FavoritesService favoritesService;
+
 	
 	private static String uploadDir="user-photos";
 	
@@ -70,10 +74,10 @@ public class PostController {
 		return fileName;
 		
 	}
-	@PostMapping("/addNewPost")
-	public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO){
+	@PostMapping("/addNewPost/{username}")
+	public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO,@PathVariable String username){
 		
-		Post response=postService.addNewPost(postDTO);
+		Post response=postService.addNewPost(postDTO,username);
 		
 		return  response == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
             new ResponseEntity<Post>(response,HttpStatus.CREATED);
@@ -165,16 +169,20 @@ public class PostController {
                 ResponseEntity.ok(fronts);
     }
 	
+
 	
-	@GetMapping(value = "/getPublicPost")
-    public ResponseEntity<List<FrontPostDTO>> findAllById() {
-		System.out.println("javni profili ");
-        List<Post> drugs=postRepository.findAll();
+	
+
+	@GetMapping(value = "/getPostByCollection/{id}")
+    public ResponseEntity<List<FrontPostDTO>> getPostByCollection(@PathVariable Long id) {
+		System.out.println("uslooo");
+		Set<Post> posts=favoritesService.findAllPosts(id);
         List<FrontPostDTO> fronts=new ArrayList<FrontPostDTO>();
         
-        for(Post p:drugs) {
-        
-        	
+        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+    	
+        for(Post p:posts) {
+
         	FrontPostDTO front=new FrontPostDTO();
         	front.setDate(p.getDate());
         	front.setDescription(p.getDescription());
@@ -219,7 +227,7 @@ public class PostController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 ResponseEntity.ok(fronts);
     }
-	
+
 	
 	//naseeeeeeeeee
 	@GetMapping(value = "/getPostPublic")

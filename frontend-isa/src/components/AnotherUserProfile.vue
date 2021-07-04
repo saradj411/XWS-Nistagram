@@ -1,13 +1,28 @@
 <template>
 <div class="profile">
-    <h1 style="color:white;"> {{this.userProfile[0].name}} {{this.userProfile[0].surname }} </h1>
+    <table style="margin-top: 50px; position: relative;">
+        <tr>
+        <td>
+            <img src="../assets/gizmo.jpg" width="200px" height="200px" style="margin-left: -50px; position: absolut;"/></td>
+        <td>
+         <h1 style="color:white;"> {{this.userProfile[0].name}} {{this.userProfile[0].surname }} </h1>
     <p><i> @{{ this.userProfile[0].username }} </i></p>
-    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%; color:white;"  
-    :disabled="this.exists" 
-    :style="this.exists ? {'background-color': 'green'} : ''"
-    v-on:click = "follow()"
-     >
-                            <b-icon icon="plus" aria-hidden="true"></b-icon> {{ text }} </b-button> 
+    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%; color:white;" v-on:click = "follow()"> 
+    <b-icon icon="plus" aria-hidden="true"></b-icon>
+     {{ text }} 
+    <b-icon icon="lock" v-show="this.userProfileClassInfo.privateProfil == true && this.requestStatus == false && this.followingStatus == false" aria-hidden="true"></b-icon> </b-button> 
+    </td>
+        </tr>
+    </table>
+
+    <div v-show="this.userProfileClassInfo.privateProfil == true && followingStatus == false ">
+        <h3 style="margin-top: 100px;"> Profile is private! To see posts you need to follow this user! </h3>
+        <img src="../assets/lock.png" style="width: 200px; height: 200px; margin-top: 40px;" aria-hidden="true"><img>
+
+    </div> 
+    
+   
+    
 
 
 
@@ -26,7 +41,8 @@
             text: "Follow",
             followingStatus: false,
             requestStatus: false,
-            following: []
+            following: [],
+            userProfileClassInfo: {}
 
         }
       },
@@ -36,26 +52,46 @@
             {
                 username: this.userProfile[0].username
             }
+            console.log(this.userProfile[0]);
 
-            if(this.userProfile[0].privateProfil==true)
-            {
+            if(this.userProfileClassInfo.privateProfil == true)
+            { 
+                console.log("ZAHTEV ZA PRIVATAN PROFIL");
                 // salji zhatev
                 if(this.requestStatus == false)
                 {
-                    //nema poslatog zahteva
-                    this.axios.post('/profile/api/profile/addRequest4follow',userForFollow ,{ 
+                    console.log("REQUEST FALSE");
+                    if(this.followingStatus == true)
+                    {
+                        console.log("Brise onoga ko ga prati");
+                        this.axios.post('/profile/api/profile/deleteRequestAndFollow',userForFollow ,{ 
+                                                    headers: {
+                                                        'Content-Type': 'application/json;charset=utf-8' 
+                                                        }
+                                                    }).then(response => {
+                                                        console.log(response.data);
+                                                        this.followingStatus = false;
+                                                        this.text = " Follow ";
+                                                    }).catch(res => {                                                                
+                                                                console.log(res.response.data.message);
+                                                            });
+                    }else
+                    {
+                        this.axios.post('/profile/api/profile/addRequest4follow', userForFollow ,{ 
                             headers: {
                                 'Content-Type': 'application/json;charset=utf-8' 
                                 }
                             }).then(response => {
                                 console.log(response.data);
-                                this.exists = true;
                                 this.requestStatus = true;
+                                
                                 this.text = " Request sent ";
                             }).catch(res => {
-                                        console.log("neushep");
                                         console.log(res.response.data.message);
                                     });
+                    }
+                    //nema poslatog zahteva
+                   
                 }
                 else
                 {
@@ -66,11 +102,9 @@
                                                         }
                                                     }).then(response => {
                                                         console.log(response.data);
-                                                        this.exists = false;
                                                         this.requestStatus = false;
                                                         this.text = " Follow ";
-                                                    }).catch(res => {
-                                                                console.log("neushep");
+                                                    }).catch(res => {                                                                
                                                                 console.log(res.response.data.message);
                                                             });
 
@@ -79,11 +113,21 @@
 
             }else
             {
-                //zaprati
-            }
-
-           
-           /*if(this.requestStatus == false)
+                if(this.followingStatus == true)
+                {
+                    this.axios.post('/profile/api/profile/deleteRequestAndFollow',userForFollow ,{ 
+                                                    headers: {
+                                                        'Content-Type': 'application/json;charset=utf-8' 
+                                                        }
+                                                    }).then(response => {
+                                                        console.log(response.data);
+                                                        this.followingStatus = false;
+                                                        this.text = " Follow ";
+                                                    }).catch(res => {                                                                
+                                                                console.log(res.response.data.message);
+                                                            });
+                }
+                else
                 {
                     this.axios.post('/profile/api/profile/addRequest4follow',userForFollow ,{ 
                             headers: {
@@ -91,18 +135,13 @@
                                 }
                             }).then(response => {
                                 console.log(response.data);
-                                this.exists = true;
-                                this.text = "Request sent";
+                                this.followingStatus = true;
+                                this.text = " Following ";
                             }).catch(res => {
-                                        console.log("neushep");
                                         console.log(res.response.data.message);
                                     });
                 }
-                else
-                {
-                    //brisanje poslatog zahteva
-                }*/
-           
+            }
         }
     },
    
@@ -116,13 +155,27 @@
                    'Content-Type': 'application/json;charset=utf-8' 
                 }
             }).then(response => {
-                  this.userProfile = response.data;
-                  console.log("Uspeh");
-                  console.log(response.data[0]);
-            }).catch(res => {
-                           console.log("neushep");
-                          console.log(res.response.data.message);
+                  this.userProfile = response.data;              
+            }).catch(res => {                        
+                     console.log(res.response.data.message);
                     });
+
+        
+        this.axios.post('/profile/api/profile/getProfileByUsername',profile ,{ 
+            headers: {
+                   'Content-Type': 'application/json;charset=utf-8' 
+                }
+            }).then(response => {
+                  this.userProfileClassInfo = response.data; 
+                                    
+                     console.log("STASTA");                   
+                     console.log(this.userProfileClassInfo); 
+
+            }).catch(res => {                        
+                     console.log(res.response.data.message);
+                    });
+
+        
 
                     
         this.axios.get('/profile/api/users/getLoggedUser',{
@@ -136,19 +189,16 @@
                                     
                             this.axios.post('/profile/api/profile/getAllRequest',log, {
                                         headers: {}} ).then(response => 
-                                        {     console.log("getRe")
+                                        {     
                                              this.sendedRequest = response.data;
                                              
                                              for(var u in this.sendedRequest)
                                              { 
-                                                 console.log(this.sendedRequest[u].username);
-                                                 console.log(this.userProfile[0].username);
-
                                                  if(this.sendedRequest[u].username == this.userProfile[0].username)
                                                  {
                                                      console.log("USAO")
-                                                     this.exists = true;
                                                      this.requestStatus = true;
+                                                     this.followingStatus = false;
                                                      this.text = "Request sent";
                                                      break;
                                                  }
@@ -205,7 +255,7 @@ body
 .profile
 {  margin-top: -60px;
     background-color: black; 
-    height: 1000px;
+    height: 100vh;
     color: white;
 }
 
@@ -218,6 +268,8 @@ b-button[disabled]{
   background-color: #white;
   color: #666666;
 }
+
+  
 
 
 </style>

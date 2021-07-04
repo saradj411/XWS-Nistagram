@@ -6,8 +6,10 @@ import Registration from '../components/Registration.vue'
 import UpdateAccount from '../components/UpdateAccount.vue'
 import UserProfile from '../components/UserProfile.vue'
 import AddPost from '../components/AddPost.vue'
-
+import AddStory from '../components/AddStory.vue'
 import Proba from '../components/Proba.vue'
+import Favorites from '../components/Favorites.vue'
+import CollectionPosts from '../components/CollectionPosts.vue'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VerificationRequest from '../components/VerificationRequest.vue'
@@ -70,6 +72,11 @@ const routes = [
         component: AddPost
       },
       {
+        path: '/AddStory',
+      name: 'AddStory',
+      component: AddStory
+    },
+      {
           path: '/Proba',
         name: 'Proba',
         component: Proba
@@ -89,7 +96,19 @@ const routes = [
         path: '/AllRequest',
         name: 'AllRequest',
         component: AllRequest
+      },
+      {
+        path: '/Favorites',
+        name: 'Favorites',
+        component: Favorites
       }
+      ,
+      {
+        path: '/CollectionPosts/:id',
+        name: 'CollectionPosts',
+        component: CollectionPosts
+      }
+
       ,
       {
         path: '/AnotherUserProfile/:username',
@@ -103,8 +122,7 @@ const routes = [
         component: PublicProfile
       }
 
-      
-      
+
       
 
       

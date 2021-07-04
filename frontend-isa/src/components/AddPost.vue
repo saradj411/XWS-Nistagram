@@ -83,20 +83,11 @@ export default {
         medias:[],
         highlight:'',
         closeFriends:'',
+         loggedUser: {} 
         }
     },
     mounted() {
-        /* let token = localStorage.getItem('token').substring(1, localStorage.getItem('token').length-1);
-          this.axios.get('http://localhost:8083/profileMicroservice/api/profile/loggedUserInfo',{ 
-             headers: {
-                 'Authorization': 'Bearer ' + token,
-             }
-         }).then(response => {
-              this.user = response.data;
-         }).catch(res => {
-               alert(Error)
-                console.log(res);
-            });*/
+       
 
             this.axios.get('/media/location/findAll',{ 
              headers: {
@@ -108,6 +99,28 @@ export default {
                alert(Error)
                 console.log(res);
             });
+
+
+    this.axios.get('/profile/api/users/getLoggedUser',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                        
+                       this.loggedUser = response.data;
+
+          
+        
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
+     
+           
+         
+           
         
     },
     methods:{
@@ -151,7 +164,7 @@ export default {
                  }
           
 
-          this.axios.post('/media/post/addNewPost',storyInfo,{ 
+          this.axios.post('/media/post/addNewPost/'+this.loggedUser.username,storyInfo,{ 
                 }).then(response => {
                     alert("Post is shared!");
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.mediamicroservice.dto.ProfileDTO;
 import com.example.mediamicroservice.dto.ProfileeDTO;
 import com.example.mediamicroservice.model.Profile;
+import com.example.mediamicroservice.service.FavoritesService;
 import com.example.mediamicroservice.service.ProfileService;
 
 @RestController
@@ -25,11 +26,13 @@ public class PofileController {
 
 	@Autowired
 	private ProfileService profileService;
+	@Autowired
+	FavoritesService favoritesService;
 	
 	@PostMapping("/save/{username}")
     public ResponseEntity add(@PathVariable String username) {
 		Profile profile=profileService.save(username);
-		
+		favoritesService.save(profile);
 		return profile== null ?
                 new ResponseEntity<>(HttpStatus.IM_USED) :
                 ResponseEntity.ok().build();
