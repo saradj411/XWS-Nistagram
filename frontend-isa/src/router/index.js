@@ -19,6 +19,7 @@ import PublicProfile from '../components/PublicProfile'
 import DisLikePosts from '../components/DisLikePosts'
 import LikePosts from '../components/LikePosts'
 import UnappropriateContent from '../components/UnappropriateContent'
+import ProfilePublic from '../components/ProfilePublic'
 
 
 
@@ -120,12 +121,7 @@ const routes = [
         name: 'AnotherUserProfile',
         component: AnotherUserProfile
       }
-      ,
-      {
-        path: '/PublicProfile',
-        name: 'PublicProfile',
-        component: PublicProfile
-      }
+     
       ,
       {
         path: '/LikePosts',
@@ -142,6 +138,11 @@ const routes = [
         path: '/UnappropriateContent',
         name: 'UnappropriateContent',
         component: UnappropriateContent
+      },
+      {
+        path: '/ProfilePublic',
+        name: 'ProfilePublic',
+        component: ProfilePublic
       }
 
       

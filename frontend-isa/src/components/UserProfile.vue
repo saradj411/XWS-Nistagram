@@ -34,7 +34,12 @@
                     <b-icon icon="camera" aria-hidden="true"></b-icon> Add story</b-button> 
                     
                     <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "addPosts">
-                        <b-icon icon="camera" aria-hidden="true"></b-icon> Add post</b-button>   
+                        <b-icon icon="camera" aria-hidden="true"></b-icon> Add post</b-button>
+
+                    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "publicProfile">
+                        <b-icon icon="camera" aria-hidden="true"></b-icon> View public profile</b-button>
+
+
                 <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "post">
                     <b-icon icon="image" aria-hidden="true"></b-icon> Posts</b-button>   
                     
@@ -392,6 +397,9 @@ export default {
         window.location.href = "/Favorites";
       }, 
 
+publicProfile: function(){
+        window.location.href = "/ProfilePublic";
+      },
 
 
 
