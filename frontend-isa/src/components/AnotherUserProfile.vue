@@ -4,7 +4,7 @@
         <tr>
         <td>
             <img src="../assets/gizmo.jpg" width="200px" height="200px" style="margin-left: -50px; position: absolut;"/></td>
-        <td>
+        <td>   
          <h1 style="color:white;"> {{this.userProfile[0].name}} {{this.userProfile[0].surname }} </h1>
     <p><i> @{{ this.userProfile[0].username }} </i></p>
     <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%; color:white;" v-on:click = "follow()"> 
@@ -20,11 +20,48 @@
         <img src="../assets/lock.png" style="width: 200px; height: 200px; margin-top: 40px;" aria-hidden="true"><img>
 
     </div> 
-    
-   
-    
 
 
+    
+
+<!--Prikazi postove  profila ako ga pratim  -->
+
+<div style="float: left; margin:15px;background-color: black" v-show=" followingStatus == true || this.userProfileClassInfo.privateProfil == false" >  
+    
+         <!--FRIEND'S POSTS-->
+             <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName" >
+                  <b-row >
+                        <h4 align="left" style="color: black"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
+                     
+                        
+                        </b-row>
+             <h6 align="left" style="color: black">{{post.location}}</h6>
+                        
+                 <div v-for="m in post.media" v-bind:key="m.imageBytes">
+                    <b-img v-if="!m.fileName.includes(videoText)" thumbnail  v-bind:src="m.imageByte" alt="Image 1"></b-img>
+                             <video v-if="m.fileName.includes(videoText)" autoplay controls v-bind:src="m.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
+
+                 </div> 
+                             <h5 align="right" style="color: black"> <b-icon icon="exclamation" aria-hidden="true" align="right" @click="content($event,post)"></b-icon>inappropriate content</h5>
+     
+                  <h4 align="left" style="margin-top:-5px;color: black">{{post.description}}</h4>
+                   <h5 align="left" style="color: black"><span v-for="(tag,t) in post.tags" :key="t">
+                                        #{{tag.tagText}}
+                                    </span>
+                        </h5>
+                        
+             <h5 v-if="numberOfLikes==0" align="left" style="color: black"><b-icon style="color: black" icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
+              <h5 v-if="numberOfLikes!=0" align="left" style="color: black"><b-icon  icon="hand-thumbs-up" style="color: black" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{numberOfLikes}} likes </h5>
+            <h5 v-if="numberOfDislikes==0" align="left" style="color: black"> <b-icon icon="hand-thumbs-down" style="color: black" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{post.numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            </h5>
+            <h5 v-if="numberOfDislikes!=0" align="left" style="color: black"> <b-icon icon="hand-thumbs-down" style="color: black" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            </h5>
+            
+            <h5 align="left"> <b-icon icon="bookmark"  style="color: black" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
+
+        </b-card>
+        
+        </div>
 
 </div>
 </template>
@@ -42,11 +79,93 @@
             followingStatus: false,
             requestStatus: false,
             following: [],
-            userProfileClassInfo: {}
+            userProfileClassInfo: {},
+
+        value: "",
+       
+        
+        requestVisible: true,
+
+        followerRequest: [],
+        posts:true
+            
 
         }
       },
       methods:{
+          saveInFavorites: async function(event,post){
+        console.log(post)
+         //alert(this.loggedUser.username)
+         //alert(post.idPost)
+            this.axios.post('media/favorites/saveInFavorites/'+this.loggedUser.username+"/"+post.idPost,{ 
+                
+
+                }).then(response => {
+                    alert("Post saved in favorites!");
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already saved this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
+        content: async function(event,post){
+            this.axios.post('media/post/report/'+post.idPost,{ 
+                
+
+                }).then(response => {
+                    alert("Post was reported as inappropriate content!");
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already saved this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
+
+    likePost: async function(event,post){
+        console.log(post)
+         
+            this.axios.post('media/post/like/'+this.loggedUser.username+"/"+post.idPost,{ 
+                }).then(response => {
+                    alert("Picture is liked!");
+                    this.likesNumber = response.data
+                    this.numberOfLikes = this.likesNumber
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already liked this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
+
+         dislikePost: async function(event,post){
+        console.log(post)
+         
+            this.axios.post('media/post/dislike/'+this.loggedUser.username+"/"+post.idPost,{ 
+                }).then(response => {
+                    alert("Picture is disliked!");
+                    this.dislikesNumber = response.data
+                    this.numberOfDislikes = this.dislikesNumber
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already liked this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
         follow: function(){
             const userForFollow = 
             {
@@ -146,6 +265,34 @@
     },
    
     mounted() {       
+
+        this.axios.get('/media/post/getPostByUsername/'+this.username)
+            .then(response => {
+                this.posts = response.data;
+                let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                 for(let j=0; j< this.posts[k].media.length; j++){
+                    if(!this.posts[k].media[j].fileName.includes(video)){
+                                console.log("usao je u if");
+                                this.posts[k].media[j].imageByte = 'data:image/jpeg;base64,' + this.posts[k].media[j].imageByte;
+                            }else{
+                                this.posts[k].media[j].imageByte = 'data:video/mp4;base64,' + this.posts[k].media[j].imageByte;       
+                            }  
+                            console.log("uslo");
+                        }
+                 }
+              
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
+        
+ 
+
+
+
+
+
        const profile =
         {
             username: this.username
@@ -263,11 +410,12 @@ button:background {
   background-color:red;
 }
 
+/* nesto javlja gresku nmp
 b-button[disabled]{
   border: 1px solid #999999;
   background-color: #white;
   color: #666666;
-}
+}*/
 
   
 
