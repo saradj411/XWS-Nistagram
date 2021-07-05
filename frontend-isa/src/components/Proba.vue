@@ -24,13 +24,14 @@
                                         #{{tag.tagText}}
                                     </span>
                         </h5>
-             <h5 v-if="numberOfLikes==0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
+            <h5 v-if="numberOfLikes==0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
               <h5 v-if="numberOfLikes!=0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{numberOfLikes}} likes </h5>
             <h5 v-if="numberOfDislikes==0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{post.numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
             </h5>
             <h5 v-if="numberOfDislikes!=0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
             </h5>
             
+             
             
             <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
                
@@ -47,7 +48,9 @@ export default {
         
         posts: [],
         videoText: "mp4",
-        numberOfLikes:0,
+        //numberOfLikes:0,
+        //likesNumber:0,
+        numberOfLikes :0,
         numberOfDislikes:0,
         loggedUser: {} 
        
@@ -135,7 +138,7 @@ export default {
                     alert("Picture is liked!");
                     this.likesNumber = response.data
                     this.numberOfLikes = this.likesNumber
-                     
+                      window.location.href = "/proba";   
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
@@ -154,13 +157,22 @@ export default {
                     alert("Picture is disliked!");
                     this.dislikesNumber = response.data
                     this.numberOfDislikes = this.dislikesNumber
-                     
+                      window.location.href = "/proba";   
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
                     console.log(res.response.data.message);
 
                 });
+
+
+        },
+
+        dislikes: function(event,post){
+        
+         
+                    this.dislikesNumber = 77;
+              console.log(post)
 
 
         }
