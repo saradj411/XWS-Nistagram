@@ -87,13 +87,31 @@ public class PostController {
 	public ResponseEntity<Integer> like(@PathVariable String username,@PathVariable Long post){
 		Post p=postRepository.getOne(post);
 		Set<Profile> oldLikes=p.getLike();
-		oldLikes.add(profileRepo.getOneByUsername(username));
-		p.setLike(oldLikes);
-		p.setNumberOfLikes(p.getNumberOfLikes()+1);
+		Set<Profile> oldDisikes=p.getDislike();
+		
+		Boolean res=false;
+		for(Profile profile:oldLikes) {
+			if(username.equals(profile.getUsername())) {
+				res=true;
+			}
+		}
+		Integer integer=null;
+		if(!res) {
+			oldLikes.add(profileRepo.getOneByUsername(username));
+			p.setLike(oldLikes);
+			p.setNumberOfLikes(p.getNumberOfLikes()+1);
+			Boolean jel=oldDisikes.remove(profileRepo.getOneByUsername(username));
+			System.out.println("obrisa li dislike?????"+jel);
+			if(jel) {
+				p.setDislike(oldDisikes);
+				p.setNumberOfDislikes(p.getNumberOfDislikes()-1);
+			}
+			
+			Post response=postRepository.save(p);
+			integer=response.getNumberOfLikes();
+		}
 		
 		
-		Post response=postRepository.save(p);
-		Integer integer=response.getNumberOfLikes();
 		
 		return  integer == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
             new ResponseEntity<Integer>(integer,HttpStatus.CREATED);
@@ -102,21 +120,37 @@ public class PostController {
 	@PostMapping("/dislike/{username}/{post}")
 	public ResponseEntity<Integer> dislike(@PathVariable String username,@PathVariable Long post){
 		Post p=postRepository.getOne(post);
-		Set<Profile> oldLikes=p.getDislike();
-		oldLikes.add(profileRepo.getOneByUsername(username));
-		p.setDislike(oldLikes);
-		p.setNumberOfDislikes(p.getNumberOfDislikes()+1);
+		Set<Profile> oldDisikes=p.getDislike();
+		Set<Profile> oldLikes=p.getLike();
 		
-		
-		Post response=postRepository.save(p);
-		Integer integer=response.getNumberOfDislikes();
-		
+		Boolean res=false;
+		for(Profile profile:oldDisikes) {
+			if(username.equals(profile.getUsername())) {
+				res=true;
+			}
+		}
+		Integer integer=null;
+		if(!res) {
+			oldDisikes.add(profileRepo.getOneByUsername(username));
+			p.setDislike(oldDisikes);
+			p.setNumberOfDislikes(p.getNumberOfDislikes()+1);
+			Boolean jel=oldLikes.remove(profileRepo.getOneByUsername(username));
+			System.out.println("obrisa li?????"+jel);
+			if(jel) {
+				p.setLike(oldLikes);
+				p.setNumberOfLikes(p.getNumberOfLikes()-1);
+			}
+			
+			
+			Post response=postRepository.save(p);
+			integer=response.getNumberOfDislikes();
+		}
 		return  integer == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
             new ResponseEntity<Integer>(integer,HttpStatus.CREATED);
 	}
 	
 	@GetMapping(value = "/getPostByUsername/{username}")
-    public ResponseEntity<List<FrontPostDTO>> findAllByIdPharm(@PathVariable String username) {
+    public ResponseEntity<List<FrontPostDTO>> findAllByIdUsername(@PathVariable String username) {
 		System.out.println("uslooo");
         List<Post> drugs=postRepository.findAllPostByUser(username);
         List<FrontPostDTO> fronts=new ArrayList<FrontPostDTO>();

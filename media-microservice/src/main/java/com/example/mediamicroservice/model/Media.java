@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Media {
@@ -25,6 +26,26 @@ public class Media {
     //@JsonBackReference
     private Post post;
     
+    @OneToOne(mappedBy="media")
+    private Story story;
+   
+    
+	public Story getStory() {
+		return story;
+	}
+
+	public void setStory(Story story) {
+		this.story = story;
+	}
+
+	public Media(Long id, String fileName, Post post, Story story) {
+		super();
+		this.id = id;
+		this.fileName = fileName;
+		this.post = post;
+		this.story = story;
+	}
+
 	public Media() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -34,6 +55,13 @@ public class Media {
 		super();
 		this.id = id;
 		this.fileName = fileName;
+	}
+
+	public Media(Long id, String fileName, Post post) {
+		super();
+		this.id = id;
+		this.fileName = fileName;
+		this.post = post;
 	}
 
 	public Long getId() {
@@ -52,12 +80,7 @@ public class Media {
 		this.fileName = fileName;
 	}
 
-	public Media(Long id, String fileName, Post post) {
-		super();
-		this.id = id;
-		this.fileName = fileName;
-		this.post = post;
-	}
+	
 
 	public Post getPost() {
 		return post;
@@ -66,6 +89,7 @@ public class Media {
 	public void setPost(Post post) {
 		this.post = post;
 	}
+
     
     
 }
