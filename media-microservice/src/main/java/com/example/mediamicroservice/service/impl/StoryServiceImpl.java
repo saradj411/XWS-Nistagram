@@ -1,12 +1,17 @@
 package com.example.mediamicroservice.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.StoryDTO;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Story;
@@ -46,14 +51,14 @@ public class StoryServiceImpl implements StoryService{
 		
 		Media media=new Media();
 		media.setFileName(storyDTO.getFileName());
+		Media m=mediaRepository.save(media);
 		
-		
-		
+		story.setMedia(m);
 		Story s=storyRepository.save(story);
 		
 		
-		media.setStory(s);
-		Media m=mediaRepository.save(media);
+		
+		
 		
 		
 		List<String> lista=new ArrayList<>();
@@ -70,6 +75,33 @@ public class StoryServiceImpl implements StoryService{
 		}
 		
 		return s;
+	}
+	
+	public FrontMediaDTO getImagesFiles(FrontMediaDTO fronts) {
+		FrontMediaDTO listaDTO=new FrontMediaDTO();
+		if(fronts!=null) {
+			String filePath=new File("").getAbsolutePath();
+			filePath=filePath.concat("/"+"user-photos"+"/");
+			
+				listaDTO=imageFile(fronts, filePath);
+		
+		}
+		return listaDTO;
+	}
+	public FrontMediaDTO imageFile(FrontMediaDTO front,String filePath) {
+		FrontMediaDTO frontDTO=front;
+		//List<byte[]> imageBytes=new ArrayList<byte[]>();
+		//front.setImageByte(imageBytes);
+		File in=new File(filePath+"/"+front.getFileName());
+		try {
+			frontDTO.setImageByte(IOUtils.toByteArray(new FileInputStream(in)));
+		}catch(IOException e){
+			e.printStackTrace();
+			
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+		}
+		return frontDTO;
 	}
 
 }

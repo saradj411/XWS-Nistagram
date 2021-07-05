@@ -37,6 +37,8 @@
                         <b-icon icon="camera" aria-hidden="true"></b-icon> Add post</b-button>   
                 <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "post">
                     <b-icon icon="image" aria-hidden="true"></b-icon> Posts</b-button>   
+                    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "story">
+                    <b-icon icon="image" aria-hidden="true"></b-icon> Stories</b-button>   
                     
                       <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "favorites">
                     <b-icon icon="heart-fill" aria-hidden="true"></b-icon> Favorites</b-button> 
@@ -249,6 +251,9 @@ export default {
       },
       post: function(){
         window.location.href = "/Proba";
+      },  
+      story: function(){
+        window.location.href = "/Stories";
       },     
     favorites: function(){
         window.location.href = "/Favorites";

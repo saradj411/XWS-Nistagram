@@ -7,8 +7,8 @@
 </span>
                </div>
              <div style="float: left; margin: 15px;">  
-         <!--FRIEND'S POSTS-->
-             <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
+         <!--my post !-->
+             <b-card class="post_look" v-for="post in posts" v-bind:key="post.idPost">
                   <b-row >
                         <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
                         </b-row>
@@ -42,15 +42,11 @@
 
 <script>
 export default {
-    name: 'Homepage',
     data() {
     return {
         
         posts: [],
-        usernameTo:'',
-        usernameFrom:'',
         videoText: "mp4",
-        //likesNumber:0,
         numberOfLikes:0,
         numberOfDislikes:0,
         loggedUser: {} 

@@ -177,7 +177,7 @@ export default {
                     alert("Story is shared!");
 
                     console.log(response);  
-                     // window.location.href = "/proba";              
+                     window.location.href = "/Stories";              
                 }).catch(res => {
                     console.log(storyInfo.fileNames);
                     alert("Error"+res.response.data.message);

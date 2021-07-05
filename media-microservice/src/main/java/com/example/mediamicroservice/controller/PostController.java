@@ -111,7 +111,7 @@ public class PostController {
 	}
 	
 	@GetMapping(value = "/getPostByUsername/{username}")
-    public ResponseEntity<List<FrontPostDTO>> findAllByIdPharm(@PathVariable String username) {
+    public ResponseEntity<List<FrontPostDTO>> findAllByIdUsername(@PathVariable String username) {
 		System.out.println("uslooo");
         List<Post> drugs=postRepository.findAllPostByUser(username);
         List<FrontPostDTO> fronts=new ArrayList<FrontPostDTO>();
