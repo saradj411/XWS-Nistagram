@@ -16,7 +16,7 @@
     
             <div class="sideViewContent">
                 <div>
-                    <img src="../assets/logo.png" width="100px" style="margin: 10px; margin-top:20px;" height="100px">
+                    <img src="../assets/gizmo.jpg" width="100px" style="margin: 10px; margin-top:20px;" height="100px">
                 </div>           
                 <p>{{loggedUser.name}} {{loggedUser.surname}} </p>
                 <p><i> @{{loggedUser.username}}</i></p>
@@ -40,6 +40,14 @@
                     
                       <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "favorites">
                     <b-icon icon="heart-fill" aria-hidden="true"></b-icon> Favorites</b-button> 
+
+
+                    <b-button class="btn btn-dark"  style=" margin-top: 10px; width: 80%;" v-on:click = "likePosts">
+                    <b-icon  icon="hand-thumbs-up" aria-hidden="true"></b-icon> Like posts</b-button> 
+
+
+                    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "dislikePosts">
+                    <b-icon icon="hand-thumbs-down" aria-hidden="true"></b-icon> Dislike posts</b-button> 
             <button class="btn btn-dark" style=" margin-top: 10px; width: 80%; " v-on:click = "logOut"> Log out </button>
            
             
@@ -47,7 +55,62 @@
            
 			<div class="fotos" v-bind:class="[!visible ? 'show' : 'hide', 'shadow-lg']" >
             <div>
-                <h1> Fotos : </h1>
+                <h1> FRIEND'S POSTS : </h1>
+
+
+         <!--FRIEND'S POSTS-->
+
+
+
+
+
+<div style="float: left; margin:15px;" v-if="posts">  
+         <!--FRIEND'S POSTS-->
+             <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
+                  <b-row >
+                        <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
+                     
+                        
+                        </b-row>
+             <h6 align="left">{{post.location}}</h6>
+                        
+                 <div v-for="m in post.media" v-bind:key="m.imageBytes">
+                    <b-img v-if="!m.fileName.includes(videoText)" thumbnail  v-bind:src="m.imageByte" alt="Image 1"></b-img>
+                             <video v-if="m.fileName.includes(videoText)" autoplay controls v-bind:src="m.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
+
+                 </div> 
+                             <h5 align="right"> <b-icon icon="exclamation" aria-hidden="true" align="right" @click="content($event,post)"></b-icon>inappropriate content</h5>
+     
+                  <h4 align="left" style="margin-top:-5px;">{{post.description}}</h4>
+                   <h5 align="left"><span v-for="(tag,t) in post.tags" :key="t">
+                                        #{{tag.tagText}}
+                                    </span>
+                        </h5>
+                        
+             <h5 v-if="numberOfLikes==0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
+              <h5 v-if="numberOfLikes!=0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{numberOfLikes}} likes </h5>
+            <h5 v-if="numberOfDislikes==0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{post.numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            </h5>
+            <h5 v-if="numberOfDislikes!=0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            </h5>
+            
+            
+            <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
+
+        </b-card>
+        
+        </div>
+
+         <!--FRIEND'S POSTS-->
+
+
+
+
+
+
+
+
+
             </div>
         </div>  
         
@@ -153,7 +216,8 @@ export default {
         requestVisible: true,
 
         followerRequest: [],
-        visible: false
+        visible: false,
+        posts:true
     }
   },
   computed:{
@@ -163,6 +227,80 @@ export default {
         }
   },
   methods:{ 
+      saveInFavorites: async function(event,post){
+        console.log(post)
+         //alert(this.loggedUser.username)
+         //alert(post.idPost)
+            this.axios.post('media/favorites/saveInFavorites/'+this.loggedUser.username+"/"+post.idPost,{ 
+                
+
+                }).then(response => {
+                    alert("Post saved in favorites!");
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already saved this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
+        content: async function(event,post){
+            this.axios.post('media/post/report/'+post.idPost,{ 
+                
+
+                }).then(response => {
+                    alert("Post was reported as inappropriate content!");
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already saved this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
+
+    likePost: async function(event,post){
+        console.log(post)
+         
+            this.axios.post('media/post/like/'+this.loggedUser.username+"/"+post.idPost,{ 
+                }).then(response => {
+                    alert("Picture is liked!");
+                    this.likesNumber = response.data
+                    this.numberOfLikes = this.likesNumber
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already liked this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
+
+         dislikePost: async function(event,post){
+        console.log(post)
+         
+            this.axios.post('media/post/dislike/'+this.loggedUser.username+"/"+post.idPost,{ 
+                }).then(response => {
+                    alert("Picture is disliked!");
+                    this.dislikesNumber = response.data
+                    this.numberOfDislikes = this.dislikesNumber
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already liked this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        }
+    ,
       acceptRequest: function(username)
       {
         console.log(username);  
@@ -254,6 +392,17 @@ export default {
         window.location.href = "/Favorites";
       }, 
 
+
+
+
+
+
+    dislikePosts: function(){
+        window.location.href = "/DisLikePosts";
+      },      
+    likePosts: function(){
+        window.location.href = "/LikePosts";
+      }, 
       searchFunction: function()  
       {
           console.log(this.search);
@@ -295,6 +444,47 @@ export default {
       },
       
 mounted() { 
+
+
+    this.axios.get('/profile/api/users/getLoggedUser',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                        
+                       this.loggedUser = response.data;
+
+                               //alert(this.loggedUser.username)
+            this.axios.get('/media/post/getPostOfFollowing/'+this.loggedUser.username)
+            .then(response => {
+                this.posts = response.data;
+                let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                 for(let j=0; j< this.posts[k].media.length; j++){
+                    if(!this.posts[k].media[j].fileName.includes(video)){
+                                console.log("usao je u if");
+                                this.posts[k].media[j].imageByte = 'data:image/jpeg;base64,' + this.posts[k].media[j].imageByte;
+                            }else{
+                                this.posts[k].media[j].imageByte = 'data:video/mp4;base64,' + this.posts[k].media[j].imageByte;       
+                            }  
+                            console.log("uslo");
+                        }
+                 }
+              
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
+        
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
+     
+
+
     this.axios.get('/profile/api/users/getLoggedUser',{
                     headers:{}}).then(response => 
                     {                        
@@ -347,7 +537,7 @@ mounted() {
     color: white;
     background-color: black;
     width: 25%;
-    height: 100vh;
+    height: 125vh;
     position: absolute;
     margin-top: -60px;
 }
@@ -366,8 +556,8 @@ margin: -50px 38%;
 {
     background-color: gray;
     color: black;
-width: 80%;
-height: 100vh;
+width: 70%;
+height: 125vh;
 position: absolute;
 display: -webkit-inline-box;
 margin-left: -25%;
