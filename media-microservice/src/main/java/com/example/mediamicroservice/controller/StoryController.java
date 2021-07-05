@@ -160,4 +160,14 @@ public class StoryController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 ResponseEntity.ok(fronts);
     }
+	
+	
+	@PostMapping("/setVisibleStory")
+	public ResponseEntity<Boolean> setVisibleStory(){
+		
+		storyService.setVisibleStory();
+		
+		return  new ResponseEntity<Boolean>(true,HttpStatus.ACCEPTED);
+	}
+	
 }

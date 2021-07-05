@@ -6,4 +6,5 @@ import com.example.mediamicroservice.model.Story;
 public interface StoryService {
 
 	Story addNewStory(StoryDTO postDTO,String username);
+	void setVisibleStory();
 }

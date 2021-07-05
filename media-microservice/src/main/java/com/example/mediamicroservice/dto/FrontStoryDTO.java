@@ -1,6 +1,7 @@
 package com.example.mediamicroservice.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class FrontStoryDTO {
 
 	    private String description;
 
-	    private LocalDate date;
+	    private LocalDateTime date;
 
 	    private String location;
 
@@ -25,7 +26,7 @@ public class FrontStoryDTO {
 			// TODO Auto-generated constructor stub
 		}
 
-		public FrontStoryDTO(Long idStory, String description, LocalDate date, String location,
+		public FrontStoryDTO(Long idStory, String description, LocalDateTime date, String location,
 				FrontMediaDTO media, List<FrontTagDTO> tags, String username) {
 			super();
 			this.idStory = idStory;
@@ -53,11 +54,11 @@ public class FrontStoryDTO {
 			this.description = description;
 		}
 
-		public LocalDate getDate() {
+		public LocalDateTime getDate() {
 			return date;
 		}
 
-		public void setDate(LocalDate date) {
+		public void setDate(LocalDateTime date) {
 			this.date = date;
 		}
 

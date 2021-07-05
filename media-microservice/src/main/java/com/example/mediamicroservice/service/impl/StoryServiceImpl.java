@@ -3,7 +3,7 @@ package com.example.mediamicroservice.service.impl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +41,7 @@ public class StoryServiceImpl implements StoryService{
 	public Story addNewStory(StoryDTO storyDTO, String username) {
 		Story story=new Story();
 		
-		story.setDate(LocalDate.now());
+		story.setDate(LocalDateTime.now());
 		story.setDescription(storyDTO.getDescription());
 		story.setLocation(storyDTO.getLocation());
 		story.setVisibleForCloseFriends(storyDTO.getVisibleForCloseFriends());
@@ -102,6 +102,27 @@ public class StoryServiceImpl implements StoryService{
 			e.printStackTrace();
 		}
 		return frontDTO;
+	}
+
+	@Override
+	public void setVisibleStory() {
+		// TODO Auto-generated method stub
+		List<Story> stories=storyRepository.findAll();
+		
+		for(Story s:stories) {
+			LocalDateTime date=s.getDate();
+			LocalDateTime plusTime=date.plusHours(24);
+			LocalDateTime now=LocalDateTime.now();
+			
+			System.out.println("storuy:"+date);
+			System.out.println("dodato:"+plusTime);
+			System.out.println("sad:"+now);
+			 if(plusTime.compareTo(now)<0){
+				 System.out.println("uslo");
+	             s.setVisible24h(false);
+	                    
+	            }
+	        }
 	}
 
 }

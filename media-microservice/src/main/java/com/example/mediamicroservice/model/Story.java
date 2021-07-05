@@ -2,6 +2,7 @@ package com.example.mediamicroservice.model;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +26,7 @@ public class Story {
     private Long idStory;
 
     @Column
-    private LocalDate date;
+    private LocalDateTime date;
     
     @Column
     private String description;
@@ -67,7 +68,7 @@ public class Story {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Story(Long idStory, LocalDate date, String description, String location, Boolean visible24h,
+	public Story(Long idStory, LocalDateTime date, String description, String location, Boolean visible24h,
 			Boolean visibleHighlights, Boolean visibleForCloseFriends, Profile profile, Media media, Set<Tag> tags,
 			Highlights highlights) {
 		super();
@@ -98,12 +99,12 @@ public class Story {
 	}
 
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
