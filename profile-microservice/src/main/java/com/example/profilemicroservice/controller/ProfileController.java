@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -142,6 +143,30 @@ User loggedUser;
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	
+	@GetMapping(value ="/getAllFollowingProfile/{username}")
+	public ArrayList<ProfileeDTO> getAllFollowingProfile(@PathVariable String username)	
+	{
+		ArrayList<ProfileeDTO>dtos=new ArrayList<>();
+		ArrayList<Profile> allProfile = (ArrayList<Profile>) profileService.findAll();
+		for(Profile p:allProfile) {
+			if(p.getUsername().equals(username)) {
+                 for(Profile ppp:p.getFollowing()) {
+         			ProfileeDTO d=new ProfileeDTO(ppp.getId(),ppp.getUsername(),ppp.getPrivateProfil());
+    				dtos.add(d);
+    				System.out.println("svi javni profili su"+p.getUsername());
+		  		}
+				
+	
+			}
+			
+			
+			
+			
+		}
+		//mediaConnection.getAllProfiles(dtos);
+		return dtos;
+	}
 	
 	
 }

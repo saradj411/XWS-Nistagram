@@ -10,13 +10,18 @@ import AddStory from '../components/AddStory.vue'
 import Proba from '../components/Proba.vue'
 import Favorites from '../components/Favorites.vue'
 import CollectionPosts from '../components/CollectionPosts.vue'
-
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VerificationRequest from '../components/VerificationRequest.vue'
 import AdminProfile from '../components/AdminProfile.vue'
 import AllRequest from '../components/AllRequest.vue'
 import AnotherUserProfile from '../components/AnotherUserProfile'
 import PublicProfile from '../components/PublicProfile'
+import DisLikePosts from '../components/DisLikePosts'
+import LikePosts from '../components/LikePosts'
+import UnappropriateContent from '../components/UnappropriateContent'
+
+
+
 
 
 import moment from 'moment'
@@ -121,8 +126,25 @@ const routes = [
         name: 'PublicProfile',
         component: PublicProfile
       }
+      ,
+      {
+        path: '/LikePosts',
+        name: 'LikePosts',
+        component: LikePosts
+      }
+      ,
+      {
+        path: '/DisLikePosts',
+        name: 'DisLikePosts',
+        component: DisLikePosts
+      },
+      {
+        path: '/UnappropriateContent',
+        name: 'UnappropriateContent',
+        component: UnappropriateContent
+      }
 
-
+      
       
 
       
