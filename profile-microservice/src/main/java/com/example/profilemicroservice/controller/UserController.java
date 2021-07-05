@@ -24,7 +24,9 @@ import com.example.profilemicroservice.dto.LoginDTO;
 import com.example.profilemicroservice.dto.ProfileDTO;
 import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.dto.UserRegistrationDTO;
+import com.example.profilemicroservice.model.Profile;
 import com.example.profilemicroservice.model.User;
+import com.example.profilemicroservice.repository.ProfileRepository;
 import com.example.profilemicroservice.service.impl.UserServiceImpl;
 
 // Primer kontrolera cijim metodama mogu pristupiti samo autorizovani korisnici
@@ -38,6 +40,9 @@ public class UserController {
     @Autowired
     private MediaConnection mediaConnection;
     
+    @Autowired
+    private ProfileRepository profileRepository;
+    
     //@Context
 	HttpServletRequest request;
 	User loggedUser;
@@ -45,7 +50,13 @@ public class UserController {
     @PostMapping("/public/register")
     public ResponseEntity<User> add(@Valid @RequestBody UserRegistrationDTO user) {
         User u=userService.addUser(user);
+        Profile p=new Profile();
+        p.setUsername(user.getUsername());
+        System.out.println("Vrsta profila jeee "+user.getPrivateProfile() );
+        p.setPrivateProfil(user.getPrivateProfile());
+        profileRepository.save(p);
         mediaConnection.add(user.getUsername());
+        
         return  u == null ? new ResponseEntity<>(HttpStatus.BAD_REQUEST) :
             new ResponseEntity<User>(u,HttpStatus.CREATED);
     }

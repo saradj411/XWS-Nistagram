@@ -6,14 +6,19 @@ import Registration from '../components/Registration.vue'
 import UpdateAccount from '../components/UpdateAccount.vue'
 import UserProfile from '../components/UserProfile.vue'
 import AddPost from '../components/AddPost.vue'
-
+import AddStory from '../components/AddStory.vue'
 import Proba from '../components/Proba.vue'
+import Favorites from '../components/Favorites.vue'
+import CollectionPosts from '../components/CollectionPosts.vue'
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VerificationRequest from '../components/VerificationRequest.vue'
 import AdminProfile from '../components/AdminProfile.vue'
 import AllRequest from '../components/AllRequest.vue'
 import AnotherUserProfile from '../components/AnotherUserProfile'
+import PublicProfile from '../components/PublicProfile'
+
+
 import moment from 'moment'
 
 Vue.use(VueRouter)
@@ -30,6 +35,11 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 const routes = [
     {
       path: '/',
+      name: 'PublicProfile',
+      component: PublicProfile
+    },
+    {
+      path: '/Welcome',
       name: 'Welcome',
       component: Welcome
     },
@@ -62,6 +72,11 @@ const routes = [
         component: AddPost
       },
       {
+        path: '/AddStory',
+      name: 'AddStory',
+      component: AddStory
+    },
+      {
           path: '/Proba',
         name: 'Proba',
         component: Proba
@@ -81,16 +96,33 @@ const routes = [
         path: '/AllRequest',
         name: 'AllRequest',
         component: AllRequest
+      },
+      {
+        path: '/Favorites',
+        name: 'Favorites',
+        component: Favorites
       }
+      ,
+      {
+        path: '/CollectionPosts/:id',
+        name: 'CollectionPosts',
+        component: CollectionPosts
+      }
+
       ,
       {
         path: '/AnotherUserProfile/:username',
         name: 'AnotherUserProfile',
         component: AnotherUserProfile
       }
+      ,
+      {
+        path: '/PublicProfile',
+        name: 'PublicProfile',
+        component: PublicProfile
+      }
 
 
-      
       
 
       

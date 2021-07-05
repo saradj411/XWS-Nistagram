@@ -32,7 +32,7 @@
             </h5>
             
             
-            <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right"></b-icon></h5>
+            <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
                
         </b-card>
         
@@ -67,14 +67,8 @@ export default {
                     {                        
                        this.loggedUser = response.data;
 
-                               alert(this.loggedUser.username)
-                    }).catch(res => {                        
-                                         
-                        console.log(res.response);
-                       
-                    });   
-     
-            this.axios.get('/media/post/getPostByUsername/saki')
+                               //alert(this.loggedUser.username)
+            this.axios.get('/media/post/getPostByUsername/'+this.loggedUser.username)
             .then(response => {
                 this.posts = response.data;
                 let video = "mp4";
@@ -106,11 +100,37 @@ export default {
                             console.log(res);
                     });
         
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
+     
+           
          
                 
    },
     methods:{
-    
+    saveInFavorites: async function(event,post){
+        console.log(post)
+         //alert(this.loggedUser.username)
+         //alert(post.idPost)
+            this.axios.post('media/favorites/saveInFavorites/'+this.loggedUser.username+"/"+post.idPost,{ 
+                
+
+                }).then(response => {
+                    alert("Post saved in favorites!");
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already saved this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
+
     likePost: async function(event,post){
         console.log(post)
          
