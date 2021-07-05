@@ -31,7 +31,7 @@ public class ProfileServiceImpl implements ProfileService {
 		System.out.println("uslo u kontroler:"+profile.getOldPassword());
 		Profile pat = profileRepository.getOneByUsername(profile.getOldPassword());
 		
-        Long ids=pat.getId();
+        int ids=pat.getId();
         System.out.println("id:"+pat.getUsername());
        
         pat.setUsername(profile.getNewPassword());

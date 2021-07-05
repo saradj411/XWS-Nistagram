@@ -15,6 +15,18 @@
              v-on:keyup.enter="changeVisibility" />
     
             <div class="sideViewContent">
+            <div class="container" >
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-sm">
+                    Following  <br> {{ this.following.length }}
+                    </div>
+                    <div class="col-sm">
+                    Followers <br>{{ this.followers.length }}
+                    </div>
+                   
+                </div>
+                </div>
+
                 <div>
                     <img src="../assets/logo.png" width="100px" style="margin: 10px; margin-top:20px;" height="100px">
                 </div>           
@@ -27,6 +39,7 @@
             
             <b-button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "update"><b-icon icon="person" aria-hidden="true"></b-icon> Update </b-button>
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "requestPage"><b-icon icon="emoji-wink" aria-hidden="true"></b-icon> Request for follow  </b-button>
+            <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" ><b-icon icon="heart-fill" aria-hidden="true"></b-icon> Close friends </b-button>
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "request">
                 <b-icon icon="tools" aria-hidden="true"></b-icon> Sent a request for verification </b-button>
  
@@ -157,6 +170,10 @@ export default {
         requestVisible: true,
 
         followerRequest: [],
+        following: [],
+        followingNum:0,
+        followers:[],
+        followersNum:0,
         visible: false
     }
   },
@@ -304,7 +321,8 @@ export default {
 
       },
       
-mounted() { 
+mounted() {         
+           
     this.axios.get('/profile/api/users/getLoggedUser',{
                     headers:{}}).then(response => 
                     {                        
@@ -326,16 +344,35 @@ mounted() {
                                 'Content-Type': 'application/json;charset=utf-8' 
                                 }
                             }).then(response => {
-                                this.followerRequest = response.data; 
-                                
-                                console.log("IZVUCE LI ISTA");
-                                    console.log(this.followerRequest); 
+                                this.followerRequest = response.data;                                 
 
                             }).catch(res => {                        
                                     console.log(res.response.data.message);
                                     });
                             }).catch(res => { console.log(res.response.data.message); });
-/*****************************************************************************************************************************/
+
+ this.axios.post('/profile/api/profile/getAllFollowing',info ,{ 
+         headers: {
+                    'Content-Type': 'application/json;charset=utf-8' 
+                  }
+                            }).then(response => {
+                                this.following = response.data;                                 
+
+                            }).catch(res => {                        
+                                    console.log(res.response.data.message);
+                                    });
+ this.axios.post('/profile/api/profile/getAllFollowers',info ,{ 
+         headers: {
+                    'Content-Type': 'application/json;charset=utf-8' 
+                  }
+                            }).then(response => {
+                                this.followers = response.data;                                 
+
+                            }).catch(res => {                        
+                                    console.log(res.response.data.message);
+                                    });
+
+
 
 
                                     }).catch(res => {                        
@@ -343,7 +380,11 @@ mounted() {
                                         console.log(res.response);
                                         
                                     
-                                    });  
+                                    }); 
+    
+    
+
+      
             }
      
 }

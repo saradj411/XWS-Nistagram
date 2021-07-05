@@ -4,6 +4,14 @@
       <img src="../assets/nistagram.png" width="300" height="250" style="position: relative; margin: 0 auto; margin-top: 60px;"> 
       <table style=" margin-top: 20px; width: 50%;" >
         <tr>
+          <td>
+            
+          </td>
+        </tr>
+        
+        <tr>
+        </tr>
+        <tr>
           <td style="color: black;"> Username: </td>
         </tr>
         <tr>
@@ -80,7 +88,9 @@ export default {
       },
       update : function(){
         window.location.href = "/UpdateAccount";
-      },
+      }, post: function(){
+        window.location.href = "/PublicProfile";
+      }, 
     
       signIn: function(){
         const loginInfo = 
