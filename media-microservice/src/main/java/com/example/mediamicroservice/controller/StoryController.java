@@ -102,4 +102,62 @@ public class StoryController {
                 ResponseEntity.ok(fronts);
     }
 
+	@GetMapping(value = "/getHighlightStoryByUsername/{username}")
+    public ResponseEntity<List<FrontStoryDTO>> getHighlightStoryByUsername(@PathVariable String username) {
+		System.out.println("uslooo");
+		List<Story> drugs=new ArrayList<Story>();
+        List<Story> drugs1=storyRepository.findAllStoryByUser(username);
+        List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
+        
+        for(Story s:drugs1) {
+        	if(s.getVisibleHighlights()!=null) {
+        		
+        		if(s.getVisibleHighlights()) {
+            		
+            		drugs.add(s);
+            	}
+        	}
+        }
+        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+    	
+        for(Story p:drugs) {
+        	FrontStoryDTO front=new FrontStoryDTO();
+        	front.setDate(p.getDate());
+        	front.setDescription(p.getDescription());
+        	front.setIdStory(p.getIdStory());
+        	front.setLocation(p.getLocation());
+        	front.setUsername(p.getProfile().getUsername());
+        	
+        	
+        	FrontMediaDTO ee=new FrontMediaDTO();
+        	Media a=p.getMedia();
+        		FrontMediaDTO ff=new FrontMediaDTO();
+        		
+        		ff.setFileName(a.getFileName());
+        		ff.setId(a.getId());
+        		ff.setIdPost(a.getStory().getIdStory());
+        		
+        		 ee=storyImpl.getImagesFiles(ff);
+        	
+        	
+        	front.setMedia(ff);
+        	
+        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+        	for(Tag t:p.getTags()) {
+        		FrontTagDTO tt=new FrontTagDTO();
+        		tt.setIdPost(t.getStory().getIdStory());
+        		tt.setTagText(t.getTagText());
+        		lista1.add(tt);
+        	}
+        	front.setTags(lista1);
+        	
+        	fronts.add(front);
+        	
+        }
+       
+        
+        return fronts == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(fronts);
+    }
 }

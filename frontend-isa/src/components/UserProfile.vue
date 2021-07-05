@@ -37,8 +37,10 @@
                         <b-icon icon="camera" aria-hidden="true"></b-icon> Add post</b-button>   
                 <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "post">
                     <b-icon icon="image" aria-hidden="true"></b-icon> Posts</b-button>   
-                    <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "story">
+                <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "story">
                     <b-icon icon="image" aria-hidden="true"></b-icon> Stories</b-button>   
+                <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "istaknuto">
+                    <b-icon icon="image" aria-hidden="true"></b-icon> Highlights</b-button>   
                     
                       <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "favorites">
                     <b-icon icon="heart-fill" aria-hidden="true"></b-icon> Favorites</b-button> 
@@ -254,7 +256,10 @@ export default {
       },  
       story: function(){
         window.location.href = "/Stories";
-      },     
+      },  
+      istaknuto: function(){
+        window.location.href = "/HighlightsStories";
+      },    
     favorites: function(){
         window.location.href = "/Favorites";
       }, 
