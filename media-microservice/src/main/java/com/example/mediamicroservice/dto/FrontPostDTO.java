@@ -11,6 +11,8 @@ import java.util.Set;
 public class FrontPostDTO {
 
     private Long idPost;
+    
+    private Integer numberOfInappropriateVote;
 
     private String description;
 
@@ -140,6 +142,16 @@ public class FrontPostDTO {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+
+	public Integer getNumberOfInappropriateVote() {
+		return numberOfInappropriateVote;
+	}
+
+
+	public void setNumberOfInappropriateVote(Integer numberOfInappropriateVote) {
+		this.numberOfInappropriateVote = numberOfInappropriateVote;
 	}
     
     
