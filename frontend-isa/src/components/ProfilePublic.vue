@@ -74,16 +74,17 @@
                                         #{{tag.tagText}}
                                     </span>
                         </h5>
-             <h5 v-if="numberOfLikes==0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
+            <h5 v-if="numberOfLikes==0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
               <h5 v-if="numberOfLikes!=0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{numberOfLikes}} likes </h5>
             <h5 v-if="numberOfDislikes==0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{post.numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
             </h5>
             <h5 v-if="numberOfDislikes!=0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
             </h5>
-            
+
+               
             
             <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
-               
+                 
         </b-card>
         
         </div> 
@@ -178,6 +179,35 @@
                                         #{{tag.tagText}}
                                     </span>
                         </h5>
+            <h5 v-if="numberOfLikes==0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
+              <h5 v-if="numberOfLikes!=0" align="left"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{numberOfLikes}} likes </h5>
+            <h5 v-if="numberOfDislikes==0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{post.numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            </h5>
+            <h5 v-if="numberOfDislikes!=0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            </h5>
+
+               
+            
+            <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
+                
+
+
+
+
+
+
+                
+<span  style="float:left;margin:15px">
+                    
+          <div class="input-group mb-3">
+              <input type="text" style="width:500px;" v-model="comment" class="form-control" placeholder="Add comment" aria-label="Enter username" aria-describedby="addon-wrapping">
+              <div class="input-group-append">
+                  <b-button class="btn btn-info" style="background:gray;color:white;margine-left:-2%" v-on:click = "getComments(post)" type="button"  ><b-icon icon="plus-circle" aria-hidden="true"></b-icon> 
+                Share</b-button>
+                </div>
+           </div>
+      </span>
+
               
             
             
@@ -212,12 +242,22 @@ export default {
         profile: null,
         pregled1:false,
         pregled2:false,
-        pregled3:false
+        pregled3:false,
+        postId:null
        
         }
     },
     async mounted(){
-        
+         this.axios.get('/profile/api/users/getLoggedUser',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                        
+                       this.loggedUser = response.data;
+
+                               //alert(this.loggedUser.username)
             this.axios.get('/media/post/getPostPublic')
             .then(response => {
                 this.posts = response.data;
@@ -250,6 +290,12 @@ export default {
                         alert("greskaa");
                             console.log(res);
                     });
+        
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
         
          
                 
@@ -377,6 +423,26 @@ export default {
         window.location.href = "/Welcome";
       },
     
+     saveInFavorites: async function(event,post){
+        console.log(post)
+         //alert(this.loggedUser.username)
+         //alert(post.idPost)
+            this.axios.post('media/favorites/saveInFavorites/'+this.loggedUser.username+"/"+post.idPost,{ 
+                
+
+                }).then(response => {
+                    alert("Post saved in favorites!");
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already saved this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
+
     likePost: async function(event,post){
         console.log(post)
          
@@ -412,8 +478,31 @@ export default {
 
                 });
 
+        },
+        getComments: function(post){
+            //alert("idemooo");
+           // alert("logovani komentarise "+this.loggedUser.username);
+            //alert("komentar "+this.comment);
+            //alert("kome komentarise sliku "+post.username);
+            //alert("id posta "+post.idPost);
 
-        }
+            const postInfo = {
+                usernameFrom : this.loggedUser.username,
+                usernameTo:post.username,
+                comment : this.comment,
+                postId: post.idPost
+
+            }
+            this.axios.post('media/post/commentPost',postInfo,{ 
+                }).then(response => {
+                    alert("Comment is shared");
+                    this.nesto = response.data;
+                }).catch(res => {
+                    alert("Error,please try later");
+                    console.log(res.response.data.message);
+
+                });
+        },
     
 }
 }

@@ -33,7 +33,17 @@
             
             
             <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
-               
+              
+<span  style="float:left;margin:15px">
+                    
+          <div class="input-group mb-3">
+              <input type="text" style="width:500px;" v-model="comment" class="form-control" placeholder="Add comment" aria-label="Enter username" aria-describedby="addon-wrapping">
+              <div class="input-group-append">
+                  <b-button class="btn btn-info" style="background:gray;color:white;margine-left:-2%" v-on:click = "getComments(post)" type="button"  ><b-icon icon="plus-circle" aria-hidden="true"></b-icon> 
+                Share</b-button>
+                </div>
+           </div>
+      </span>  
         </b-card>
         
         </div> 
@@ -111,6 +121,31 @@ export default {
                 
    },
     methods:{
+        
+        getComments: function(post){
+            //alert("idemooo");
+            //alert("logovani komentarise "+this.loggedUser.username);
+            //alert("komentar "+this.comment);
+            //alert("kome komentarise sliku "+post.username);
+            //alert("id posta "+post.idPost);
+
+            const postInfo = {
+                usernameFrom : this.loggedUser.username,
+                usernameTo:post.username,
+                comment : this.comment,
+                postId: post.idPost
+
+            }
+            this.axios.post('media/post/commentPost',postInfo,{ 
+                }).then(response => {
+                    alert("Comment is shared");
+                    this.nesto = response.data;
+                }).catch(res => {
+                    alert("Error,please try later");
+                    console.log(res.response.data.message);
+
+                });
+        },
     saveInFavorites: async function(event,post){
         console.log(post)
          //alert(this.loggedUser.username)
