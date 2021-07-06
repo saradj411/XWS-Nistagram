@@ -14,13 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.commons.util.IdUtils;
 import org.springframework.stereotype.Service;
 
+import com.example.mediamicroservice.controller.PostController;
+import com.example.mediamicroservice.dto.CommentDTO;
 import com.example.mediamicroservice.dto.FavoritesDTO;
 import com.example.mediamicroservice.dto.FrontMediaDTO;
+import com.example.mediamicroservice.dto.FrontPostDTO;
 import com.example.mediamicroservice.dto.PostDTO;
+import com.example.mediamicroservice.model.Comment;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Post;
 import com.example.mediamicroservice.model.Profile;
 import com.example.mediamicroservice.model.Tag;
+import com.example.mediamicroservice.repository.CommentRepository;
 import com.example.mediamicroservice.repository.MediaRepository;
 import com.example.mediamicroservice.repository.PostRepository;
 import com.example.mediamicroservice.repository.ProfileRepository;
@@ -41,6 +46,12 @@ public class PostServiceImpl implements PostService{
 	
 	@Autowired
 	TagRepository tagRepo;
+	
+	@Autowired
+	PostController post;
+	
+	@Autowired
+	CommentRepository commentRepository;
 	
 	@Override
 	public Post addNewPost(PostDTO postDTO,String username) {
@@ -145,5 +156,44 @@ public class PostServiceImpl implements PostService{
 		}
 		return frontDTO;
 	}
+	
+    @Override
+    public Comment commentPost(CommentDTO dto) {
+    	System.out.println("Usao u metodu za komentarisanjneeeee ");
+		 Comment newCom=new Comment();
+
+    	 Profile profileMediaTo = profileRep.getOneByUsername(dto.getUsernameTo());//kome koment
+		 Profile profileMediaFrom =profileRep.getOneByUsername(dto.getUsernameFrom());//ko koment
+		 List<FrontPostDTO> myPosts = post.findAllByIdUsernameee(dto.getUsernameTo());////getPostsByUsername
+		 //List<Media> medias = new ArrayList<Media>();
+		 //int updatedNumberOfComments = 0;
+		
+			 Comment newComment=new Comment();
+			 Post ppp=postRepository.findPostByIdPost(dto.getPostId());
+			 
+/*
+			
+				 List<Comment>allComments=commentRepository.findAll();
+				 List<Comment>currentComments=new ArrayList<Comment>();
+				 
+				 for(Comment c:allComments) {
+					 if(c.getProfile().getUsername().equals(dto.getUsernameTo())) {
+						 currentComments.add(c);
+					 }
+					 
+				 }
+				 */
+				 newComment.setDescription(dto.getComment());
+				 
+				 newComment.setPost(ppp);
+				 newComment.setProfile(profileMediaFrom);
+			     System.out.println("komentaaar jeee  "+newComment.getDescription());
+				 newCom=commentRepository.save(newComment);
+					 
+				 
+			 
+		 return newCom;
+		 
+		}
 
 }

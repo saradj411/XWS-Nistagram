@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.mediamicroservice.connections.ProfileConnection;
+import com.example.mediamicroservice.dto.CommentDTO;
 import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.FrontPostDTO;
 import com.example.mediamicroservice.dto.FrontTagDTO;
 import com.example.mediamicroservice.dto.PostDTO;
 import com.example.mediamicroservice.dto.ProfileeDTO;
+import com.example.mediamicroservice.model.Comment;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Post;
 import com.example.mediamicroservice.model.Profile;
@@ -171,6 +174,59 @@ public class PostController {
     }
 	
 
+	
+	@GetMapping(value = "/getPostByUsernameeeeee/{username}")
+    public List<FrontPostDTO> findAllByIdUsernameee(@PathVariable String username) {
+		System.out.println("uslooo");
+        List<Post> drugs=postRepository.findAllPostByUser(username);
+        List<FrontPostDTO> fronts=new ArrayList<FrontPostDTO>();
+        
+        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+    	
+        for(Post p:drugs) {
+        	FrontPostDTO front=new FrontPostDTO();
+        	front.setDate(p.getDate());
+        	front.setDescription(p.getDescription());
+        	front.setIdPost(p.getIdPost());
+        	front.setLocation(p.getLocation());
+        	front.setUsername(p.getProfile().getUsername());
+        	front.setNumberOfDislikes(p.getNumberOfDislikes());
+        	front.setNumberOfLikes(p.getNumberOfLikes());
+        	
+        	List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+        	List<FrontMediaDTO> ee=new ArrayList<FrontMediaDTO>();
+        	for(Media a:p.getMedia()) {
+        		FrontMediaDTO ff=new FrontMediaDTO();
+        		
+        		ff.setFileName(a.getFileName());
+        		ff.setId(a.getId());
+        		ff.setIdPost(a.getPost().getIdPost());
+        		lista.add(ff);
+        		 ee=postImpl.getImagesFiles(lista);
+        	}
+        	
+        	front.setMedia(ee);
+        	
+        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+        	for(Tag t:p.getTags()) {
+        		FrontTagDTO tt=new FrontTagDTO();
+        		tt.setIdPost(t.getPost().getIdPost());
+        		tt.setTagText(t.getTagText());
+        		lista1.add(tt);
+        	}
+        	front.setTags(lista1);
+        	
+        	fronts.add(front);
+        	
+        	/*Set<Media> medias=p.getMedia();
+        	for(Media m:medias) {
+        	System.out.println("nestoo:0"+m.getFileName());
+        	}*/
+        }
+        //List<FrontMediaDTO> ee=postImpl.getImagesFiles(lista);
+        return fronts;
+	}
+	
 	
 	
 
@@ -809,7 +865,12 @@ public class PostController {
 			    }
 				
 				
-		
+				@PostMapping("/commentPost")
+				public ResponseEntity commentPost(@RequestBody CommentDTO comment) {
+					Comment c= postService.commentPost(comment);
+					
+					return new ResponseEntity(comment, HttpStatus.OK);
+				}
 		
 		
 }
