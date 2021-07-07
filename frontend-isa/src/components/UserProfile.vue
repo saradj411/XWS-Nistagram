@@ -42,7 +42,7 @@
             
             <b-button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "update"><b-icon icon="person" aria-hidden="true"></b-icon> Update </b-button>
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "requestPage"><b-icon icon="emoji-wink" aria-hidden="true"></b-icon> Request for follow  </b-button>
-            <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" ><b-icon icon="heart-fill" aria-hidden="true"></b-icon> Close friends </b-button>
+            <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click="showCloseFriend" ><b-icon icon="heart-fill"  aria-hidden="true"></b-icon> Close friends </b-button>
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "request">
                 <b-icon icon="tools" aria-hidden="true"></b-icon> Sent a request for verification </b-button>
  
@@ -166,27 +166,46 @@
                         top: 50%;
                         left: 50%;
                         transform: translate(-50%, -50%);">{{one.text}}</h4>
+                      </div>                     
+                    </div>        
+                    
+                </div>
+
+                <div class="closeFriendsPage" v-if="this.showModalForCloseFriends">
+                <h1 style="color:black;">Your close friends: </h1>
+                    <button type="button" style=" margin-top: -40px; color: black;" class="close  btn pull-right"  @click="showModalForCloseFriends = !showModalForCloseFriends" aria-label="Close">
+                    <span aria-hidden="true"> X </span></button>
+
+                <div class="row" v-for="friend in this.closeFriends"  v-bind:key="friend.username"   style="margin-left: 10px;
+                        margin-right: 10px;
+                        padding: 5px;
+                        margin-top: 5px;
+                        border-width: 2px; background-color: black; color: white;
+                        border-color: black;
+                        border-style: solid;
+                        cursor: pointer;" >
+                        <div class="col-2">
+                            <img src="../assets/gizmo.jpg" width="100px" height="100px"/>
+                        
+                        <!--v-for="one in this.notifications.slice().reverse()" v-on:click="goTo(one)" v-bind:key="one.id" -->
                       </div>
-                      <!--<div class="col" >
-                        <button  type="button"  style="position: relative;
+                      <div class="col-8" v-on:click="closeFriendShowProfile(friend)">
+                        <h4 style="position: relative;
                         float: left;
-                        top: 100%;
+                        top: 50%;
                         left: 50%;
-                        transform: translate(-50%, -50%); margin-left:-5px;" class="close  btn pull-right" aria-label="Add">
-                            <b-icon icon="check-square" aria-hidden="true"></b-icon>          
-                          </button>
-                      </div>
+                        transform: translate(-50%, -50%);">@{{friend.username}}</h4>
+                      </div>  
                       <div class="col">
-                        <button  type="button" style="position: relative;
+                        <button  type="button"  @click="deleteCloseFriend(friend.username)"  style="position: relative;
                         float: left;
                         top: 100%;
                         left: 50%;
                         transform: translate(-50%, -50%); margin-left:-10px;" class="close  btn pull-right" aria-label="Add">
                             <b-icon icon="x-square" aria-hidden="true"></b-icon>          
                           </button>
-                      </div>-->
-                    </div>        
-                    
+                      </div>                   
+                    </div>   
                 </div>
 
         
@@ -223,7 +242,10 @@ export default {
         followingNum:0,
         followers:[],
         followersNum:0,
-        visible: false
+        visible: false,
+
+        closeFriends: [],
+        showModalForCloseFriends: false
     }
   },
   computed:{
@@ -233,6 +255,55 @@ export default {
         }
   },
   methods:{ 
+
+      closeFriendShowProfile: function(friend)
+      { console.log(friend);
+                this.$router.push('/AnotherUserProfile/'+ friend.username);
+      },
+      deleteCloseFriend: function(username)
+      {
+            console.log(username);
+
+            const userForFollow = 
+            {
+                username: username
+            }
+   
+              this.axios.post('/profile/api/profile/deleteNewCloseFriend', userForFollow ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                console.log(response.data);
+                                this.showModalForCloseFriends = false;                     
+                             
+                            }).catch(res => {
+                                        console.log(res.response.data.message);
+                                    });
+      },
+
+      showCloseFriend: function()
+      {
+          
+          this.showModalForCloseFriends = true;
+            this.axios.get('/profile/api/profile/getAllCloseFriends',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {        
+                        this.closeFriends = response.data;            
+                       console.log(response.data);                       
+                               
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    }); 
+
+
+      },
       goTo: function(one)
       {
           console.log("FO TO");
@@ -332,6 +403,7 @@ export default {
     {
         this.requestVisible = !this.requestVisible;
         this.showModalForNotification = false
+        this.showModalForCloseFriends = false;
     }  ,
         logOut: function(){
       this.axios.post('/profile/api/users/logout',{
@@ -589,6 +661,16 @@ visibility: hidden;
 }
 
 .notificationPage
+{
+    background-color: gray;
+    width: 75%;
+    height: 100vh;
+    position: absolute;
+    margin-top: -60px;
+    margin-left: 25%;
+}
+
+.closeFriendsPage
 {
     background-color: gray;
     width: 75%;

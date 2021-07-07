@@ -1,5 +1,6 @@
 package com.example.profilemicroservice.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.profilemicroservice.dto.UserProfileDTO;
 import com.example.profilemicroservice.model.Profile;
-import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.repository.ProfileRepository;
 import com.example.profilemicroservice.service.IProfileService;
 @Service
@@ -109,6 +109,7 @@ public class ProfileService  implements IProfileService {
 		
 		
 	}
+	
 	
 	public Profile deleteRequestOrFollow(String usernameForFollow)
 	{
