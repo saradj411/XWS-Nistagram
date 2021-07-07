@@ -131,7 +131,11 @@ export default {
 },
 mounted() {
       
-      
+       this.axios.post('/media/story/setVisibleStory')
+        .catch(res => {
+                alert("Nesto ne valja");
+                console.log(res);
+        });
 
         
     }

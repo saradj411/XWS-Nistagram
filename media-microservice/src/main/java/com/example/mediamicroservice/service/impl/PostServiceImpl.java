@@ -5,13 +5,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.commons.util.IdUtils;
 import org.springframework.stereotype.Service;
 
 import com.example.mediamicroservice.dto.FavoritesDTO;
@@ -19,7 +16,6 @@ import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.PostDTO;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Post;
-import com.example.mediamicroservice.model.Profile;
 import com.example.mediamicroservice.model.Tag;
 import com.example.mediamicroservice.repository.MediaRepository;
 import com.example.mediamicroservice.repository.PostRepository;

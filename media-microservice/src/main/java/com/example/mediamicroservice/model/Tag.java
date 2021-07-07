@@ -17,6 +17,11 @@ public class Tag {
     @JoinColumn(name = "post", referencedColumnName = "idPost")
     //@JsonBackReference
     private Post post;
+    
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "story", referencedColumnName = "idStory")
+    //@JsonBackReference
+    private Story story;
 
 	public Tag(Long idTag, String tagText, Post post) {
 		super();
@@ -24,6 +29,30 @@ public class Tag {
 		this.tagText = tagText;
 		this.post = post;
 	}
+	
+	
+
+	public Story getStory() {
+		return story;
+	}
+
+
+
+	public void setStory(Story story) {
+		this.story = story;
+	}
+
+
+
+	public Tag(Long idTag, String tagText, Post post, Story story) {
+		super();
+		this.idTag = idTag;
+		this.tagText = tagText;
+		this.post = post;
+		this.story = story;
+	}
+
+
 
 	public Post getPost() {
 		return post;
