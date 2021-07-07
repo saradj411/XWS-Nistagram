@@ -58,6 +58,7 @@ public class PostController {
 	@Autowired
 	ProfileConnection profileConnection;
 
+	@Autowired
 	FavoritesService favoritesService;
 
 	
