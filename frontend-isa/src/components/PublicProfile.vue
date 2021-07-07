@@ -7,7 +7,10 @@
 </span>
                </div>
              <div style="float: left; margin: 15px;">  
-                 
+                 <button  class="btn btn-primary btn-lg"  style="width:200px;margin-top:60px;margin-left:1250px;" id="btnSignIn" 
+            v-on:click = "welcome"> Sing in/Sign up</button>                    <h3 style="color: #0D184F;font-size:35px;margin-top:60px;margin-left:5px;">Posts of public profiles</h3>
+
+        
          <!--FRIEND'S POSTS-->
              <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
                   <b-row >
@@ -30,10 +33,7 @@
             
                
         </b-card>
-<button  class="btn btn-primary btn-lg"  style="width:200px;margin-top:60px;margin-left:1250px;" id="btnSignIn" 
-            v-on:click = "welcome"> Sing in/Sign up</button>                    <h3 style="color: #0D184F;font-size:35px;margin-top:60px;margin-left:5px;">Posts of public profiles</h3>
 
-        
         </div> 
     </div>
 </template>

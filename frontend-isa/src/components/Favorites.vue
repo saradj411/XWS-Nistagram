@@ -4,10 +4,13 @@
            <span style="float: left; margin: 15px;">
                 <img class="image_style space_style" title="Nistagram" style="width: 50px; height: 50px; margin-right:10px;"
                 src="../assets/nistagram.png">
+
+                 <b-button  class="btn btn-secondary btn-lg" style="margin-left:20px;" v-on:click = "homePage">
+                    <b-icon icon="person" aria-hidden="true"></b-icon>Home </b-button>
 </span>
 
-            <span  style="float:right;margin:30px">
-                    <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" style="margin-right:20px;" v-on:click = "addNewCollecion">
+            <span  style="float:right;margin:20px">
+                    <b-button class="btn btn-secondary btn-lg" style="margin-right:20px;" v-on:click = "addNewCollecion">
                         <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add new collection</b-button>
                 </span>
                 
@@ -28,7 +31,7 @@
                     placeholder="type here.."
                     ></b-form-textarea>
                 </b-col>
-                    <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" style="margin:10px;" v-on:click = "addCollecion">
+                    <b-button class="btn btn-secondary btn-lg" style="margin:10px;" v-on:click = "addCollecion">
                         <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add</b-button>
                 </div>
              <div style="float: left; margin: 15px;">  
@@ -121,7 +124,9 @@ export default {
                 
    },
     methods:{
-        
+        homePage: function(){
+           window.location.href = "/profile";
+        },
         addCollecion: function() {
           
             this.axios.post('/media/favorites/addNewCollection/'+this.loggedUser.username+"/"+this.name,{
