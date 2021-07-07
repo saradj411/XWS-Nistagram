@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.profilemicroservice.connections.MediaConnection;
+import com.example.profilemicroservice.dto.ChangeProfileDTO;
 import com.example.profilemicroservice.dto.LoginDTO;
 import com.example.profilemicroservice.dto.ProfileDTO;
 import com.example.profilemicroservice.dto.UserDTO;
@@ -62,12 +63,17 @@ public class UserController {
     }
 
     @PostMapping("/updateUser")
-    ResponseEntity<String> update(@RequestBody User user, HttpSession session)
+    ResponseEntity<String> update(@RequestBody ChangeProfileDTO user, HttpSession session)
     {
-    	System.out.println("uslo u kontroler");
+    	System.out.println("uslo u kontroler za izmjenu");
+        System.out.println("Novi username jeee  controlwr "+user.getUsername());
+        System.out.println("Stari username jeee   controlwr"+user.getOldUsername());
+
         User u=userService.update(user);
         session.setAttribute("loggedInUser", u);
         loggedUser = u;
+
+    	System.out.println("logovani user   "+u.getUsername());
         ProfileDTO profile=new ProfileDTO(u.getUsername(),user.getOldUsername());
         mediaConnection.update(profile);
         return new ResponseEntity<>("ajdeee", HttpStatus.CREATED);

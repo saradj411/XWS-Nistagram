@@ -9,9 +9,15 @@
                     <b-icon icon="person" aria-hidden="true"></b-icon>Home </b-button>
 </span>
                </div>
+
+             <div style="float: left; margin: 15px;" v-if="postovi">  
+         <!--FRIEND'S POSTS
+             <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
+-->
              <div style="float: left; margin: 15px;">  
          <!--my post !-->
              <b-card class="post_look" v-for="post in posts" v-bind:key="post.idPost">
+
                   <b-row >
                         <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
                         </b-row>
@@ -33,14 +39,85 @@
             </h5>
             <h5 v-if="numberOfDislikes!=0" align="left"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
             </h5>
-            
-             
+
             
             <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
-               
+                
+
+
+
+
+
+
+                
+<span  style="float:left;margin:15px">
+                    
+          <div class="input-group mb-3">
+              <input type="text" style="width:500px;" v-model="comment" class="form-control" placeholder="Add comment" aria-label="Enter username" aria-describedby="addon-wrapping">
+              <div class="input-group-append">
+                  <b-button class="btn btn-info" style="background:gray;color:white;margine-left:-2%" v-on:click = "getComments(post)" type="button"  ><b-icon icon="plus-circle" aria-hidden="true"></b-icon> 
+                Share</b-button>
+                </div>
+           </div>
+      </span>
+
+
+
+
+ <section>
+                <b-button 
+                variant="outline-secondary"  
+                v-on:click = "allComment(post)"
+                style="margin-top: 0% !important;
+                margin-right: 83%;
+                color: #406b99;
+                width: 250px;
+                hight: 500px;"
+                                
+
+                >
+                <b-icon icon="chat-square" aria-hidden="chat-square"></b-icon> 
+                See all comments
+                </b-button>
+                 </section>
+
+
+
         </b-card>
-        
+             </div>
         </div> 
+          <!--FRIEND'S POSTS-->
+         
+ <div v-if="bp" style="background:lightgray;width:800px;">  
+       <label style="font-size:28px;color:black;margin-top:60px;margin-left:30px;">All comments</label>
+
+<div  style=" width:700px;margin-left:30px;margin-top:40px;"  v-for="d in this.comments"  v-bind:key="d.id">
+      
+        <form>  
+           <table  id="table2" class="table" >
+
+              <tbody>
+      
+    <tr style="font-size:22px;color:black;background:white;width:10px;">@{{d.username}}  
+      {{d.txt}}   
+    
+    </tr>
+  
+    
+  </tbody>
+                        </table>
+
+
+
+                </form>
+
+               </div>
+                                                       <button class="btn btn-primary btn-lg"  v-on:click = "back" style="margin-left:28px; margin-top:42px;">GO BACK</button>
+
+
+
+ </div>
+
     </div>
 </template>
 
@@ -55,7 +132,12 @@ export default {
         //likesNumber:0,
         numberOfLikes :0,
         numberOfDislikes:0,
-        loggedUser: {} 
+        loggedUser: {},
+        comment:'',
+        comments:[],
+        postId:null,
+        postovi:true,
+
        
         }
     },
@@ -113,8 +195,60 @@ export default {
                 
    },
     methods:{
+
         homePage: function(){
            window.location.href = "/profile";
+        },
+         back: function(){
+                     this.bp = false;
+
+          this.postovi = true;
+      },
+allComment: function(post){
+            //alert("idemooo");
+            //alert("logovani komentarise "+this.loggedUser.username);
+            //alert("komentar "+this.comment);
+            //alert("kome komentarise sliku "+post.username);
+            //alert("id posta "+post.idPost);
+            this.postovi = false;
+                        this.bp = true;
+
+
+            this.axios.get('/media/post/getComments/'+post.idPost,{ 
+                }).then(response => {
+                    //alert("prikaziii");
+                    this.comments = response.data;
+                }).catch(res => {
+                    alert("Error,please try later");
+                    console.log(res.response.data.message);
+
+                });
+        },
+      
+        getComments: function(post){
+            //alert("idemooo");
+            //alert("logovani komentarise "+this.loggedUser.username);
+            //alert("komentar "+this.comment);
+            //alert("kome komentarise sliku "+post.username);
+            //alert("id posta "+post.idPost);
+
+            const postInfo = {
+                usernameFrom : this.loggedUser.username,
+                usernameTo:post.username,
+                comment : this.comment,
+                postId: post.idPost
+
+            }
+            this.axios.post('media/post/commentPost',postInfo,{ 
+                }).then(response => {
+                    alert("Comment is shared");
+                    this.nesto = response.data;
+                }).catch(res => {
+                    alert("Error,please try later");
+                    console.log(res.response.data.message);
+
+                });
+
         },
     saveInFavorites: async function(event,post){
         console.log(post)

@@ -89,7 +89,8 @@ export default {
         medias:[],
         highlight:'',
         closeFriends:'',
-         loggedUser: {} 
+         loggedUser: {} ,
+         followers: []
         }
     },
     mounted() {
@@ -115,7 +116,23 @@ export default {
                     }}).then(response => 
                     {                        
                        this.loggedUser = response.data;
+const info =
+            {
+                username: this.loggedUser.username
+            }
+     
+        this.axios.post('/profile/api/profile/getAllFollowers',info ,{ 
+         headers: {
+                    'Content-Type': 'application/json;charset=utf-8' 
+                  }
+                            }).then(response => {
+                                console.log("followersi");
+                                this.followers = response.data; 
+                                console.log(this.followers);
 
+                            }).catch(res => {                        
+                                    console.log(res.response.data.message);
+                                    }); 
           
         
                     }).catch(res => {                        
@@ -177,6 +194,29 @@ export default {
                     alert("Story is shared!");
 
                     console.log(response);  
+                            console.log(this.followers); 
+                     for(var follower in this.followers)
+                            {
+                                const newNotification = 
+                            {
+                                text: "@"+ this.loggedUser.username +" just posted a picture.",
+                                toWhoUsername: this.followers[follower].username, // kome saljem
+                                type: "STORY"
+
+                            }
+                             this.axios.post('/profile/api/notification/addNotification',newNotification ,{ 
+                                                    headers: {
+                                                        'Content-Type': 'application/json;charset=utf-8' 
+                                                        }
+                                                    }).then(response => {
+                                                        console.log(response.data);                                                     
+                                                    }).catch(res => {                                                                
+                                                                console.log(res.response.data.message);
+                                                            });
+
+                            }
+
+
                      window.location.href = "/Stories";              
                 }).catch(res => {
                     console.log(storyInfo.fileNames);

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.profilemicroservice.common.TimeProvider;
 import com.example.profilemicroservice.config.consts.UserRoles;
+import com.example.profilemicroservice.dto.ChangeProfileDTO;
 import com.example.profilemicroservice.dto.LoginDTO;
 import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.dto.UserRegistrationDTO;
@@ -25,13 +26,16 @@ import com.example.profilemicroservice.exception.ResourceNotFoundException;
 import com.example.profilemicroservice.mappers.UserMapper;
 import com.example.profilemicroservice.model.Authority;
 import com.example.profilemicroservice.model.ConfirmationToken;
+import com.example.profilemicroservice.model.Profile;
 import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.model.UserRequest;
 import com.example.profilemicroservice.repository.AuthorityRepository;
 import com.example.profilemicroservice.repository.ConfirmationTokenRepository;
+import com.example.profilemicroservice.repository.ProfileRepository;
 import com.example.profilemicroservice.repository.UserRepository;
 import com.example.profilemicroservice.service.AuthorityService;
 import com.example.profilemicroservice.service.UserService;
+import com.netflix.discovery.converters.Auto;
 
 @Service("UserServiceImpl")
 public class UserServiceImpl implements UserService {
@@ -53,6 +57,11 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private AuthorityRepository authorityRepository;
+	
+	@Autowired
+	private ProfileRepository profileRepository;
+	
+	
 /*
 	@Autowired
 	private KomentarRepository komentarRepository;
@@ -69,9 +78,12 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-    public User update(User user) {
+    public User update(ChangeProfileDTO user) {
 		System.out.println("uslo u kontroler");
         User pat = userRepository.getOne(user.getId());
+        System.out.println("Novi username jeee "+user.getUsername());
+        System.out.println("Stari username jeee "+user.getOldUsername());
+        
         Long ids=pat.getId();
         System.out.println("id:"+ids);
         pat.setName(user.getName());
@@ -85,8 +97,21 @@ public class UserServiceImpl implements UserService {
         pat.setOldUsername(user.getOldUsername());
         pat.setAdmin(false);
         pat.setUsername(user.getUsername());
-        
         User u=userRepository.save(pat);
+
+        Profile p=profileRepository.findOneByUsername(u.getOldUsername());
+        System.out.println("biografijaa "+user.getBiography());
+
+
+        p.setBiography(user.getBiography());
+        p.setUsername(u.getUsername());
+        p.setMessageFromUnfollowes(user.getMessageFromUnfollowes());
+        p.setTagFromUnfollowers(user.getTagFromUnfollowers());
+        p.setWebSite(user.getWebSite());
+        p.setPrivateProfil(user.getPrivateProfil());
+        
+        Profile ppp=profileRepository.save(p);
+        
         return u;
     }
 	

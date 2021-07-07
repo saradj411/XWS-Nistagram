@@ -11,8 +11,10 @@
                         </div>
                         <div class="form-group col-md-6">
  <b-dropdown id="ddCommodity"  name="ddCommodity" text="Category list">
+    
                                 <b-dropdown-item  v-for="item in this.types" v-on:click ="typeIsSelected($event, item.categoryType)" v-bind:key="item.categoryType"> {{item.categoryType }}</b-dropdown-item>
                             </b-dropdown> 
+                            <div> <span>{{this.choosenType}}</span> </div>
                         </div>
                         
                     </div>
@@ -113,10 +115,9 @@ export default {
                     
                     });  
         },
-    
+
      sendRequest: function(){
-      
-       
+
     const adminInfo = {
                     name : this.user.name,
                     lastname: this.user.surname,
@@ -141,11 +142,13 @@ export default {
       },
 
        handleFileUpload(){
+
             for(let i=0; i< this.$refs.file.files.length; i++){
                 let fileOne = this.$refs.file.files[i];
                 this.file.push(fileOne);
             }
          },
+
 }
    
 }

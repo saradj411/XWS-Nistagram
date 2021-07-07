@@ -1,5 +1,6 @@
 package com.example.profilemicroservice.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.profilemicroservice.dto.UserProfileDTO;
 import com.example.profilemicroservice.model.Profile;
-import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.repository.ProfileRepository;
 import com.example.profilemicroservice.service.IProfileService;
 @Service
@@ -109,6 +109,7 @@ public class ProfileService  implements IProfileService {
 		
 		
 	}
+	
 	
 	public Profile deleteRequestOrFollow(String usernameForFollow)
 	{
@@ -318,5 +319,33 @@ public class ProfileService  implements IProfileService {
         
 	}*/
 	
+	 @Override
+	    public Boolean viewPosts(String myUsrename,String usernameOfSearchAccount) {
+		 Boolean view=true;
+		 int i=0;
+		 
+	    	//treba mi taj profil i following od njega
+		 //ako mu je profil privatan i ako ga ne prati vrati false0
+	    	Profile myProfile=profileRepository.findOneByUsername(myUsrename);
+	    	Profile profileOfSearchAccount=profileRepository.findOneByUsername(usernameOfSearchAccount);
+	    	System.out.println("moj username jee "+myProfile.getUsername());
+	    	Set<Profile>profiles=profileOfSearchAccount.getFollowers();
+	    	if(profileOfSearchAccount.getPrivateProfil().equals(true)) {
+	    		for(Profile p:profiles) {
+	    			if(p.getUsername().equals(myUsrename)) {
+	    				
+	    			}else {
+	    				i++;
+	    			}
+		    	}
+	    		if(profiles.size()==i) {
+	    			view=false;
+	    		}
+	    		
+	    	}
+	    	
+			return view;
+	    	
+	    }
 	
 }
