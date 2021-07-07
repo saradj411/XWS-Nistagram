@@ -139,7 +139,7 @@ export default {
                 formData.append('file', file);
             }
             console.log("FORM DATA"+formData);
-            this.axios.post('/media/post/saveImage',formData,{
+            this.axios.post('/media/post/saveImage1',formData,{
                 headers: {
                    
                 }
