@@ -42,7 +42,7 @@ public class PofileController {
 	@PostMapping("/updateProfile")
     ResponseEntity<String> update(@RequestBody ProfileDTO profile)
     {
-    	System.out.println("uslo u kontroler");
+    	System.out.println("username jeeeee ");
         Profile u=profileService.update(profile);
         
         return new ResponseEntity<>("ajdeee", HttpStatus.CREATED);

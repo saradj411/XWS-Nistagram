@@ -9,33 +9,33 @@
     <form>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                        <label>Name:</label>
+                        <label style="color:#474A8A;font-size:22px;">Name:</label>
                         <input type="text" class="form-control" v-model = "user.name" >
                         </div>
                         <div class="form-group col-md-6">
-                        <label>Surname:</label>
+                        <label style="color:#474A8A;font-size:22px;">Surname:</label>
                         <input type="text"  class="form-control" v-model = "user.surname">
                         </div>
                          <div class="form-group col-md-6">
-                        <label>Email:</label>
+                        <label style="color:#474A8A;font-size:22px;">Email:</label>
                         <input type="text"  class="form-control" v-model = "user.email">
                         </div>
                          <div class="form-group col-md-6">
-                        <label>Phone number:</label>
+                        <label style="color:#474A8A;font-size:22px;">Phone number:</label>
                         <input type="text"  class="form-control" v-model= "user.phone" >
                         </div>
                     </div>
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                        <label>Country:</label>
+                        <label style="color:#474A8A;font-size:22px;">Country:</label>
                         <input type="text"  class="form-control" v-model="user.country" >
                         </div>
                         <div class="form-group col-md-6">
-                        <label>City:</label>
+                        <label style="color:#474A8A;font-size:22px;">City:</label>
                         <input type="text" class="form-control" v-model="user.city" >
                         </div>
                         <div class="form-group col-md-6">
-                        <label>Address:</label>
+                        <label style="color:#474A8A;font-size:22px;">Address:</label>
                         <input type="text"  class="form-control" v-model="user.address">
                         </div>
                         <div class="form-row">
@@ -45,7 +45,7 @@
 
                        </div>
                          <div class="form-group  col-md-6">
-                            <label>Current Password:</label>
+                            <label style="color:#474A8A;font-size:22px;">Current Password:</label>
                             <input type="password" class="form-control" v-model="currentPassword" placeholder="Current password">
                         </div>
                     </div>
@@ -54,23 +54,55 @@
                        <div class="form-row">
 
                         <div class="form-group  col-md-6">
-                            <label>New password:</label>
+                            <label style="color:#474A8A;font-size:22px;">New password:</label>
                             <input type="password" class="form-control" v-model="newPassword" placeholder=" New password">
                         </div>
                         <div class="form-group  col-md-6">
-                            <label>Repeat new password:</label>
+                            <label style="color:#474A8A;font-size:22px;">Repeat new password:</label>
                             <input type="password" class="form-control" v-model="newPasswordRepeat" placeholder="Repeat new password">
                         </div>
                         
                        </div>
+                       <div class="form-row">
 
-                       <div>
-                           <div class="form-group col-md-6">
-                        <label>New username:</label>
-                        <input type="text"  class="form-control" v-model="usernamee" placeholder=" New username">
-                        </div> 
-                        
+                        <div class="form-group  col-md-6">
+                            <label style="color:#474A8A;font-size:22px;">New username:</label>
+                            <input type="text" class="form-control" v-model="usernamee" placeholder=" New username">
+                        </div>
+                        <div class="form-group  col-md-6">
+                            <label style="color:#474A8A;font-size:22px;">Biography:</label>
+                            <input type="text" class="form-control" v-model="biography" placeholder="New biography">
+                        </div>
                        </div>
+                       <div class="form-row">
+
+                        <div class="form-group  col-md-6">
+                            <label style="color:#474A8A;font-size:22px;">Web site:</label>
+                            <input type="text" class="form-control" v-model="webSite" placeholder=" New web site">
+                        </div>
+                        <div class="form-group  col-md-6">
+                            <label style="color:#474A8A;font-size:22px;">New type of profile:</label>
+                            <b-dropdown id="ddCommodity" style="color:#474A8A;font-size:22px;" name="ddCommodity" text="choose">
+                                <b-dropdown-item  v-for="item in this.types" v-on:click ="typeIsSelected($event, item.categoryType)" v-bind:key="item.categoryType"> {{item.categoryType }}</b-dropdown-item>
+                            </b-dropdown>       <span>{{this.choosenType}}</span>   
+                       </div>
+                       </div>
+
+                       <div class="form-row">
+
+                        <div class="form-group  col-md-6">
+                            <label style="color:#474A8A;font-size:22px;">Message from unfollowes:</label>
+                            <b-dropdown style="color:#474A8A;font-size:22px;" id="ddCommodity"  name="ddCommodity" text="choose">
+                                <b-dropdown-item  v-for="item in this.messages" v-on:click ="typeIsSelected1($event, item.messagesType)" v-bind:key="item.messagesType"> {{item.messagesType }}</b-dropdown-item>
+                            </b-dropdown> <span>{{this.choosenMessages}}</span>   
+                        </div>
+                        <div class="form-group  col-md-6">
+                            <label style="color:#474A8A;font-size:22px;">Tag from unfollowers:</label>
+<b-dropdown style="color:#474A8A;font-size:22px;" id="ddCommodity"  name="ddCommodity" text="choose">
+                                <b-dropdown-item  v-for="item in this.tags" v-on:click ="typeIsSelected2($event, item.tagsType)" v-bind:key="item.tagsType"> {{item.tagsType }}</b-dropdown-item>
+                            </b-dropdown>           <span>{{this.choosenTags}}</span>              </div>
+                       </div>
+
                          
               
                     <button class="btn btn-primary btn-lg" v-on:click = "update">Change</button>
@@ -89,7 +121,18 @@
 export default {
   data() {
     return {
-
+     types: [
+          { categoryType: 'PRIVATE' },
+          { categoryType: 'PUBLIC' }
+      ],
+      messages: [
+          { messagesType: 'ENABLE' },
+          { messagesType: 'DISABLE' }
+      ],
+      tags: [
+          { tagsType: 'ENABLE' },
+          { tagsType: 'DISABLE' }
+      ],
     user: {},
     user1:{},
    
@@ -107,7 +150,18 @@ export default {
         sifra:"",
         usernamee:"",
         newUsername:"",
-        oldUsername:""
+        oldUsername:"",
+        categoryType : "",
+        choosenType : ""   ,        
+        messagesType : "",
+        choosenMessages: ""   ,      
+        biography:"",
+webSite:"",
+         
+        tagsType : "",
+        choosenTags: "" ,
+
+
     }
   },
   
@@ -116,7 +170,6 @@ export default {
         this.axios.get('/profile/api/users/getLoggedUser',{
                     headers: 
                     {          
-                         
                         
                     }}).then(response => 
                     {                        
@@ -134,6 +187,15 @@ export default {
     
 },
   methods:{
+    typeIsSelected : function(event, type) { 
+           this.choosenType = type;
+      },
+      typeIsSelected1 : function(event, type) { 
+           this.choosenMessages = type;
+      },
+      typeIsSelected2 : function(event, type) { 
+           this.choosenTags = type;
+      },
     korisnik: function(){
  this.axios.get('profile/api/users/findOneById/'+this.user1.id,{ 
              
@@ -167,7 +229,32 @@ export default {
         }else{
            this.newUsername=this.usernamee
         }
+if(this.choosenType=='PUBLIC'){
+                this.privateProfile=false;
+            }
+            
+            if(this.choosenType=='PRIVATE'){
+                this.privateProfile=true;
+            }
 
+
+
+            if(this.choosenMessages=='ENABLE'){
+                this.messageFromUnfollowes=true;
+            }
+            
+            if(this.choosenMessages=='DISABLE'){
+                this.messageFromUnfollowes=false;
+            }
+
+
+            if(this.choosenTags=='ENABLE'){
+                this.tagFromUnfollowers=true;
+            }
+            
+            if(this.choosenTags=='DISABLE'){
+                this.tagFromUnfollowers=false;
+            }
         //alert(this.user.id)
         //alert(this.user.username)
         //alert(this.usernamee)
@@ -182,7 +269,16 @@ export default {
                     password: this.sifra,
                     email:this.user.email,
                     oldUsername:this.user.username,
-                    username:this.newUsername
+                    username:this.newUsername,
+                    privateProfil:this.privateProfile,
+                    messageFromUnfollowes:this.messageFromUnfollowes,
+                    tagFromUnfollowers:this.tagFromUnfollowers,
+                    biography:this.biography,
+                    webSite:this.webSite
+
+
+
+
                     
           }
     this.axios.post('/profile/api/users/updateUser',info,{

@@ -28,10 +28,10 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public Profile update(ProfileDTO profile) {
-		System.out.println("uslo u kontroler:"+profile.getOldPassword());
+		//System.out.println("uslo u kontroler:"+profile.getOldPassword());
 		Profile pat = profileRepository.getOneByUsername(profile.getOldPassword());
 		
-        int ids=pat.getId();
+        //int ids=pat.getId();
         System.out.println("id:"+pat.getUsername());
        
         pat.setUsername(profile.getNewPassword());

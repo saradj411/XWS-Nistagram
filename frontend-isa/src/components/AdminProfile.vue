@@ -1,10 +1,20 @@
 <template>
-    <div>
+        <div class="sideView">
     <h2>Admin profile </h2>
-        
-     <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "request">See requests for verification </button>
-    <button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "logOut"> Log out </button>
-        
+        <div>
+                    <img src="../assets/gizmo.jpg" width="100px" style="margin: 10px; margin-top:20px;" height="100px">
+                </div>
+ <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "request">
+                <b-icon icon="tools" aria-hidden="true"></b-icon>Requests for verification</b-button>
+
+
+
+<b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "content">
+                <b-icon icon="exclamation" aria-hidden="true"></b-icon>Reported unappropriate content</b-button>
+
+<b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "logOut">
+                <b-icon icon="exclamation" aria-hidden="true"></b-icon>Log out</b-button>
+
     </div>
 </template>
 <script>
@@ -40,6 +50,9 @@ export default {
       },
       request: function(){
         window.location.href = "/AllRequest";
+      },
+      content: function(){
+        window.location.href = "/UnappropriateContent";
       }
                 
     
@@ -70,3 +83,12 @@ mounted() {
 
 
 </script>
+.sideView
+{
+    color: white;
+    background-color: black;
+    width: 25%;
+    height: 125vh;
+    position: absolute;
+    margin-top: -60px;
+}

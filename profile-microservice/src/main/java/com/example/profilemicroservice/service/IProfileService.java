@@ -20,4 +20,5 @@ public interface IProfileService {
 	
 	
 	Profile addRequest4follow(String usernameForFollow);
+	Boolean viewPosts(String myUsrename, String usernameOfSearchAccount);
 }

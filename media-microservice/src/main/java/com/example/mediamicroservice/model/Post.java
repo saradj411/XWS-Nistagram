@@ -77,7 +77,7 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile", referencedColumnName = "id")
     //@JsonBackReference
-    private Profile profile;
+    private Profile profile;//ciji je post
 
 	public Post() {
 		super();

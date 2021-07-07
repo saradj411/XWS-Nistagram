@@ -183,12 +183,10 @@ export default{
 
             if(this.choosenType=='PUBLIC'){
                 this.privateProfile=false;
-                alert("profil je javan");
             }
             
             if(this.choosenType=='PRIVATE'){
                 this.privateProfile=true;
-                alert("profil je privatan");
             }
             console.log(this.name);
             if(this.password != this.rePassword)

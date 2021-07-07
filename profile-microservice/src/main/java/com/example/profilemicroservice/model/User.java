@@ -57,7 +57,7 @@ public class User implements UserDetails{
 	    @Column
 	    private String surname;
 
-	    @Column(name = "username", unique = true, nullable = false)
+	    @Column(name = "username", unique = true)
 	    private String username;
 
 	    @Column
@@ -81,7 +81,7 @@ public class User implements UserDetails{
 	    private Category category;
 	    
 
-	    @Column(name = "password", nullable = false)
+	    @Column(name = "password")
 	    private String password;
 	    
 	    @Column(name = "oldUsername")

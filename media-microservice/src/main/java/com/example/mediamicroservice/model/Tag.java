@@ -11,7 +11,7 @@ public class Tag {
     private Long idTag;
 
     @Column
-    private String tagText;
+    private String tagText;//ovo je username u slucaju tagovanih profila
     
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "post", referencedColumnName = "idPost")
