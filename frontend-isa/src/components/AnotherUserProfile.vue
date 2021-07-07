@@ -10,12 +10,12 @@
     <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%; color:white;" v-on:click = "follow()"> 
     <b-icon icon="plus" aria-hidden="true"></b-icon>
      {{ text }} 
-    <b-icon icon="lock" v-show="this.userProfileClassInfo.privateProfil == true && this.requestStatus == false && this.followingStatus == false" aria-hidden="true"></b-icon> </b-button> 
+    <b-icon icon="lock" v-show="this.userProfileClassInfo.privateProfil == true && this.requestStatus == false && this.followingStatus == false && this.postovi == false" aria-hidden="true"></b-icon> </b-button> 
     </td>
         </tr>
     </table>
 
-    <div v-show="this.userProfileClassInfo.privateProfil == true && followingStatus == false ">
+    <div v-show="this.userProfileClassInfo.privateProfil == true && followingStatus == false && this.postovi ==false ">
         <h3 style="margin-top: 100px;"> Profile is private! To see posts you need to follow this user! </h3>
         <img src="../assets/lock.png" style="width: 200px; height: 200px; margin-top: 40px;" aria-hidden="true"><img>
 
@@ -24,41 +24,42 @@
 
     
 
-<!--Prikazi postove  profila ako ga pratim  -->
 
-<div style="float: left; margin:15px;background-color: black" v-show=" followingStatus == true || this.userProfileClassInfo.privateProfil == false" >  
-    
-         <!--FRIEND'S POSTS-->
-             <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName" >
+<!--Prikazi postove  profila ako ga pratim   v-show="this.userProfileClassInfo.privateProfil == false || this.followingStatus == true"-->
+<div  style="float: left; margin: 15px;" v-show="prikaz">  
+       
+
+         <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
                   <b-row >
-                        <h4 align="left" style="color: black"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
-                     
-                        
+                        <h4 align="left"  style="color:black"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
                         </b-row>
-             <h6 align="left" style="color: black">{{post.location}}</h6>
+             <h6 align="left"  style="color:black">{{post.location}}</h6>
                         
                  <div v-for="m in post.media" v-bind:key="m.imageBytes">
                     <b-img v-if="!m.fileName.includes(videoText)" thumbnail  v-bind:src="m.imageByte" alt="Image 1"></b-img>
                              <video v-if="m.fileName.includes(videoText)" autoplay controls v-bind:src="m.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
 
-                 </div> 
-                             <h5 align="right" style="color: black"> <b-icon icon="exclamation" aria-hidden="true" align="right" @click="content($event,post)"></b-icon>inappropriate content</h5>
-     
-                  <h4 align="left" style="margin-top:-5px;color: black">{{post.description}}</h4>
-                   <h5 align="left" style="color: black"><span v-for="(tag,t) in post.tags" :key="t">
+                 </div>      
+                  <h4 align="left" style="margin-top:-5px;color:black">{{post.description}}</h4>
+                   <h5 align="left"  style="color:black"><span v-for="(tag,t) in post.tags" :key="t">
                                         #{{tag.tagText}}
                                     </span>
                         </h5>
-                        
-             <h5 v-if="numberOfLikes==0" align="left" style="color: black"><b-icon style="color: black" icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
-              <h5 v-if="numberOfLikes!=0" align="left" style="color: black"><b-icon  icon="hand-thumbs-up" style="color: black" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{numberOfLikes}} likes </h5>
-            <h5 v-if="numberOfDislikes==0" align="left" style="color: black"> <b-icon icon="hand-thumbs-down" style="color: black" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{post.numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            <h5 v-if="numberOfLikes==0" align="left"  style="color:black"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{post.numberOfLikes}} likes </h5>
+              <h5 v-if="numberOfLikes!=0" align="left"  style="color:black"><b-icon  icon="hand-thumbs-up" aria-hidden="true" @click="likePost($event,post)"></b-icon>{{numberOfLikes}} likes </h5>
+            <h5 v-if="numberOfDislikes==0" align="left"  style="color:black"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{post.numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
             </h5>
-            <h5 v-if="numberOfDislikes!=0" align="left" style="color: black"> <b-icon icon="hand-thumbs-down" style="color: black" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
+            <h5 v-if="numberOfDislikes!=0" align="left"  style="color:black"> <b-icon icon="hand-thumbs-down" aria-hidden="true" @click="dislikePost($event,post)"></b-icon>{{numberOfDislikes}} dislikes <span style="margin-left:330px;"></span>
             </h5>
+
+               
             
-            <h5 align="left"> <b-icon icon="bookmark"  style="color: black" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
+            <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
+                 
+                
 <span  style="float:left;margin:15px">
+
+
                     
           <div class="input-group mb-3">
               <input type="text" style="width:500px;" v-model="comment" class="form-control" placeholder="Add comment" aria-label="Enter username" aria-describedby="addon-wrapping">
@@ -68,9 +69,58 @@
                 </div>
            </div>
       </span>
+
+<section>
+                <b-button 
+                variant="outline-secondary"  
+                v-on:click = "allComment(post)"
+                style="margin-top: 0% !important;
+                margin-right: 78%;
+                color: #406b99;
+                width: 200px;"
+                >
+                <b-icon icon="chat-square" aria-hidden="chat-square"></b-icon> 
+                See all comments
+                </b-button>
+                 </section>
         </b-card>
         
-        </div>
+        
+       </div>
+
+        <!--FRIEND'S POSTS   -->
+         
+         
+ <div  v-if="bp" style="margin-left:500px;background:lightgray;width:1100px;">  
+       <label style="font-size:28px;color:black">All comments</label>
+
+<div  style=" width:800px;margin-left:140px;margin-top:60px;"  v-for="d in this.comments"  v-bind:key="d.id">
+      
+        <form>  
+           <table  id="table2" class="table" >
+
+              <tbody>
+      
+    <tr style="font-size:22px;color:black;background:white;width:10px;">@{{d.username}}  
+      {{d.txt}}   
+    
+    </tr>
+  
+    
+  </tbody>
+                        </table>
+
+
+
+                </form>
+
+               </div>
+                                                       <button class="btn btn-primary btn-lg"  v-on:click = "back" style="margin-left:28px; margin-top:42px;">GO BACK</button>
+
+
+
+ </div>
+ 
 
 </div>
 </template>
@@ -85,23 +135,49 @@
             loggedUser: {},
             exists: false,
             text: "Follow",
+            postovi:false,
             followingStatus: false,
             requestStatus: false,
             following: [],
             userProfileClassInfo: {},
-
-        value: "",
+            comments:[],
+            prikaz:false,
+            value: "",
+            posts:[],
        
         
         requestVisible: true,
 
         followerRequest: [],
-        posts:true
+       bp:false
             
 
         }
       },
       methods:{
+           allComment: function(post){
+            //alert("idemooo");
+            //alert("logovani komentarise "+this.loggedUser.username);
+            //alert("komentar "+this.comment);
+            //alert("kome komentarise sliku "+post.username);
+            //alert("id posta "+post.idPost);
+          this.bp = true;
+          this.prikaz = false;
+                      
+
+
+
+
+            this.axios.get('/media/post/getComments/'+post.idPost,{ 
+                }).then(response => {
+                    //alert("prikaziii");
+                    this.comments = response.data;
+                }).catch(res => {
+                    alert("Error,please try later");
+                    console.log(res.response.data.message);
+
+                });
+        },
           getComments: function(post){
  //alert("idemooo");
             //alert("logovani komentarise "+this.loggedUser.username);
@@ -199,6 +275,10 @@
 
 
         },
+         back: function(){
+this.prikaz = true;
+          this.bp = false;
+      },
         follow: function(){
             const userForFollow = 
             {
@@ -208,6 +288,7 @@
 
             if(this.userProfileClassInfo.privateProfil == true)
             { 
+                this.postovi = false;
                 console.log("ZAHTEV ZA PRIVATAN PROFIL");
                 // salji zhatev
                 if(this.requestStatus == false)
@@ -215,6 +296,7 @@
                     console.log("REQUEST FALSE");
                     if(this.followingStatus == true)
                     {
+                        this.postovi = true;
                         console.log("Brise onoga ko ga prati");
                         this.axios.post('/profile/api/profile/deleteRequestAndFollow',userForFollow ,{ 
                                                     headers: {
@@ -223,6 +305,7 @@
                                                     }).then(response => {
                                                         console.log(response.data);
                                                         this.followingStatus = false;
+                                                        this.postovi = false;
                                                         this.text = " Follow ";
                                                     }).catch(res => {                                                                
                                                                 console.log(res.response.data.message);
@@ -264,9 +347,12 @@
                 }
 
             }else
-            {
+            {   
+                this.postovi=true;
                 if(this.followingStatus == true)
                 {
+                this.postovi=true;
+
                     this.axios.post('/profile/api/profile/deleteRequestAndFollow',userForFollow ,{ 
                                                     headers: {
                                                         'Content-Type': 'application/json;charset=utf-8' 
@@ -274,6 +360,7 @@
                                                     }).then(response => {
                                                         console.log(response.data);
                                                         this.followingStatus = false;
+
                                                         this.text = " Follow ";
                                                     }).catch(res => {                                                                
                                                                 console.log(res.response.data.message);
@@ -288,6 +375,7 @@
                             }).then(response => {
                                 console.log(response.data);
                                 this.followingStatus = true;
+                                this.postovi=true;
                                 this.text = " Following ";
                             }).catch(res => {
                                         console.log(res.response.data.message);
@@ -298,6 +386,36 @@
     },
    
     mounted() {       
+
+        
+    this.axios.get('/profile/api/users/getLoggedUser',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                        
+                       this.loggedUser = response.data;
+
+                               //alert(this.loggedUser.username)
+            this.axios.get('/profile/api/profile/viewPosts/'+this.loggedUser.username+"/"+this.username)
+            .then(response => {
+                  // alert("ajde "+ response.data)
+                this.prikaz = response.data;
+                
+              
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
+        
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
+
+
 
         this.axios.get('/media/post/getPostByUsername/'+this.username)
             .then(response => {
@@ -379,6 +497,7 @@
                                                      console.log("USAO")
                                                      this.requestStatus = true;
                                                      this.followingStatus = false;
+                                                     this.postovi = false;
                                                      this.text = "Request sent";
                                                      break;
                                                  }
@@ -401,6 +520,7 @@
                                                  {                                                     
                                                      this.text = " Following ";
                                                      this.followingStatus = true;
+                                                     this.postovi=true;
                                                      break;
                                                  }
                                              }

@@ -21,7 +21,7 @@
                 <p>{{loggedUser.name}} {{loggedUser.surname}} </p>
                 <p><i> @{{loggedUser.username}}</i></p>
                 <p>Biography:<br> {{this.myProfile.biography}}</p>
-                <p><i>Category: {{this.myProfile.category}}</i></p>
+                <p style="color:white"><i>Category: {{this.loggedUser.category}}</i></p>
                 
             </div>
             
@@ -69,7 +69,7 @@
 
 
 
-<div style="float: left; margin:15px;" v-if="posts">  
+<div style="float: left; margin:15px;" v-if="postovi">  
          <!--FRIEND'S POSTS-->
              <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
                   <b-row >
@@ -112,11 +112,59 @@
                 </div>
            </div>
       </span>
+      <section>
+                <b-button 
+                variant="outline-secondary"  
+                v-on:click = "allComment(post)"
+                style="margin-top: 0% !important;
+                margin-right: 83%;
+                color: #406b99;
+                width: 250px;
+                hight: 500px;"
+                                
+
+                >
+                <b-icon icon="chat-square" aria-hidden="chat-square"></b-icon> 
+                See all comments
+                </b-button>
+                 </section>
+
         </b-card>
         
         </div>
 
+        
          <!--FRIEND'S POSTS-->
+         
+ <div v-if="bp" style="background:lightgray;">  
+       <label style="font-size:28px;color:black">All comments</label>
+
+<div  style=" width:700px;margin-left:30px;margin-top:60px;"  v-for="d in this.comments"  v-bind:key="d.id">
+      
+        <form>  
+           <table  id="table2" class="table" >
+
+              <tbody>
+      
+    <tr style="font-size:22px;color:black;background:white;width:10px;">@{{d.username}}  
+      {{d.txt}}   
+    
+    </tr>
+  
+    
+  </tbody>
+                        </table>
+
+
+
+                </form>
+
+               </div>
+                                                       <button class="btn btn-primary btn-lg"  v-on:click = "back" style="margin-left:28px; margin-top:42px;">GO BACK</button>
+
+
+
+ </div>
 
 
 
@@ -200,8 +248,7 @@
 
             </div>
         </div>  
-              
-
+          
         
     </div>
 </template>
@@ -216,6 +263,8 @@ export default {
         selected: null,
         allusers: [],
         item:{},
+                comments:[],
+
         localFields:
         {
             value: 'username', text: 'username'
@@ -232,7 +281,9 @@ export default {
 
         followerRequest: [],
         visible: false,
-        posts:true
+        postovi:true,
+        bp:false
+
     }
   },
   computed:{
@@ -242,12 +293,35 @@ export default {
         }
   },
   methods:{ 
+      allComment: function(post){
+            //alert("idemooo");
+            //alert("logovani komentarise "+this.loggedUser.username);
+            //alert("komentar "+this.comment);
+            //alert("kome komentarise sliku "+post.username);
+            //alert("id posta "+post.idPost);
+            this.postovi = false;
+                        this.bp = true;
+
+
+            this.axios.get('/media/post/getComments/'+post.idPost,{ 
+                }).then(response => {
+                    //alert("prikaziii");
+                    this.comments = response.data;
+                }).catch(res => {
+                    alert("Error,please try later");
+                    console.log(res.response.data.message);
+
+                });
+        },
       getComments: function(post){
             //alert("idemooo");
             //alert("logovani komentarise "+this.loggedUser.username);
             //alert("komentar "+this.comment);
             //alert("kome komentarise sliku "+post.username);
             //alert("id posta "+post.idPost);
+                        
+
+
 
             const postInfo = {
                 usernameFrom : this.loggedUser.username,
@@ -388,6 +462,13 @@ export default {
                        
                     });    
       },
+
+       back: function(){
+         this.bp = false;
+
+          this.postovi = true;
+      },
+
     requestPage: function()
     {
         this.requestVisible = !this.requestVisible;
@@ -497,7 +578,6 @@ mounted() {
                     {                        
                        this.loggedUser = response.data;
 
-                               //alert(this.loggedUser.username)
             this.axios.get('/media/post/getPostOfFollowing/'+this.loggedUser.username)
             .then(response => {
                 this.posts = response.data;

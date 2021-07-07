@@ -11,6 +11,7 @@
 
             
         
+        <h3 style="color: #0D184F;font-size:35px;margin-top:60px;margin-left:5px;">Posts of public profiles</h3>
 
         <div  style="height: 80px;">
 
@@ -45,7 +46,6 @@
             
             
             
-        <h3 style="color: #0D184F;font-size:35px;margin-top:60px;margin-left:5px;">Posts of public profiles</h3>
                  
 
 
@@ -85,10 +85,66 @@
             
             <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
                  
+                
+<span  style="float:left;margin:15px">
+                    
+          <div class="input-group mb-3">
+              <input type="text" style="width:500px;" v-model="comment" class="form-control" placeholder="Add comment" aria-label="Enter username" aria-describedby="addon-wrapping">
+              <div class="input-group-append">
+                  <b-button class="btn btn-info" style="background:gray;color:white;margine-left:-2%" v-on:click = "getComments(post)" type="button"  ><b-icon icon="plus-circle" aria-hidden="true"></b-icon> 
+                Share</b-button>
+                </div>
+           </div>
+      </span>
+
+<section>
+                <b-button 
+                variant="outline-secondary"  
+                v-on:click = "allComment(post)"
+                style="margin-top: 0% !important;
+                margin-right: 78%;
+                color: #406b99;
+                width: 200px;"
+                >
+                <b-icon icon="chat-square" aria-hidden="chat-square"></b-icon> 
+                See all comments
+                </b-button>
+                 </section>
         </b-card>
         
         </div> 
 
+     <!--FRIEND'S POSTS-->
+         
+ <div v-if="bp" style="background:lightgray;">  
+       <label style="font-size:28px;color:black">All comments</label>
+
+<div  style=" width:700px;margin-left:30px;margin-top:60px;"  v-for="d in this.comments"  v-bind:key="d.id">
+      
+        <form>  
+           <table  id="table2" class="table" >
+
+              <tbody>
+      
+    <tr style="font-size:22px;color:black;background:white;width:10px;">@{{d.username}}  
+      {{d.txt}}   
+    
+    </tr>
+  
+    
+  </tbody>
+                        </table>
+
+
+
+                </form>
+
+               </div>
+                                                       <button class="btn btn-primary btn-lg"  v-on:click = "back" style="margin-left:28px; margin-top:42px;">GO BACK</button>
+
+
+
+ </div>
 
 <!-- pretraga lokacije !-->
 <div style="float: left; margin: 15px;" v-if="pregled2">  
@@ -119,6 +175,31 @@
             
             <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
                
+                
+<span  style="float:left;margin:15px">
+                    
+          <div class="input-group mb-3">
+              <input type="text" style="width:500px;" v-model="comment" class="form-control" placeholder="Add comment" aria-label="Enter username" aria-describedby="addon-wrapping">
+              <div class="input-group-append">
+                  <b-button class="btn btn-info" style="background:gray;color:white;margine-left:-2%" v-on:click = "getComments(post)" type="button"  ><b-icon icon="plus-circle" aria-hidden="true"></b-icon> 
+                Share</b-button>
+                </div>
+           </div>
+      </span>
+
+<section>
+                <b-button 
+                variant="outline-secondary"  
+                v-on:click = "allComment(post)"
+                style="margin-top: 0% !important;
+                margin-right: 78%;
+                color: #406b99;
+                width: 200px;"
+                >
+                <b-icon icon="chat-square" aria-hidden="chat-square"></b-icon> 
+                See all comments
+                </b-button>
+                 </section>
         </b-card>
         
         </div> 
@@ -152,14 +233,39 @@
             
             
             <h5 align="left"> <b-icon icon="bookmark" aria-hidden="true" align="right" @click="saveInFavorites($event,post)"></b-icon></h5>
-               
+                     
+<span  style="float:left;margin:15px">
+                    
+          <div class="input-group mb-3">
+              <input type="text" style="width:500px;" v-model="comment" class="form-control" placeholder="Add comment" aria-label="Enter username" aria-describedby="addon-wrapping">
+              <div class="input-group-append">
+                  <b-button class="btn btn-info" style="background:gray;color:white;margine-left:-2%" v-on:click = "getComments(post)" type="button"  ><b-icon icon="plus-circle" aria-hidden="true"></b-icon> 
+                Share</b-button>
+                </div>
+           </div>
+      </span>
+
+<section>
+                <b-button 
+                variant="outline-secondary"  
+                v-on:click = "allComment(post)"
+                style="margin-top: 0% !important;
+                margin-right: 78%;
+                color: #406b99;
+                width: 200px;"
+                >
+                <b-icon icon="chat-square" aria-hidden="chat-square"></b-icon> 
+                See all comments
+                </b-button>
+                 </section>
+             
+          
         </b-card>
         
-        </div> 
+       
 
 
-
-
+ </div>
 
          <!--FRIEND'S POSTS-->
          <div v-if="postovi">
@@ -208,11 +314,28 @@
            </div>
       </span>
 
-              
-            
+<section>
+                <b-button 
+                variant="outline-secondary"  
+                v-on:click = "allComment(post)"
+                style="margin-top: 0% !important;
+                margin-right: 78%;
+                color: #406b99;
+                width: 200px;"
+                >
+                <b-icon icon="chat-square" aria-hidden="chat-square"></b-icon> 
+                See all comments
+                </b-button>
+                 </section>
+             
             
                
         </b-card>
+
+       
+
+
+
 </div>
         
         </div> 
@@ -226,6 +349,7 @@ export default {
     return {
         
         posts: [],
+        comments:[],
         pretraga1: [],
         pretraga2: [],
         pretraga3: [],
@@ -243,6 +367,8 @@ export default {
         pregled1:false,
         pregled2:false,
         pregled3:false,
+        bp:false,
+
         postId:null
        
         }
@@ -302,8 +428,28 @@ export default {
    },
     methods:{
 
+     allComment: function(post){
+            //alert("idemooo");
+            //alert("logovani komentarise "+this.loggedUser.username);
+            //alert("komentar "+this.comment);
+            //alert("kome komentarise sliku "+post.username);
+            //alert("id posta "+post.idPost);
+                this.postovi = false;
+                this.pregled2 = false;
+                this.pregled1 = false;
+                this.pregled3 = false;
+                this.bp = true;
 
+            this.axios.get('/media/post/getComments/'+post.idPost,{ 
+                }).then(response => {
+                    //alert("prikaziii");
+                    this.comments = response.data;
+                }).catch(res => {
+                    alert("Error,please try later");
+                    console.log(res.response.data.message);
 
+                });
+        },
 
     
     searchLocation: function(location){
@@ -314,8 +460,9 @@ export default {
                 this.postovi = false;
                 this.pregled2 = true;
                 this.pregled1 = false;
-                                this.pregled3 = false;
+                this.pregled3 = false;
 
+                this.bp = false;
 
                 
                 this.pretraga2= response.data;
@@ -351,6 +498,7 @@ export default {
                 this.pregled1 = false;
                 this.pregled3 = true;
 
+                this.bp = false;
 
                 
                 this.pretraga3= response.data;
@@ -391,7 +539,8 @@ export default {
                  this.pregled3 = false;
 
 
-                
+                                this.bp = false;
+
                 this.pretraga1= response.data;
                 let video = "mp4";
                 for(let k=0; k< response.data.length; k++){
@@ -417,7 +566,14 @@ export default {
       ,
 
 
+      back: function(){
+          this.postovi = true;
+                this.pregled2 = false;
+                this.pregled1 = false;
+                this.pregled3 = false;
 
+                this.bp = false;
+      },
 
         welcome : function(){
         window.location.href = "/Welcome";
@@ -481,14 +637,14 @@ export default {
         },
         getComments: function(post){
             //alert("idemooo");
-           // alert("logovani komentarise "+this.loggedUser.username);
+            //alert("logovani komentarise "+this.loggedUser.username);
             //alert("komentar "+this.comment);
             //alert("kome komentarise sliku "+post.username);
             //alert("id posta "+post.idPost);
 
             const postInfo = {
-                usernameFrom : this.loggedUser.username,
-                usernameTo:post.username,
+                usernameFrom :this.loggedUser.username,
+                usernameTo: post.username,
                 comment : this.comment,
                 postId: post.idPost
 
