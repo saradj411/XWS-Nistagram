@@ -70,7 +70,7 @@ public class PostController {
 	private static String uploadDir="user-photos";
 	
 	
-	@PostMapping("/saveImage")
+	@PostMapping("/saveImage1")
 	public String saveImage(@RequestParam("file") MultipartFile multipartFile) throws IOException{
 		
 		String fileName=StringUtils.cleanPath(multipartFile.getOriginalFilename().replaceAll("\\s", ""));
@@ -79,6 +79,20 @@ public class PostController {
 		System.out.println("slikaa:0"+fileName);
 		return fileName;
 	}
+	
+	@PostMapping("/saveImage")
+    public List<String> saveImage(@RequestParam("file") List<MultipartFile> multipartFiles ) throws IOException {
+		List<String> fileName = new ArrayList<String>();
+		for(MultipartFile multipartFile:multipartFiles) {
+	        String fileNam = StringUtils.cleanPath(multipartFile.getOriginalFilename().replaceAll("\\s", "")); 
+	        fileName.add(fileNam);
+	        uploadDir = "user-photos";
+	        MediaUpload.saveFile(uploadDir, fileNam, multipartFile);
+		}
+        return fileName;
+    }
+	
+	
 	@PostMapping("/addNewPost/{username}")
 	public ResponseEntity<Post> addNewPost(@RequestBody PostDTO postDTO,@PathVariable String username){
 		

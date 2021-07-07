@@ -4,6 +4,9 @@
            <span style="float: left; margin: 15px;">
                 <img class="image_style space_style" title="Nistagram" style="width: 50px; height: 50px; margin-right:10px;"
                 src="../assets/nistagram.png">
+                 
+                <b-button  class="btn btn-secondary btn-lg" v-on:click = "homePage">
+                    <b-icon icon="person" aria-hidden="true"></b-icon>Home </b-button>
 </span>
                </div>
 
@@ -192,6 +195,10 @@ export default {
                 
    },
     methods:{
+
+        homePage: function(){
+           window.location.href = "/profile";
+        },
          back: function(){
                      this.bp = false;
 
@@ -241,6 +248,7 @@ allComment: function(post){
                     console.log(res.response.data.message);
 
                 });
+
         },
     saveInFavorites: async function(event,post){
         console.log(post)

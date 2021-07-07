@@ -7,6 +7,11 @@
 </span>
                </div>
              <div style="float: left; margin: 15px;">  
+
+                 <button  class="btn btn-primary btn-lg"  style="width:200px;margin-top:60px;margin-left:1250px;" id="btnSignIn" 
+            v-on:click = "welcome"> Sing in/Sign up</button>                    <h3 style="color: #0D184F;font-size:35px;margin-top:60px;margin-left:5px;">Posts of public profiles</h3>
+
+
                              
 <button  class="btn btn-primary btn-lg"  style="width:200px;margin-top:60px;margin-left:1500px;" id="btnSignIn" 
             v-on:click = "welcome"> Sing in/Sign up</button>
@@ -157,9 +162,6 @@
         </div> 
 
 
-
-
-
          <!--FRIEND'S POSTS-->
          <div v-if="postovi">
                      <h3 style="color: #0D184F;font-size:35px;margin-top:60px;margin-left:5px;">Posts of public profiles</h3>
@@ -235,6 +237,7 @@
 
  </div>
         
+
         </div> 
     </div>
 </template>

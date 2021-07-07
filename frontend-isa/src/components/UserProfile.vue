@@ -36,7 +36,9 @@
                 <p>{{loggedUser.name}} {{loggedUser.surname}} </p>
                 <p><i> @{{loggedUser.username}}</i></p>
                 <p>Biography:<br> {{this.myProfile.biography}}</p>
+
                 <p style="color:white"><i>Category: {{this.loggedUser.category}}</i></p>
+
                 
             </div>
             

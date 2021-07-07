@@ -64,23 +64,20 @@ public class PostServiceImpl implements PostService{
 		post.setNumberOfDislikes(0);
 		post.setPostLimit(10);
 		post.setProfile(profileRep.getOneByUsername(username));
+		Post p=postRepository.save(post);
 		
-		Media media=new Media();
-		media.setFileName(postDTO.getFileName());
-		
+		for(String s:postDTO.getFileName()) {
+			Media media=new Media();
+			media.setFileName(s);
+			
+			media.setPost(p);
+			Media m=mediaRepository.save(media);
+		}
 		
 		//post.setMedia(medias);
 		
-		
 		//Set<Media> medias=new HashSet<Media>();
 		//medias.add(media);
-		
-		Post p=postRepository.save(post);
-		
-		
-		media.setPost(p);
-		Media m=mediaRepository.save(media);
-		
 		
 		//Set<Tag> profiles=new HashSet<Tag>();
 		

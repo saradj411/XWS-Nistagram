@@ -1,16 +1,18 @@
 package com.example.profilemicroservice.service.impl;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.profilemicroservice.dto.RequestDTO;
 import com.example.profilemicroservice.dto.RequestFrontDTO;
-import com.example.profilemicroservice.dto.UserDTO;
 import com.example.profilemicroservice.model.Category;
-import com.example.profilemicroservice.model.Profile;
 import com.example.profilemicroservice.model.Request;
 import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.repository.ProfileRepository;
@@ -40,11 +42,11 @@ public class RequestService  implements IRequestService {
 	@Override
     public Request save(RequestDTO dto) {
 		Request d = new Request();
-	 	System.out.print("Username je "+dto.getUsername());
+	 	System.out.print("Username jeeeeeeeeeeeeeeee: "+dto.getUsername());
 	 	d.setUsername(dto.getUsername());
         d.setName(dto.getName());
         d.setCategory(dto.getCategory());
-        d.setImage("slika");
+        d.setImage(dto.getImage());
         d.setProcessed(false);
         d.setLastname(dto.getLastname());
         //Profile ppp= profileRepository.save(p);
@@ -82,13 +84,42 @@ public class RequestService  implements IRequestService {
 		List<Request>lista=requestRepository.findAll();
 		for(Request r:lista) {
 			if(r.getProcessed().equals(false)) {
-				RequestFrontDTO reqD=new RequestFrontDTO(r.getName(),r.getLastname(),r.getUsername(),r.getCategory());
-				dto.add(reqD);
+				RequestFrontDTO reqD=new RequestFrontDTO(r.getName(),r.getLastname(),r.getUsername(),r.getCategory(),r.getImage());
+				RequestFrontDTO ee=getImagesFiles(reqD);
+				System.out.println("byteeeeeeeeeees:0"+ee.getImageByte());
+				dto.add(ee);
 			}
 			
 		}
 		return dto;
 		
+	}
+	
+	public RequestFrontDTO getImagesFiles(RequestFrontDTO fronts) {
+		RequestFrontDTO listaDTO=new RequestFrontDTO();
+		if(fronts!=null) {
+			String filePath=new File("").getAbsolutePath();
+			filePath=filePath.concat("/"+"request-photos"+"/");
+			
+				listaDTO=imageFile(fronts, filePath);
+		
+		}
+		return listaDTO;
+	}
+	public RequestFrontDTO imageFile(RequestFrontDTO front,String filePath) {
+		RequestFrontDTO frontDTO=front;
+		//List<byte[]> imageBytes=new ArrayList<byte[]>();
+		//front.setImageByte(imageBytes);
+		File in=new File(filePath+"/"+front.getImage());
+		try {
+			frontDTO.setImageByte(IOUtils.toByteArray(new FileInputStream(in)));
+		}catch(IOException e){
+			e.printStackTrace();
+			
+		}catch(NullPointerException e) {
+			e.printStackTrace();
+		}
+		return frontDTO;
 	}
 	
 	@Override

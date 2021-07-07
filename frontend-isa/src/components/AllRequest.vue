@@ -9,7 +9,13 @@
 <div >
 
     <div style=" width:650px;margin-left:38px;margin-top:60px;"  v-for="d in this.pharmacies"  v-bind:key="d.id">
-         <form>
+           <div>
+                    <b-img v-if="!d.image.includes(videoText)" thumbnail  v-bind:src="d.imageByte" width="380" height="380" alt="Image 1"></b-img>
+                             <video v-if="d.image.includes(videoText)" autoplay controls v-bind:src="d.imageByte" width="300" height="300" style="display:block; margin-left:auto; margin-right:auto"></video>
+
+                 </div> 
+                 
+            <form>
            <table style="background:#B0B3D6;" id="table2" class="table" >
 
               <tbody>
@@ -36,9 +42,14 @@
       <td >Category:</td>   
        <td>{{d.category}}</td>
     </tr>
+    <tr>
+       <th></th>
+       
+    </tr>
     
   </tbody>
                         </table>
+                       
 
                         <button class="btn btn-primary btn-lg" v-on:click = "accept(d.category,d.username)"  style="margin-left:30px; margin-top:42px;background:#474A8A">Accept</button>
                         <button class="btn btn-primary btn-lg"  v-on:click = "refuse(d.username)" style="margin-left:30px; margin-top:42px;background:#474A8A">Refuse</button>
@@ -74,7 +85,10 @@ export default {
       date:null,
        end:null,
        start:null,
-       price:null
+       price:null,
+       videoText: "mp4",
+       
+
 
        
     }
@@ -83,6 +97,18 @@ export default {
         this.axios.get('/profile/request/findAll/')
         .then(response => {
                 this.pharmacies = response.data;  
+
+                  let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                   if(!this.pharmacies[k].image.includes(video)){
+                                console.log("usao je u if");
+                                this.pharmacies[k].imageByte = 'data:image/jpeg;base64,' + this.pharmacies[k].imageByte;
+                            }else{
+                                this.pharmacies[k].imageByte = 'data:video/mp4;base64,' + this.pharmacies[k].imageByte;       
+                            }  
+                            console.log("uslo");
+                        
+                 }
 
          }).catch(res => {
                 console.log(res);

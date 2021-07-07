@@ -6,7 +6,7 @@ import java.util.List;
 public class PostDTO {
 
 	
-	    private String fileName;
+	    private List<String> fileName;
 	    private String description;
 	    private String location;
 	    private List<String> tags;
@@ -30,7 +30,7 @@ public class PostDTO {
 
 
 
-		public PostDTO(String fileName, String description, String location,  List<String> tags) {
+		public PostDTO(List<String> fileName, String description, String location,  List<String> tags) {
 			super();
 			this.fileName = fileName;
 			this.description = description;
@@ -40,11 +40,11 @@ public class PostDTO {
 
 
 
-		public String getFileName() {
+		public List<String> getFileName() {
 			return fileName;
 		}
 
-		public void setFileName(String fileName) {
+		public void setFileName(List<String> fileName) {
 			this.fileName = fileName;
 		}
 

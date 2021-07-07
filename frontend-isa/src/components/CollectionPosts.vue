@@ -4,6 +4,10 @@
            <span style="float: left; margin: 15px;">
                 <img class="image_style space_style" title="Nistagram" style="width: 50px; height: 50px; margin-right:10px;"
                 src="../assets/nistagram.png">
+                <b-button  class="btn btn-secondary btn-lg" style="margin-left:20px;" v-on:click = "homePage">
+                    <b-icon icon="person" aria-hidden="true"></b-icon>Home </b-button>
+                <b-button  class="btn btn-secondary btn-lg" style="margin-left:20px;" v-on:click = "favoritesButton">
+                    <b-icon icon="heart" aria-hidden="true"></b-icon>Favorites </b-button>
 </span>
                </div>
              <div style="float: left; margin: 15px;">  
@@ -11,7 +15,7 @@
              <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
                   <b-row >
                         <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{post.username}}</h4>
-                         <h4 align="right" style="margin-left:200px">  <b-button pill variant="outline-danger" class = "btn btn-lg btn-light" v-on:click = "addNewCollecion">
+                         <h4 align="right" style="margin-left:200px">  <b-button class="btn btn-secondary btn-lg" v-on:click = "addNewCollecion">
                         <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add in other collection</b-button></h4>
             <div v-if="showAdd" style="float:right;margin-top:2px;margin-left:300px">
            <h4 for="textarea-large" 
@@ -32,7 +36,7 @@
                         </option>
                     </datalist>
                 </b-col>
-                    <b-button pill variant="outline-danger" class = "btn btn-light" style="margin:10px;"  @click="addCollection($event,selectedCollection,post) ">
+                    <b-button class="btn btn-secondary btn-lg" style="margin:10px;"  @click="addCollection($event,selectedCollection,post) ">
                         <b-icon icon="plus-square" aria-hidden="true"></b-icon> Add</b-button>
                 </div>
                   </b-row>
@@ -161,6 +165,12 @@ export default {
                 
    },
     methods:{
+        homePage: function(){
+           window.location.href = "/profile";
+        },
+        favoritesButton: function(){
+           window.location.href = "/Favorites";
+        },
         addNewCollecion:function(){
             this.showAdd=true;
         },
