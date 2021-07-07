@@ -18,18 +18,14 @@
                     </div>
 
                      <div class="form-row">
-                        <div class="form-group col-md-6">
-                        <label style="color: #0D184F;font-size:22px;">Choose image:</label>
-                        </div>
-                        <div class="form-group col-md-6">
-                     <button class="btn btn-primary btn-lg"  v-on:click = "update" style="background:#474A8A;width:130px;">Choose</button>
-
-                        </div>
+                          <h4 style="left: 10px;">Choose image </h4>
+                            <input type="file" multiple name="image" accept="image/png, image/jpeg, video/mp4,video/x-m4v,video/*" id="file" ref="file" v-on:change="handleFileUpload()">
+            
                         
                     </div>
                   
                      
-                    <button class="btn btn-primary btn-lg" v-on:click = "update" style="width:130px;">Sent</button>
+                    <button class="btn btn-primary btn-lg" v-on:click = "saveMedia" style="width:130px;">Sent</button>
 
                 </form>
 
@@ -90,17 +86,43 @@ export default {
                     });   
          
     },
-    methods:
+    methods:{
+    saveMedia : function() {
+           let formData = new FormData();
+            
+            for( var i = 0; i < this.$refs.file.files.length; i++ ){
+                let file = this.$refs.file.files[i];
+                formData.append('file', file);
+            }
+            console.log("FORM DATA"+formData);
+            this.axios.post('/profile/request/saveImage',formData,{
+                headers: {
+                }
+                }).then(response => {
+                        this.fileNames = response.data
+                       //alert(this.fileNames)
+                       //alert("Success")
+                       console.log(response.data)
+                       this.sendRequest();
+                       
+                  
+                    })
+                    .catch(response => {
+                    console.log(response.data)
+                    alert("Eror")
+                    
+                    });  
+        },
     
-    {
-     update: function(){
+     sendRequest: function(){
       
        
     const adminInfo = {
                     name : this.user.name,
                     lastname: this.user.surname,
                     category: this.choosenType,
-                    username:this.user.username
+                    username:this.user.username,
+                    image:this.fileNames
 
         } 
         this.axios.post('/profile/request/create',adminInfo,{
@@ -113,10 +135,17 @@ export default {
 
                        console.log(res);
                  });
-      }
-      ,typeIsSelected : function(event, type) { 
+      },
+      typeIsSelected : function(event, type) { 
            this.choosenType = type;
-      }
+      },
+
+       handleFileUpload(){
+            for(let i=0; i< this.$refs.file.files.length; i++){
+                let fileOne = this.$refs.file.files[i];
+                this.file.push(fileOne);
+            }
+         },
 }
    
 }
