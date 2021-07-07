@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.mediamicroservice.controller.PostController;
 import com.example.mediamicroservice.dto.CommentDTO;
+import com.example.mediamicroservice.dto.CommntsDTO;
 import com.example.mediamicroservice.dto.FavoritesDTO;
 import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.FrontPostDTO;
@@ -162,11 +163,15 @@ public class PostServiceImpl implements PostService{
     	System.out.println("Usao u metodu za komentarisanjneeeee ");
 		 Comment newCom=new Comment();
 
-    	 Profile profileMediaTo = profileRep.getOneByUsername(dto.getUsernameTo());//kome koment
+    	 Profile profileMediaTo = profileRep.getOneByUsername(dto.getUsernameTo());//ko komentarise
+     	System.out.println("ajdeeee "+dto.getUsernameFrom());
+
 		 Profile profileMediaFrom =profileRep.getOneByUsername(dto.getUsernameFrom());//ko koment
 		 List<FrontPostDTO> myPosts = post.findAllByIdUsernameee(dto.getUsernameTo());////getPostsByUsername
 		 //List<Media> medias = new ArrayList<Media>();
 		 //int updatedNumberOfComments = 0;
+	     	System.out.println("pliz "+profileMediaFrom.getUsername());
+
 		
 			 Comment newComment=new Comment();
 			 Post ppp=postRepository.findPostByIdPost(dto.getPostId());
@@ -195,5 +200,52 @@ public class PostServiceImpl implements PostService{
 		 return newCom;
 		 
 		}
+    
+    @Override
+	public List<CommntsDTO> getComments(Long idPost) {
+		List<CommntsDTO> listaDTO=new ArrayList<CommntsDTO>();
+		List<Post>posts=postRepository.findAll();
+		
+		 List<Comment>allComments=commentRepository.findAll();
+		 List<CommntsDTO>currentComments=new ArrayList<CommntsDTO>();
+		 
+		
+		
+		
+		
+			 for(Comment c:allComments) {
+				if(c.getPost().getIdPost().equals(idPost)) {
+			     	System.out.println("uuuuu "+c.getProfile().getUsername());
+
+					
+					CommntsDTO ccc=new CommntsDTO(c.getDescription(),c.getProfile().getUsername());
+					currentComments.add(ccc);
+				}
+				 
+			 }
+			
+			
+			
+		
+		
+		
+		
+		
+		return currentComments;
+	}
+    
+    @Override
+    public Boolean viewPosts(String myUsrename,String usernameOfSearchAccount) {
+    	
+    	//treba mi taj profil i following od njega
+    	Profile myProfile=profileRep.getOneByUsername(myUsrename);
+    	System.out.println("moj username jee "+myProfile.getUsername());
+		return null;
+    	
+    }
+    
+
 
 }
+
+

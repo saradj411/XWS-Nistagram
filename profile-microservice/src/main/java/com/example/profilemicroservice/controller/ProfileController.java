@@ -169,4 +169,13 @@ User loggedUser;
 	}
 	
 	
+	@GetMapping(value ="/viewPosts/{myUsrename}/{usernameOfSearchAccount}")
+	public ResponseEntity<Boolean> viewPosts(@PathVariable String myUsrename,@PathVariable String usernameOfSearchAccount)	
+	{
+	
+		Boolean needView=profileService.viewPosts(myUsrename, usernameOfSearchAccount);
+		//mediaConnection.getAllProfiles(dtos);
+		return new ResponseEntity<>(needView, HttpStatus.OK);
+	}
+	
 }

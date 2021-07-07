@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.mediamicroservice.connections.ProfileConnection;
 import com.example.mediamicroservice.dto.CommentDTO;
+import com.example.mediamicroservice.dto.CommntsDTO;
 import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.FrontPostDTO;
 import com.example.mediamicroservice.dto.FrontTagDTO;
@@ -871,6 +872,19 @@ public class PostController {
 					
 					return new ResponseEntity(comment, HttpStatus.OK);
 				}
+				//get comments by idPosts
+				@GetMapping(value = "/getComments/{idPost}")
+			    public ResponseEntity<List<CommntsDTO>> getComments(@PathVariable Long idPost) {
+					System.out.println("pretaga javnih profila");
+					List<CommntsDTO> fronts=postService.getComments(idPost);
+			        	
+			        
+			        return fronts == null ?
+			                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+			                ResponseEntity.ok(fronts);
+			    }
+				
+				
 		
 		
 }
