@@ -143,7 +143,7 @@
             </div>
         </div>  
               <div class="notificationPage" v-if="this.showModalForNotification">
-                    <h1>proba</h1>
+                    <h1 style="color:black;">Nofitifacions: </h1>
                     <button type="button" style=" margin-top: -40px; color: black;" class="close  btn pull-right"  @click="showModalForNotification = !showModalForNotification" aria-label="Close">
                     <span aria-hidden="true"> X </span></button>
 
@@ -239,14 +239,18 @@ export default {
           console.log(one);
           if(one.type == "FOLOW_REQUEST")
           {
-              console.log("USLO");
+              
               this.showModalForNotification = false;
               this.requestVisible = false;
           }
           else if(one.type == "FOLLOW")
           {
-              
-             this.$router.push('/AnotherUserProfile/'+ one.toWhoUsername.username);
+              console.log("foloowers");              
+             this.$router.push('/AnotherUserProfile/'+ one.fromWhoUsername.username);
+          }
+          else if(one.type == "POST")
+          {
+              this.$router.push('/AnotherUserProfile/'+ one.fromWhoUsername.username);
           }
       },
       notificationAction: function()
@@ -586,7 +590,7 @@ visibility: hidden;
 
 .notificationPage
 {
-    background-color: green;
+    background-color: gray;
     width: 75%;
     height: 100vh;
     position: absolute;
