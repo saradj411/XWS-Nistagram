@@ -79,7 +79,10 @@
             isMuted: false,
 
             blockedProfile:[],
-            isBlocked:false
+            isBlocked:false,
+
+            notifications: [],
+            notSeenNotification: 0
 
         }
       },
@@ -251,6 +254,32 @@
                                 this.requestStatus = true;
                                 
                                 this.text = " Request sent ";
+                    //TODO: Dodati post metodu za slanje nofitikacija
+
+
+                            const newNotification = 
+                            {
+                                text: "@"+this.loggedUser.username +" send you a follow request.",
+                                toWhoUsername: this.userProfileClassInfo.username, // kome saljem
+                                type: "FOLOW_REQUEST"
+
+                            }
+
+                             this.axios.post('/profile/api/notification/addNotification',newNotification ,{ 
+                                                    headers: {
+                                                        'Content-Type': 'application/json;charset=utf-8' 
+                                                        }
+                                                    }).then(response => {
+                                                        console.log(response.data);                                                     
+                                                    }).catch(res => {                                                                
+                                                                console.log(res.response.data.message);
+                                                            });
+
+
+
+
+
+
                             }).catch(res => {
                                         console.log(res.response.data.message);
                                     });
@@ -316,6 +345,26 @@
                                 console.log(response.data);
                                 this.followingStatus = true;
                                 this.text = " Following ";
+const newNotification = 
+                            {
+                                text: "@"+this.loggedUser.username +" started following you.",
+                                toWhoUsername: this.userProfileClassInfo.username, // kome saljem
+                                type: "FOLLOW"
+
+                            }
+
+                             this.axios.post('/profile/api/notification/addNotification',newNotification ,{ 
+                                                    headers: {
+                                                        'Content-Type': 'application/json;charset=utf-8' 
+                                                        }
+                                                    }).then(response => {
+                                                        console.log(response.data);                                                     
+                                                    }).catch(res => {                                                                
+                                                                console.log(res.response.data.message);
+                                                            });
+
+
+
                             }).catch(res => {
                                         console.log(res.response.data.message);
                                     });
@@ -459,7 +508,9 @@
                                         }).catch(res => {   
                                             console.log(res.response);
                                         
-                                        });             
+                                        }); 
+
+                                                    
 
                     }).catch(res => {   
                         console.log(res.response);
