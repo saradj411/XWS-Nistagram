@@ -70,7 +70,6 @@
 
 <script>
 export default {
-    //name: 'AddingStories',
     data() {
     return {
         file: [],
@@ -83,8 +82,12 @@ export default {
         medias:[],
         highlight:'',
         closeFriends:'',
-         loggedUser: {} 
+         loggedUser: {} ,
+
+         followers: []
         }
+
+        
     },
     mounted() {
        
@@ -109,7 +112,23 @@ export default {
                     }}).then(response => 
                     {                        
                        this.loggedUser = response.data;
+const info =
+            {
+                username: this.loggedUser.username
+            }
+     
+        this.axios.post('/profile/api/profile/getAllFollowers',info ,{ 
+         headers: {
+                    'Content-Type': 'application/json;charset=utf-8' 
+                  }
+                            }).then(response => {
+                                console.log("followersi");
+                                this.followers = response.data; 
+                                console.log(this.followers);
 
+                            }).catch(res => {                        
+                                    console.log(res.response.data.message);
+                                    }); 
           
         
                     }).catch(res => {                        
@@ -117,8 +136,8 @@ export default {
                         console.log(res.response);
                        
                     });   
-     
-           
+                
+              
          
            
         
@@ -169,7 +188,37 @@ export default {
                     alert("Post is shared!");
 
                     console.log(response);  
-                      window.location.href = "/proba";              
+                      
+
+                      
+
+                                for(var follower in this.followers)
+                            {
+                                const newNotification = 
+                            {
+                                text: "@"+ this.loggedUser.username +" just posted a picture.",
+                                toWhoUsername: this.followers[follower].username, // kome saljem
+                                type: "POST"
+
+                            }
+                             this.axios.post('/profile/api/notification/addNotification',newNotification ,{ 
+                                                    headers: {
+                                                        'Content-Type': 'application/json;charset=utf-8' 
+                                                        }
+                                                    }).then(response => {
+                                                        console.log(response.data);                                                     
+                                                    }).catch(res => {                                                                
+                                                                console.log(res.response.data.message);
+                                                            });
+
+                            }
+                            
+                      
+                      window.location.href = "/proba";  
+
+
+
+
                 }).catch(res => {
                     console.log(storyInfo.fileNames);
                     alert("Error"+res.response.data.message);

@@ -10,6 +10,11 @@ import AddStory from '../components/AddStory.vue'
 import Proba from '../components/Proba.vue'
 import Favorites from '../components/Favorites.vue'
 import CollectionPosts from '../components/CollectionPosts.vue'
+
+import Stories from '../components/Stories.vue'
+import HighlightsStories from '../components/HighlightsStories.vue'
+
+
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VerificationRequest from '../components/VerificationRequest.vue'
 import AdminProfile from '../components/AdminProfile.vue'
@@ -120,9 +125,22 @@ const routes = [
         path: '/AnotherUserProfile/:username',
         name: 'AnotherUserProfile',
         component: AnotherUserProfile
+
       }
      
+      
+
       ,
+      {
+        path: '/Stories',
+        name: 'Stories',
+        component: Stories
+      },
+      {
+        path: '/HighlightsStories',
+        name: 'HighlightsStories',
+        component: HighlightsStories
+      },
       {
         path: '/LikePosts',
         name: 'LikePosts',

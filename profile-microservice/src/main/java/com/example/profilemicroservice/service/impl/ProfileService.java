@@ -1,5 +1,6 @@
 package com.example.profilemicroservice.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.profilemicroservice.dto.UserProfileDTO;
 import com.example.profilemicroservice.model.Profile;
-import com.example.profilemicroservice.model.User;
 import com.example.profilemicroservice.repository.ProfileRepository;
 import com.example.profilemicroservice.service.IProfileService;
 @Service
@@ -110,6 +110,7 @@ public class ProfileService  implements IProfileService {
 		
 	}
 	
+	
 	public Profile deleteRequestOrFollow(String usernameForFollow)
 	{
 		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());		
@@ -200,9 +201,103 @@ public class ProfileService  implements IProfileService {
 		
 	}
 	
+	public Set<Profile> getCloseFriend()
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());		
+		Set<Profile> closeFriends = loggedUserProfile.getCloseFriends();
+		return closeFriends;
+		
+	}
 	
+	public Profile addCloseFriend(String username)
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());	
+		Profile newCloseFriend =  findByUsername(username);
+		Set<Profile> closeFriends = loggedUserProfile.getCloseFriends();
+		closeFriends.add(newCloseFriend);
+		profileRepository.save(loggedUserProfile);
+		return newCloseFriend;
+		
+	}
 	
+	public void deleteCloseFriend(String username)
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());	
+		Profile deleteCloseFriend =  findByUsername(username);
+		
+		Set<Profile> closeFriends = loggedUserProfile.getCloseFriends();
+		closeFriends.remove(deleteCloseFriend);
+		profileRepository.save(loggedUserProfile);		
+		
+	}
 	
+	public Set<Profile> getBlockedPforile()
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());		
+		Set<Profile> blockedFriend = loggedUserProfile.getBlockedProfiles();
+		return blockedFriend;
+		
+	}
+	
+	public Set<Profile> addBlockProfile(String username)
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());	
+		Profile profileForBlock =  findByUsername(username);
+		
+		Set<Profile> blockedProfiles = loggedUserProfile.getBlockedProfiles();
+		blockedProfiles.add(profileForBlock);
+		profileRepository.save(loggedUserProfile);
+		
+		deleteRequestOrFollow(username);
+		deleteMutedProfile(username);
+		deleteCloseFriend(username);
+		
+		return blockedProfiles;
+		
+	}
+	
+	public void deleteBlockedProfile(String username)
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());	
+		Profile deleteProfileForBlock =  findByUsername(username);
+		
+		Set<Profile> blockedProfiles = loggedUserProfile.getBlockedProfiles();
+		blockedProfiles.remove(deleteProfileForBlock);
+		profileRepository.save(loggedUserProfile);		
+		
+	}
+	
+	public Set<Profile> getMutedPforile()
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());		
+		Set<Profile> mutedFriend = loggedUserProfile.getMutedProfiles();
+		return mutedFriend;
+		
+	}
+	
+	public Set<Profile> addMutedProfile(String username)
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());	
+		Profile muteProfile =  findByUsername(username);
+		
+		Set<Profile> mutedProfiles = loggedUserProfile.getMutedProfiles();
+		mutedProfiles.add(muteProfile);
+		profileRepository.save(loggedUserProfile);	
+		return mutedProfiles;
+		
+	}
+	
+	public Set<Profile> deleteMutedProfile(String username)
+	{
+		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());	
+		Profile delmuteProfile =  findByUsername(username);
+		
+		Set<Profile> mutedProfiles = loggedUserProfile.getMutedProfiles();
+		mutedProfiles.remove(delmuteProfile);
+		profileRepository.save(loggedUserProfile);	
+		return mutedProfiles;
+		
+	}
 	
 	
 	/*

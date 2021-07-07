@@ -13,8 +13,23 @@
             <input type="text" class="form-control" v-model="search"
              placeholder="Serach..." style="width: 80%; margin: auto; background-color: black; color: white;" 
              v-on:keyup.enter="changeVisibility" />
-    
+         <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "notificationAction()">
+                Notification  <b-icon icon="bell-fill" style="margin-left:5px;" color="orange" v-if="this.notSeenNotification > 0 " aria-hidden="true" ></b-icon><label v-if="this.notSeenNotification > 0" style="color:orange; margin-left:3px;"> {{ this.notSeenNotification }} </label> 
+                             <b-icon icon="bell" v-if="this.notSeenNotification == 0" aria-hidden="true" style="margin-left:5px;"></b-icon><label></label>
+                </b-button>
             <div class="sideViewContent">
+            <div class="container" >  
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-sm">
+                    Following  <br> {{ this.following.length }}
+                    </div>
+                    <div class="col-sm">
+                    Followers <br>{{ this.followers.length }}
+                    </div>
+                   
+                </div>
+                </div>
+
                 <div>
                     <img src="../assets/gizmo.jpg" width="100px" style="margin: 10px; margin-top:20px;" height="100px">
                 </div>           
@@ -27,6 +42,7 @@
             
             <b-button class="btn btn-dark" style=" margin-top: 0px; width: 80%;" v-on:click = "update"><b-icon icon="person" aria-hidden="true"></b-icon> Update </b-button>
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "requestPage"><b-icon icon="emoji-wink" aria-hidden="true"></b-icon> Request for follow  </b-button>
+            <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click="showCloseFriend" ><b-icon icon="heart-fill"  aria-hidden="true"></b-icon> Close friends </b-button>
             <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "request">
                 <b-icon icon="tools" aria-hidden="true"></b-icon> Sent a request for verification </b-button>
  
@@ -42,6 +58,10 @@
 
                 <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "post">
                     <b-icon icon="image" aria-hidden="true"></b-icon> Posts</b-button>   
+                <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "story">
+                    <b-icon icon="image" aria-hidden="true"></b-icon> Stories</b-button>   
+                <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "istaknuto">
+                    <b-icon icon="image" aria-hidden="true"></b-icon> Highlights</b-button>   
                     
                       <b-button class="btn btn-dark" style=" margin-top: 10px; width: 80%;" v-on:click = "favorites">
                     <b-icon icon="heart-fill" aria-hidden="true"></b-icon> Favorites</b-button> 
@@ -194,20 +214,20 @@
         <div class="requestPageClass"  v-show="!requestVisible">
             <div style="width: 100%; " >
                 <h3 style="margin-top: 20px; color: black;"> Your follow request: </h3>
-                <button type="button" style=" margin-top: -40px; color: black;" class="close  btn pull-right"  @click="requestVisible = !requestVisible" aria-label="Close">
+                <button type="button" style=" margin-top: -40px; color: black;" class="close  btn pull-right"  @click="requestVisible = !requestVisible " aria-label="Close">
                     <span aria-hidden="true"> X </span>                    
                   </button>
 
                   <div class="container" style="">
                     <div class="row" style="margin-left: -10px;
-                    margin-right: -10px;
-                    padding: 5px;
-                    margin-top: 5px;
-                     border-width: 2px; background-color: black; color: white;
-                    border-color: black;
-                    border-style: solid;" v-for="req in this.followerRequest" v-bind:key="req.username">
-                      <div class="col-2">
-                        <img src="../assets/gizmo.jpg" width="100px" height="100px"/>
+                        margin-right: -10px;
+                        padding: 5px;
+                        margin-top: 5px;
+                        border-width: 2px; background-color: black; color: white;
+                        border-color: black;
+                        border-style: solid;" v-for="req in this.followerRequest" v-bind:key="req.username">
+                        <div class="col-2">
+                            <img src="../assets/gizmo.jpg" width="100px" height="100px"/>
                         
                         
                       </div>
@@ -248,7 +268,73 @@
 
             </div>
         </div>  
-          
+
+              <div class="notificationPage" v-if="this.showModalForNotification">
+                    <h1 style="color:black;">Nofitifacions: </h1>
+                    <button type="button" style=" margin-top: -40px; color: black;" class="close  btn pull-right"  @click="showModalForNotification = !showModalForNotification" aria-label="Close">
+                    <span aria-hidden="true"> X </span></button>
+
+                <div class="row" style="margin-left: 10px;
+                        margin-right: 10px;
+                        padding: 5px;
+                        margin-top: 5px;
+                        border-width: 2px; background-color: black; color: white;
+                        border-color: black;
+                        border-style: solid;
+                        cursor: pointer;" v-for="one in this.notifications.slice().reverse()" v-on:click="goTo(one)" v-bind:key="one.id">
+                        <div class="col-2">
+                            <img src="../assets/gizmo.jpg" width="100px" height="100px"/>
+                        
+                        
+                      </div>
+                      <div class="col-8">
+                        <h4 style="position: relative;
+                        float: left;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);">{{one.text}}</h4>
+                      </div>                     
+                    </div>        
+                    
+                </div>
+
+                <div class="closeFriendsPage" v-if="this.showModalForCloseFriends">
+                <h1 style="color:black;">Your close friends: </h1>
+                    <button type="button" style=" margin-top: -40px; color: black;" class="close  btn pull-right"  @click="showModalForCloseFriends = !showModalForCloseFriends" aria-label="Close">
+                    <span aria-hidden="true"> X </span></button>
+
+                <div class="row" v-for="friend in this.closeFriends"  v-bind:key="friend.username"   style="margin-left: 10px;
+                        margin-right: 10px;
+                        padding: 5px;
+                        margin-top: 5px;
+                        border-width: 2px; background-color: black; color: white;
+                        border-color: black;
+                        border-style: solid;
+                        cursor: pointer;" >
+                        <div class="col-2">
+                            <img src="../assets/gizmo.jpg" width="100px" height="100px"/>
+                        
+                        <!--v-for="one in this.notifications.slice().reverse()" v-on:click="goTo(one)" v-bind:key="one.id" -->
+                      </div>
+                      <div class="col-8" v-on:click="closeFriendShowProfile(friend)">
+                        <h4 style="position: relative;
+                        float: left;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);">@{{friend.username}}</h4>
+                      </div>  
+                      <div class="col">
+                        <button  type="button"  @click="deleteCloseFriend(friend.username)"  style="position: relative;
+                        float: left;
+                        top: 100%;
+                        left: 50%;
+                        transform: translate(-50%, -50%); margin-left:-10px;" class="close  btn pull-right" aria-label="Add">
+                            <b-icon icon="x-square" aria-hidden="true"></b-icon>          
+                          </button>
+                      </div>                   
+                    </div>   
+                </div>
+
         
     </div>
 </template>
@@ -275,14 +361,25 @@ export default {
         },
 
         value: "",
-       
+       notifications: [],
+       notSeenNotification: 0,
         
         requestVisible: true,
-
+        showModalForNotification: false,
         followerRequest: [],
-        visible: false,
+
         postovi:true,
-        bp:false
+        bp:false,
+
+
+        following: [],
+        followingNum:0,
+        followers:[],
+        followersNum:0,
+        visible: false,
+
+        closeFriends: [],
+        showModalForCloseFriends: false
 
     }
   },
@@ -293,6 +390,7 @@ export default {
         }
   },
   methods:{ 
+
       allComment: function(post){
             //alert("idemooo");
             //alert("logovani komentarise "+this.loggedUser.username);
@@ -414,6 +512,101 @@ export default {
 
         }
     ,
+
+
+      closeFriendShowProfile: function(friend)
+      { console.log(friend);
+                this.$router.push('/AnotherUserProfile/'+ friend.username);
+      },
+      deleteCloseFriend: function(username)
+      {
+            console.log(username);
+
+            const userForFollow = 
+            {
+                username: username
+            }
+   
+              this.axios.post('/profile/api/profile/deleteNewCloseFriend', userForFollow ,{ 
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8' 
+                                }
+                            }).then(response => {
+                                console.log(response.data);
+                                this.showModalForCloseFriends = false;                     
+                             
+                            }).catch(res => {
+                                        console.log(res.response.data.message);
+                                    });
+      },
+
+      showCloseFriend: function()
+      {
+          
+          this.showModalForCloseFriends = true;
+            this.axios.get('/profile/api/profile/getAllCloseFriends',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {        
+                        this.closeFriends = response.data;            
+                       console.log(response.data);                       
+                               
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    }); 
+
+
+      },
+      goTo: function(one)
+      {
+          console.log("FO TO");
+          console.log(one);
+          if(one.type == "FOLOW_REQUEST")
+          {
+              
+              this.showModalForNotification = false;
+              this.requestVisible = false;
+          }
+          else if(one.type == "FOLLOW")
+          {
+              console.log("foloowers");              
+             this.$router.push('/AnotherUserProfile/'+ one.fromWhoUsername.username);
+          }
+          else if(one.type == "POST")
+          {
+              this.$router.push('/AnotherUserProfile/'+ one.fromWhoUsername.username);
+          }
+      },
+      notificationAction: function()
+      {
+    this.showModalForNotification = true;
+         const notImportant =
+        {
+            username: this.loggedUser.username
+        }
+          this.axios.post('/profile/api/notification/seenNotification',notImportant,{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                    
+                       console.log(response);
+                       this.notSeenNotification = 0;
+                               
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    });   
+      
+      },
+
       acceptRequest: function(username)
       {
         console.log(username);  
@@ -430,6 +623,9 @@ export default {
                     }}).then(response => 
                     {  //this.$router.go(this.$router.currentRoute)                      
                        console.log(response);
+
+
+
                        window.location.reload();
                                
                     }).catch(res => {                        
@@ -472,6 +668,8 @@ export default {
     requestPage: function()
     {
         this.requestVisible = !this.requestVisible;
+        this.showModalForNotification = false
+        this.showModalForCloseFriends = false;
     }  ,
         logOut: function(){
       this.axios.post('/profile/api/users/logout',{
@@ -507,7 +705,13 @@ export default {
       },
       post: function(){
         window.location.href = "/Proba";
-      },     
+      },  
+      story: function(){
+        window.location.href = "/Stories";
+      },  
+      istaknuto: function(){
+        window.location.href = "/HighlightsStories";
+      },    
     favorites: function(){
         window.location.href = "/Favorites";
       }, 
@@ -566,46 +770,10 @@ publicProfile: function(){
 
       },
       
-mounted() { 
 
 
-    this.axios.get('/profile/api/users/getLoggedUser',{
-                    headers: 
-                    {          
-                         
-                        
-                    }}).then(response => 
-                    {                        
-                       this.loggedUser = response.data;
-
-            this.axios.get('/media/post/getPostOfFollowing/'+this.loggedUser.username)
-            .then(response => {
-                this.posts = response.data;
-                let video = "mp4";
-                for(let k=0; k< response.data.length; k++){
-                 for(let j=0; j< this.posts[k].media.length; j++){
-                    if(!this.posts[k].media[j].fileName.includes(video)){
-                                console.log("usao je u if");
-                                this.posts[k].media[j].imageByte = 'data:image/jpeg;base64,' + this.posts[k].media[j].imageByte;
-                            }else{
-                                this.posts[k].media[j].imageByte = 'data:video/mp4;base64,' + this.posts[k].media[j].imageByte;       
-                            }  
-                            console.log("uslo");
-                        }
-                 }
-              
-            }).catch(res => {
-                        alert("greskaa");
-                            console.log(res);
-                    });
-        
-                    }).catch(res => {                        
-                                         
-                        console.log(res.response);
-                       
-                    });   
-     
-
+mounted() {         
+           
 
     this.axios.get('/profile/api/users/getLoggedUser',{
                     headers:{}}).then(response => 
@@ -628,16 +796,59 @@ mounted() {
                                 'Content-Type': 'application/json;charset=utf-8' 
                                 }
                             }).then(response => {
-                                this.followerRequest = response.data; 
-                                
-                                console.log("IZVUCE LI ISTA");
-                                    console.log(this.followerRequest); 
+                                this.followerRequest = response.data;                                 
 
                             }).catch(res => {                        
                                     console.log(res.response.data.message);
                                     });
                             }).catch(res => { console.log(res.response.data.message); });
-/*****************************************************************************************************************************/
+                    
+
+ this.axios.post('/profile/api/profile/getAllFollowing',info ,{ 
+         headers: {
+                    'Content-Type': 'application/json;charset=utf-8' 
+                  }
+                            }).then(response => {
+                                this.following = response.data;                                 
+
+                            }).catch(res => {                        
+                                    console.log(res.response.data.message);
+                                    });
+ this.axios.post('/profile/api/profile/getAllFollowers',info ,{ 
+         headers: {
+                    'Content-Type': 'application/json;charset=utf-8' 
+                  }
+                            }).then(response => {
+                                this.followers = response.data;                                 
+
+                            }).catch(res => {                        
+                                    console.log(res.response.data.message);
+                                    });
+
+
+const notImportant =
+{
+    username: this.loggedUser.username
+}
+this.axios.post('/profile/api/notification/getUserNofitcation',notImportant ,{
+                                        headers: {}} ).then(response => 
+                                        {     
+                                             this.notifications = response.data; 
+                                             console.log(this.notifications);                                             
+                                             for(var notif in this.notifications)
+                                             {
+                                                 if(this.notifications[notif].notificationSeen == false)
+                                                 {console.log("ima obavestenja koje nije video");
+                                                     this.notSeenNotification += 1;
+                                                 }
+                                             }
+
+                                             console.log("BROJ : " + this.notSeenNotification);
+                                              
+                                        }).catch(res => {   
+                                            console.log(res.response);
+                                        
+                                        });
 
 
                                     }).catch(res => {                        
@@ -645,7 +856,13 @@ mounted() {
                                         console.log(res.response);
                                         
                                     
-                                    });  
+                                    }); 
+    
+
+                            
+
+
+
             }
      
 }
@@ -659,7 +876,11 @@ mounted() {
     color: white;
     background-color: black;
     width: 25%;
+
     height: 125vh;
+
+    height: fit-content;
+
     position: absolute;
     margin-top: -60px;
 }
@@ -725,5 +946,25 @@ visibility: hidden;
     margin-left: 25%;    
     margin-top: -60px;
     
+}
+
+.notificationPage
+{
+    background-color: gray;
+    width: 75%;
+    height: 100vh;
+    position: absolute;
+    margin-top: -60px;
+    margin-left: 25%;
+}
+
+.closeFriendsPage
+{
+    background-color: gray;
+    width: 75%;
+    height: 100vh;
+    position: absolute;
+    margin-top: -60px;
+    margin-left: 25%;
 }
 </style>
