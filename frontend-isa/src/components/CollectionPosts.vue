@@ -204,7 +204,7 @@ export default {
                     alert("Picture is liked!");
                     this.likesNumber = response.data
                     this.numberOfLikes = this.likesNumber
-                     
+                      window.location.href = "/CollectionPosts/"+this.id; 
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
@@ -221,7 +221,7 @@ export default {
             this.axios.post('media/post/dislike/'+this.loggedUser.username+"/"+post.idPost,{ 
                 }).then(response => {
                     alert("Picture is disliked!");
-                     
+                     window.location.href = "/CollectionPosts/"+this.id; 
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");

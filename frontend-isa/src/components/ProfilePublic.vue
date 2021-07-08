@@ -4,6 +4,8 @@
            <span style="float: left; margin: 15px;">
                 <img class="image_style space_style" title="Nistagram" style="width: 50px; height: 50px; margin-right:10px;"
                 src="../assets/nistagram.png">
+                 <b-button  class="btn btn-secondary btn-lg" v-on:click = "homePage">
+                    <b-icon icon="person" aria-hidden="true"></b-icon>Home </b-button>
 </span>
                </div>
              <div style="float: left; margin: 15px;">  
@@ -350,6 +352,7 @@ export default {
         
         posts: [],
         comments:[],
+        comment:[],
         pretraga1: [],
         pretraga2: [],
         pretraga3: [],
@@ -427,7 +430,9 @@ export default {
                 
    },
     methods:{
-
+    homePage: function(){
+           window.location.href = "/profile";
+        },
      allComment: function(post){
             //alert("idemooo");
             //alert("logovani komentarise "+this.loggedUser.username);

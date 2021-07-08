@@ -4,6 +4,8 @@
            <span style="float: left; margin: 15px;">
                 <img class="image_style space_style" title="Nistagram" style="width: 50px; height: 50px; margin-right:10px;"
                 src="../assets/nistagram.png">
+                <b-button  class="btn btn-secondary btn-lg" v-on:click = "homePage">
+                    <b-icon icon="person" aria-hidden="true"></b-icon>Home </b-button>
 </span>
                </div>
              <div style="float: left; margin: 15px;" v-if="postovi">  
@@ -104,10 +106,10 @@ export default {
         
         posts: [],
         comments: [],
+         comment: [],
         usernameTo:'',
         usernameFrom:'',
         videoText: "mp4",
-        //likesNumber:0,
         numberOfLikes:0,
         numberOfDislikes:0,
         loggedUser: {} ,
@@ -171,6 +173,9 @@ export default {
                 
    },
     methods:{
+         homePage: function(){
+           window.location.href = "/profile";
+        },
         back: function(){
          this.bp = false;
 
@@ -242,7 +247,7 @@ allComment: function(post){
 
         },
 
-    likePost: async function(event,post){
+        likePost: async function(event,post){
         console.log(post)
          
             this.axios.post('media/post/like/'+this.loggedUser.username+"/"+post.idPost,{ 
@@ -250,7 +255,7 @@ allComment: function(post){
                     alert("Picture is liked!");
                     this.likesNumber = response.data
                     this.numberOfLikes = this.likesNumber
-                     
+                      window.location.href = "/DisLikePosts";   
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
@@ -261,7 +266,8 @@ allComment: function(post){
 
         },
 
-         dislikePost: async function(event,post){
+
+        dislikePost: async function(event,post){
         console.log(post)
          
             this.axios.post('media/post/dislike/'+this.loggedUser.username+"/"+post.idPost,{ 
@@ -269,7 +275,7 @@ allComment: function(post){
                     alert("Picture is disliked!");
                     this.dislikesNumber = response.data
                     this.numberOfDislikes = this.dislikesNumber
-                     
+                      window.location.href = "/DisLikePosts";   
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
@@ -278,7 +284,7 @@ allComment: function(post){
                 });
 
 
-        }
+        },
     
 }
 }

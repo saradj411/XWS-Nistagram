@@ -344,6 +344,7 @@
 export default {
   data() {
     return {   
+         posts: [],
         loggedUser: {} ,
         myProfile: {},
         searchUsername: [],

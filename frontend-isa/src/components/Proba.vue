@@ -128,8 +128,6 @@ export default {
         
         posts: [],
         videoText: "mp4",
-        //numberOfLikes:0,
-        //likesNumber:0,
         numberOfLikes :0,
         numberOfDislikes:0,
         loggedUser: {},
@@ -137,6 +135,7 @@ export default {
         comments:[],
         postId:null,
         postovi:true,
+        bp:false
 
        
         }

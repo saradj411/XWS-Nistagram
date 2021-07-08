@@ -6,8 +6,7 @@
             <img src="../assets/gizmo.jpg" width="200px" height="200px" style="margin-left: -50px; position: absolut;"/></td>
 
         <td>   
-         <h1 style="color:white;"> {{this.userProfile[0].name}} {{this.userProfile[0].surname }} </h1>
-
+       
         <td>
          <h1 style="color:white;">{{this.userProfile[0].name}} {{this.userProfile[0].surname }} </h1>
 
@@ -39,6 +38,12 @@
 
 
 
+<b-button class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewPost()" >
+     <b-icon icon="image" v-if="!this.isBlocked" aria-hidden="true"> </b-icon> Posts </b-button>
+
+<b-button class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewStory()" >
+     <b-icon icon="image" v-if="!this.isBlocked" aria-hidden="true"> </b-icon> Stories </b-button>
+
 
     </td>
     
@@ -57,13 +62,36 @@
         <img src="../assets/lock.png" style="width: 200px; height: 200px; margin-top: 40px;" aria-hidden="true"><img>
 
     </div> 
+<!--STORYYY!-->
+  <div v-if="showStory" style="float: left; margin: 15px;" v-show="prikaz">  
+         
+             <b-card class="post_look" v-for="st in stories" v-bind:key="st.idStory">
+                  <b-row >
+                        <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{st.username}}</h4>
+                        </b-row>
+             <h6 align="left">{{st.location}}</h6>
+                      
+                 <div>
+                    <b-img v-if="!st.media.fileName.includes(videoText)" thumbnail  v-bind:src="st.media.imageByte" alt="Image 1"></b-img>
+                             <video v-if="st.media.fileName.includes(videoText)" autoplay controls v-bind:src="st.media.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
 
+                 </div>      
+                 
+                  <h4 align="left" style="margin-top:-5px;">{{st.description}}</h4>
+                   <h5 align="left"><span v-for="(tag,t) in st.tags" :key="t">
+                                        #{{tag.tagText}}
+                                    </span>
+                        </h5>
+           
+        </b-card>
+        
+        </div> 
 
     
 
 
 <!--Prikazi postove  profila ako ga pratim   v-show="this.userProfileClassInfo.privateProfil == false || this.followingStatus == true"-->
-<div  style="float: left; margin: 15px;" v-show="prikaz">  
+<div v-if="showPost" style="float: left; margin: 15px;" v-show="prikaz">  
        
 
          <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
@@ -183,9 +211,12 @@
             userProfileClassInfo: {},
 
             comments:[],
+            comment:[],
             prikaz:false,
             value: "",
             posts:[],
+            stories:[],
+             videoText: "mp4",
        
         
             requestVisible: true,
@@ -204,12 +235,26 @@
             isBlocked:false,
 
             notifications: [],
-            notSeenNotification: 0
+            notSeenNotification: 0,
+
+            numberOfLikes :0,
+        numberOfDislikes:0,
+
+        showPost:true,
+        showStory:false
 
 
         }
       },
       methods:{
+          viewPost:function(){
+              this.showPost=true
+              this.showStory=false
+          },
+          viewStory:function(){
+              this.showPost=false
+              this.showStory=true
+          },
            allComment: function(post){
             //alert("idemooo");
             //alert("logovani komentarise "+this.loggedUser.username);
@@ -298,10 +343,10 @@
          
             this.axios.post('media/post/like/'+this.loggedUser.username+"/"+post.idPost,{ 
                 }).then(response => {
-                    alert("Picture is liked!");
+                    alert("Post is liked!");
                     this.likesNumber = response.data
                     this.numberOfLikes = this.likesNumber
-                     
+                     window.location.href = "/AnotherUserProfile/"+this.username;
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
@@ -317,10 +362,10 @@
          
             this.axios.post('media/post/dislike/'+this.loggedUser.username+"/"+post.idPost,{ 
                 }).then(response => {
-                    alert("Picture is disliked!");
+                    alert("Post is disliked!");
                     this.dislikesNumber = response.data
                     this.numberOfDislikes = this.dislikesNumber
-                     
+                      window.location.href = "/AnotherUserProfile/"+this.username;
                     console.log(response);                
                 }).catch(res => {
                     alert("You have already liked this post");
@@ -631,7 +676,28 @@ const newNotification =
    
     mounted() {       
 
-        
+         this.axios.get('/media/story/getStoryByUsername/'+this.username)
+            .then(response => {
+                this.stories = response.data;
+                let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                   if(!this.stories[k].media.fileName.includes(video)){
+                                console.log("usao je u if");
+                                this.stories[k].media.imageByte = 'data:image/jpeg;base64,' + this.stories[k].media.imageByte;
+                            }else{
+                                this.stories[k].media.imageByte = 'data:video/mp4;base64,' + this.stories[k].media.imageByte;       
+                            }  
+                            console.log("uslo");
+                        
+                 }
+              
+                
+              
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
+
     this.axios.get('/profile/api/users/getLoggedUser',{
                     headers: 
                     {          
