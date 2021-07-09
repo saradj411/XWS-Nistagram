@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.mediamicroservice.connections.ProfileConnection;
 import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.FrontStoryDTO;
 import com.example.mediamicroservice.dto.FrontTagDTO;
@@ -38,6 +40,9 @@ public class StoryServiceImpl implements StoryService{
 	
 	@Autowired
 	TagRepository tagRepo;
+	
+	@Autowired
+	ProfileConnection profileConnection;
 	
 	@Override
 	public Story addNewStory(StoryDTO storyDTO, String username) {
@@ -235,19 +240,102 @@ public class StoryServiceImpl implements StoryService{
 	}
 
 	@Override
-	public List<FrontStoryDTO> getOtherHighlightStory(String username) {
+	public List<FrontStoryDTO> getOtherHighlightStory(String username,String myUsername) {
+		Set<String> closeFriends=profileConnection.getAllCloseFriendsByUsername(username);
 		List<Story> stories=new ArrayList<Story>();
         List<Story> userStories=storyRepository.findAllStoryByUser(username);
         List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
         
         for(Story s:userStories) {
         		if(s.getVisibleHighlights()) {
-        			stories.add(s);
+        			
+        			if(s.getVisibleForCloseFriends()) {
+        				Boolean yes=false;
+            			for(String closeUsername:closeFriends) {
+            				if(closeUsername.equals(myUsername)) {
+            					yes=true;
+            				}
+            			}
+            			if(yes) {
+            				stories.add(s);
+            			}
+            			
+                	}else {
+                		stories.add(s);
+                	}
+        			
             	}
         }
         //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
     	
         for(Story p:stories) {
+        	FrontStoryDTO front=new FrontStoryDTO();
+        	front.setDate(p.getDate());
+        	front.setDescription(p.getDescription());
+        	front.setIdStory(p.getIdStory());
+        	front.setLocation(p.getLocation());
+        	front.setUsername(p.getProfile().getUsername());
+        	
+        	
+        	FrontMediaDTO ee=new FrontMediaDTO();
+        	Media a=p.getMedia();
+        		FrontMediaDTO ff=new FrontMediaDTO();
+        		
+        		ff.setFileName(a.getFileName());
+        		ff.setId(a.getId());
+        		ff.setIdPost(a.getStory().getIdStory());
+        		
+        		 ee=getImagesFiles(ff);
+        	
+        	
+        	front.setMedia(ff);
+        	
+        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+        	for(Tag t:p.getTags()) {
+        		FrontTagDTO tt=new FrontTagDTO();
+        		tt.setIdPost(t.getStory().getIdStory());
+        		tt.setTagText(t.getTagText());
+        		lista1.add(tt);
+        	}
+        	front.setTags(lista1);
+        	
+        	fronts.add(front);
+        	
+        }
+        return fronts;
+	}
+
+	@Override
+	public List<FrontStoryDTO> getOtherStories(String username,String myUsername) {
+		Set<String> closeFriends=profileConnection.getAllCloseFriendsByUsername(username);
+		
+		List<Story> stories=storyRepository.findAllStoryByUser(username);
+        List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
+        List<Story> newStories=new ArrayList<Story>();
+        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+     
+        
+        for(Story s:stories) {
+    		if(s.getVisible24h()) {
+    			
+    			if(s.getVisibleForCloseFriends()) {
+    				Boolean yes=false;
+        			for(String closeUsername:closeFriends) {
+        				if(closeUsername.equals(myUsername)) {
+        					yes=true;
+        				}
+        			}
+        			if(yes) {
+        				newStories.add(s);
+        			}
+        			
+            	}else {
+            		newStories.add(s);
+            	}
+    			
+        	}
+    }
+        for(Story p:newStories) {
         	FrontStoryDTO front=new FrontStoryDTO();
         	front.setDate(p.getDate());
         	front.setDescription(p.getDescription());

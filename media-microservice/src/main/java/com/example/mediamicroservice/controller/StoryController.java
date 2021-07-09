@@ -54,6 +54,16 @@ public class StoryController {
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 ResponseEntity.ok(fronts);
     }
+	
+	@GetMapping(value = "/getOtherStories/{username}/{myUsername}")
+    public ResponseEntity<List<FrontStoryDTO>> getOtherStories(@PathVariable String username,@PathVariable String myUsername) {
+		System.out.println("uslooo");
+		List<FrontStoryDTO> fronts=storyService.getOtherStories(username,myUsername);
+       
+        return fronts == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(fronts);
+    }
 
 	@GetMapping(value = "/getMyHighlightStory/{username}")
     public ResponseEntity<List<FrontStoryDTO>> getMyHighlightStory(@PathVariable String username) {
@@ -68,7 +78,7 @@ public class StoryController {
 	@GetMapping(value = "/getOtherHighlightStory/{username}/{myUsername}")
     public ResponseEntity<List<FrontStoryDTO>> getOtherHighlightStory(@PathVariable String username,@PathVariable String myUsername) {
 		System.out.println("uslooo");
-		List<FrontStoryDTO> fronts=storyService.getOtherHighlightStory(username);
+		List<FrontStoryDTO> fronts=storyService.getOtherHighlightStory(username,myUsername);
        
         return fronts == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :

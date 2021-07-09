@@ -710,28 +710,7 @@ const newNotification =
    
     mounted() {       
 
-         this.axios.get('/media/story/getMyStories/'+this.username)
-            .then(response => {
-                this.stories = response.data;
-                let video = "mp4";
-                for(let k=0; k< response.data.length; k++){
-                   if(!this.stories[k].media.fileName.includes(video)){
-                                console.log("usao je u if");
-                                this.stories[k].media.imageByte = 'data:image/jpeg;base64,' + this.stories[k].media.imageByte;
-                            }else{
-                                this.stories[k].media.imageByte = 'data:video/mp4;base64,' + this.stories[k].media.imageByte;       
-                            }  
-                            console.log("uslo");
-                        
-                 }
-              
-                
-              
-            }).catch(res => {
-                        alert("greskaa");
-                            console.log(res);
-                    });
-             
+        
   this.axios.get('/profile/api/users/getLoggedUser',{
                     headers: 
                     {          
@@ -758,6 +737,26 @@ const newNotification =
                             console.log("uslo");
                         
                  }
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
+
+        ///OTHER STORIES
+             this.axios.get('/media/story/getOtherStories/'+this.username+'/'+this.loggedUser.username)
+            .then(response => {
+                this.stories = response.data;
+                let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                   if(!this.stories[k].media.fileName.includes(video)){
+                                console.log("usao je u if");
+                                this.stories[k].media.imageByte = 'data:image/jpeg;base64,' + this.stories[k].media.imageByte;
+                            }else{
+                                this.stories[k].media.imageByte = 'data:video/mp4;base64,' + this.stories[k].media.imageByte;       
+                            }  
+                            console.log("uslo");
+                        
+                 }
               
                 
               
@@ -765,12 +764,14 @@ const newNotification =
                         alert("greskaa");
                             console.log(res);
                     });
+             
         
                     }).catch(res => {                        
                                          
                         console.log(res.response);
                        
                     }); 
+
     this.axios.get('/profile/api/users/getLoggedUser',{
                     headers: 
                     {          

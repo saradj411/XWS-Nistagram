@@ -12,5 +12,6 @@ public interface StoryService {
 	void setVisibleStory();
 	List<FrontStoryDTO> getMyHighlightStory(String username);
 	List<FrontStoryDTO> getMyStories(String username);
-	List<FrontStoryDTO> getOtherHighlightStory(String username);
+	List<FrontStoryDTO> getOtherHighlightStory(String username,String myUsername);
+	List<FrontStoryDTO> getOtherStories(String username,String myUsername);
 }
