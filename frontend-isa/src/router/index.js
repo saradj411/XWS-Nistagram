@@ -162,7 +162,6 @@ const routes = [
         name: 'ProfilePublic',
         component: ProfilePublic
       }
-
       
       
 

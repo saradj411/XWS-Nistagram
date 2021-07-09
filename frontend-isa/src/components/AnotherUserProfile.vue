@@ -147,6 +147,8 @@
                 <b-icon icon="chat-square" aria-hidden="chat-square"></b-icon> 
                 See all comments
                 </b-button>
+               
+               
                  </section>
         </b-card>
         
@@ -247,6 +249,10 @@
         }
       },
       methods:{
+
+          report: function(post){
+              console.log(post);
+      },
           viewPost:function(){
               this.showPost=true
               this.showStory=false
@@ -296,6 +302,30 @@
                 }).then(response => {
                     alert("Comment is shared");
                     this.nesto = response.data;
+
+                        
+                            const newNotification = 
+                            {
+                                text: "@"+this.loggedUser.username +" comment on your post.",
+                                toWhoUsername: this.userProfileClassInfo.username, // kome saljem
+                                type: "COMMENT"
+
+                            }
+
+                             this.axios.post('/profile/api/notification/addNotification',newNotification ,{ 
+                                                    headers: {
+                                                        'Content-Type': 'application/json;charset=utf-8' 
+                                                        }
+                                                    }).then(response => {
+                                                        console.log(response.data);                                                     
+                                                    }).catch(res => {                                                                
+                                                                console.log(res.response.data.message);
+                                                            });
+
+
+
+
+
                 }).catch(res => {
                     alert("Error,please try later");
                     console.log(res.response.data.message);
