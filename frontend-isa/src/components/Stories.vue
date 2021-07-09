@@ -56,7 +56,7 @@ export default {
                        this.loggedUser = response.data;
 
                                //alert(this.loggedUser.username)
-            this.axios.get('/media/story/getStoryByUsername/'+this.loggedUser.username)
+            this.axios.get('/media/story/getMyStories/'+this.loggedUser.username)
             .then(response => {
                 this.posts = response.data;
                 let video = "mp4";

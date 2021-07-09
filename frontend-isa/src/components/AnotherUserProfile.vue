@@ -38,12 +38,14 @@
 
 
 
-<b-button class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewPost()" >
+<b-button v-show="this.userProfileClassInfo.privateProfil==false"  v-if="!this.isBlocked" class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewPost()" >
      <b-icon icon="image" v-if="!this.isBlocked" aria-hidden="true"> </b-icon> Posts </b-button>
 
-<b-button class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewStory()" >
+<b-button v-show="this.userProfileClassInfo.privateProfil==false" v-if="!this.isBlocked" class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewStory()" >
      <b-icon icon="image" v-if="!this.isBlocked" aria-hidden="true"> </b-icon> Stories </b-button>
 
+<b-button v-show="this.userProfileClassInfo.privateProfil==false" v-if="!this.isBlocked" class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewHighlihgts()" >
+     <b-icon icon="image" v-if="!this.isBlocked" aria-hidden="true"> </b-icon> Highlihgts </b-button>
 
     </td>
     
@@ -63,7 +65,7 @@
 
     </div> 
 <!--STORYYY!-->
-  <div v-if="showStory" style="float: left; margin: 15px;" v-show="prikaz">  
+  <div v-if="showStory && !this.isBlocked" style="float: left; margin: 15px;" v-show="prikaz">  
          
              <b-card class="post_look" v-for="st in stories" v-bind:key="st.idStory">
                   <b-row >
@@ -86,12 +88,35 @@
         </b-card>
         
         </div> 
+<!--HIGHLIGHTS!-->
+  <div v-if="showHighlights && !this.isBlocked" style="float: left; margin: 15px;" v-show="prikaz"> 
+         
+             <b-card class="post_look" v-for="h in highlights" v-bind:key="h.idStory">
+                  <b-row >
+                        <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{h.username}}</h4>
+                        </b-row>
+             <h6 align="left">{{h.location}}</h6>
+                      
+                 <div>
+                    <b-img v-if="!h.media.fileName.includes(videoText)" thumbnail  v-bind:src="h.media.imageByte" alt="Image 1"></b-img>
+                             <video v-if="h.media.fileName.includes(videoText)" autoplay controls v-bind:src="h.media.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
 
+                 </div>      
+                 
+                  <h4 align="left" style="margin-top:-5px;">{{h.description}}</h4>
+                   <h5 align="left"><span v-for="(tag,t) in h.tags" :key="t">
+                                        #{{tag.tagText}}
+                                    </span>
+                        </h5>
+           
+        </b-card>
+        
+        </div> 
     
 
 
 <!--Prikazi postove  profila ako ga pratim   v-show="this.userProfileClassInfo.privateProfil == false || this.followingStatus == true"-->
-<div v-if="showPost" style="float: left; margin: 15px;" v-show="prikaz">  
+<div v-if="showPost && !this.isBlocked"  style="float: left; margin: 15px;" v-show="prikaz">  
        
 
          <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
@@ -153,7 +178,7 @@
         
        </div>
 
-        <!--FRIEND'S POSTS   -->
+        <!--   -->
          
          
  <div  v-if="bp" style="margin-left:500px;background:lightgray;width:1100px;">  
@@ -216,6 +241,7 @@
             value: "",
             posts:[],
             stories:[],
+            highlights:[],
              videoText: "mp4",
        
         
@@ -241,7 +267,8 @@
         numberOfDislikes:0,
 
         showPost:true,
-        showStory:false
+        showStory:false,
+        showHighlights:false,
 
 
         }
@@ -250,10 +277,17 @@
           viewPost:function(){
               this.showPost=true
               this.showStory=false
+              this.showHighlights=false
           },
           viewStory:function(){
               this.showPost=false
               this.showStory=true
+              this.showHighlights=false
+          },
+          viewHighlihgts:function(){
+              this.showPost=false
+              this.showStory=false
+              this.showHighlights=true
           },
            allComment: function(post){
             //alert("idemooo");
@@ -676,7 +710,40 @@ const newNotification =
    
     mounted() {       
 
-         this.axios.get('/media/story/getStoryByUsername/'+this.username)
+        
+  this.axios.get('/profile/api/users/getLoggedUser',{
+                    headers: 
+                    {          
+                         
+                        
+                    }}).then(response => 
+                    {                        
+                       this.loggedUser = response.data;
+
+                               //alert(this.loggedUser.username)
+        //GET OTHER HIGHLIHGTS     
+       // alert(this.username) 
+            this.axios.get('/media/story/getOtherHighlightStory/'+this.username+'/'+this.loggedUser.username)
+            .then(response => {
+                this.highlights = response.data;
+                let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                   if(!this.highlights[k].media.fileName.includes(video)){
+                                console.log("usao je u if");
+                                this.highlights[k].media.imageByte = 'data:image/jpeg;base64,' + this.highlights[k].media.imageByte;
+                            }else{
+                                this.highlights[k].media.imageByte = 'data:video/mp4;base64,' + this.highlights[k].media.imageByte;       
+                            }  
+                            console.log("uslo");
+                        
+                 }
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
+
+        ///OTHER STORIES
+             this.axios.get('/media/story/getOtherStories/'+this.username+'/'+this.loggedUser.username)
             .then(response => {
                 this.stories = response.data;
                 let video = "mp4";
@@ -697,6 +764,13 @@ const newNotification =
                         alert("greskaa");
                             console.log(res);
                     });
+             
+        
+                    }).catch(res => {                        
+                                         
+                        console.log(res.response);
+                       
+                    }); 
 
     this.axios.get('/profile/api/users/getLoggedUser',{
                     headers: 
@@ -706,6 +780,7 @@ const newNotification =
                     }}).then(response => 
                     {                        
                        this.loggedUser = response.data;
+           
 
                                //alert(this.loggedUser.username)
             this.axios.get('/profile/api/profile/viewPosts/'+this.loggedUser.username+"/"+this.username)
