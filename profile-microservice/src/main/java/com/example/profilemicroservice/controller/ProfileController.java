@@ -150,6 +150,13 @@ User loggedUser;
 		return new ResponseEntity<Set<Profile>>(closeFriends, HttpStatus.OK);
 	}
 	
+	@GetMapping(value ="/getAllCloseFriendsByUsername/{username}")
+	public ResponseEntity<Set<String>> getAllCloseFriendsByUsername(@PathVariable String username)	
+	{		
+		Set<String> closeFriends = profileService.getAllCloseFriendsByUsername(username);
+		return new ResponseEntity<Set<String>>(closeFriends, HttpStatus.OK);
+	}
+	
 	@PostMapping(value ="/addNewCloseFriend")
 	public ResponseEntity<Profile> addNewCloseFriend(@RequestBody HashMap<String,String> username)	
 	{		

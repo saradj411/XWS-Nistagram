@@ -1,6 +1,7 @@
 package com.example.mediamicroservice.connections;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public interface ProfileConnection {
 	@GetMapping("/api/profile/getAllFollowingProfile/{username}")
 	ArrayList<ProfileeDTO> getAllFollowingProfile(@PathVariable String username);
 	
-	
+	@GetMapping(value ="/api/profile/getAllCloseFriendsByUsername/{username}")
+	Set<String> getAllCloseFriendsByUsername(@PathVariable String username);
 
 }

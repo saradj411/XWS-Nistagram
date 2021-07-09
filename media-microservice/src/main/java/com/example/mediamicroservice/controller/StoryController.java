@@ -18,7 +18,7 @@ import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.FrontPostDTO;
 import com.example.mediamicroservice.dto.FrontStoryDTO;
 import com.example.mediamicroservice.dto.FrontTagDTO;
-import com.example.mediamicroservice.dto.PostDTO;
+import com.example.mediamicroservice.dto.ProfileeDTO;
 import com.example.mediamicroservice.dto.StoryDTO;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Post;
@@ -42,7 +42,7 @@ public class StoryController {
 	@Autowired
 	StoryServiceImpl storyImpl;
 	
-	private static String uploadDir="user-photos";
+	//private static String uploadDir="user-photos";
 	
 	@PostMapping("/addNewStory/{username}")
 	public ResponseEntity<Story> addNewStory(@RequestBody StoryDTO storyDTO,@PathVariable String username){
@@ -53,114 +53,45 @@ public class StoryController {
             new ResponseEntity<Story>(response,HttpStatus.CREATED);
 	}
 	
-	@GetMapping(value = "/getStoryByUsername/{username}")
-    public ResponseEntity<List<FrontStoryDTO>> findAllByUsername(@PathVariable String username) {
-		System.out.println("uslooo");
-        List<Story> drugs=storyRepository.findAllStoryByUser(username);
-        List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
-        
-        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
-    	
-        for(Story p:drugs) {
-        	FrontStoryDTO front=new FrontStoryDTO();
-        	front.setDate(p.getDate());
-        	front.setDescription(p.getDescription());
-        	front.setIdStory(p.getIdStory());
-        	front.setLocation(p.getLocation());
-        	front.setUsername(p.getProfile().getUsername());
-        	
-        	
-        	FrontMediaDTO ee=new FrontMediaDTO();
-        	Media a=p.getMedia();
-        		FrontMediaDTO ff=new FrontMediaDTO();
-        		
-        		ff.setFileName(a.getFileName());
-        		ff.setId(a.getId());
-        		ff.setIdPost(a.getStory().getIdStory());
-        		
-        		 ee=storyImpl.getImagesFiles(ff);
-        	
-        	
-        	front.setMedia(ff);
-        	
-        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
-        	for(Tag t:p.getTags()) {
-        		FrontTagDTO tt=new FrontTagDTO();
-        		tt.setIdPost(t.getStory().getIdStory());
-        		tt.setTagText(t.getTagText());
-        		lista1.add(tt);
-        	}
-        	front.setTags(lista1);
-        	
-        	fronts.add(front);
-        	
-        }
+	@GetMapping(value = "/getMyStories/{username}")
+    public ResponseEntity<List<FrontStoryDTO>> getMyStories(@PathVariable String username) {
+		
+		List<FrontStoryDTO> fronts=storyService.getMyStories(username);
        
-        
-        return fronts == null ?
-                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                ResponseEntity.ok(fronts);
-    }
-
-	@GetMapping(value = "/getHighlightStoryByUsername/{username}")
-    public ResponseEntity<List<FrontStoryDTO>> getHighlightStoryByUsername(@PathVariable String username) {
-		System.out.println("uslooo");
-		List<Story> drugs=new ArrayList<Story>();
-        List<Story> drugs1=storyRepository.findAllStoryByUser(username);
-        List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
-        
-        for(Story s:drugs1) {
-        	if(s.getVisibleHighlights()!=null) {
-        		
-        		if(s.getVisibleHighlights()) {
-            		
-            		drugs.add(s);
-            	}
-        	}
-        }
-        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
-    	
-        for(Story p:drugs) {
-        	FrontStoryDTO front=new FrontStoryDTO();
-        	front.setDate(p.getDate());
-        	front.setDescription(p.getDescription());
-        	front.setIdStory(p.getIdStory());
-        	front.setLocation(p.getLocation());
-        	front.setUsername(p.getProfile().getUsername());
-        	
-        	
-        	FrontMediaDTO ee=new FrontMediaDTO();
-        	Media a=p.getMedia();
-        		FrontMediaDTO ff=new FrontMediaDTO();
-        		
-        		ff.setFileName(a.getFileName());
-        		ff.setId(a.getId());
-        		ff.setIdPost(a.getStory().getIdStory());
-        		
-        		 ee=storyImpl.getImagesFiles(ff);
-        	
-        	
-        	front.setMedia(ff);
-        	
-        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
-        	for(Tag t:p.getTags()) {
-        		FrontTagDTO tt=new FrontTagDTO();
-        		tt.setIdPost(t.getStory().getIdStory());
-        		tt.setTagText(t.getTagText());
-        		lista1.add(tt);
-        	}
-        	front.setTags(lista1);
-        	
-        	fronts.add(front);
-        	
-        }
-       
-        
         return fronts == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
                 ResponseEntity.ok(fronts);
     }
 	
+	@GetMapping(value = "/getOtherStories/{username}/{myUsername}")
+    public ResponseEntity<List<FrontStoryDTO>> getOtherStories(@PathVariable String username,@PathVariable String myUsername) {
+	
+		List<FrontStoryDTO> fronts=storyService.getOtherStories(username,myUsername);
+       
+        return fronts == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(fronts);
+    }
+
+	@GetMapping(value = "/getMyHighlightStory/{username}")
+    public ResponseEntity<List<FrontStoryDTO>> getMyHighlightStory(@PathVariable String username) {
+		
+		List<FrontStoryDTO> fronts=storyService.getMyHighlightStory(username);
+       
+        return fronts == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(fronts);
+    }
+	
+	@GetMapping(value = "/getOtherHighlightStory/{username}/{myUsername}")
+    public ResponseEntity<List<FrontStoryDTO>> getOtherHighlightStory(@PathVariable String username,@PathVariable String myUsername) {
+	
+		List<FrontStoryDTO> fronts=storyService.getOtherHighlightStory(username,myUsername);
+       
+        return fronts == null ?
+                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+                ResponseEntity.ok(fronts);
+    }
 	
 	@PostMapping("/setVisibleStory")
 	public ResponseEntity<Boolean> setVisibleStory(){
@@ -169,5 +100,14 @@ public class StoryController {
 		
 		return  new ResponseEntity<Boolean>(true,HttpStatus.ACCEPTED);
 	}
+	//postovi  profila koje ja pratim
+			@GetMapping(value = "/getStoryOfFollowing/{username}")
+		    public  ResponseEntity<List<FrontStoryDTO>> getStoryOfFollowing(@PathVariable String username) {
+				List<FrontStoryDTO> fronts=storyService.getStoryOfFollowing(username);
+		        
+		        return fronts == null ?
+		                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+		                ResponseEntity.ok(fronts);
+		    }
 	
 }

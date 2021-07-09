@@ -209,6 +209,19 @@ public class ProfileService  implements IProfileService {
 		
 	}
 	
+	public Set<String> getAllCloseFriendsByUsername(String username)
+	{
+		Profile loggedUserProfile = findByUsername(username);		
+		Set<Profile> closeFriends = loggedUserProfile.getCloseFriends();
+		Set<String> usernames=new HashSet<String>();
+		for(Profile p:closeFriends) {
+			usernames.add(p.getUsername());
+		}
+		
+		return usernames;
+		
+	}
+	
 	public Profile addCloseFriend(String username)
 	{
 		Profile loggedUserProfile = findByUsername(userService.getLoggedUser().getUsername());	
