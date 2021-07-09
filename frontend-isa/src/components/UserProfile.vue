@@ -82,8 +82,37 @@
            
 			<div class="fotos" v-bind:class="[!visible ? 'show' : 'hide', 'shadow-lg']" >
             <div>
-                <h1> FRIEND'S POSTS : </h1>
+                
+<b-button  class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewPost()" >
+     <b-icon icon="image" aria-hidden="true"> </b-icon> Friend's posts </b-button>
 
+<b-button  class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewStory()" >
+     <b-icon icon="image"  aria-hidden="true"> </b-icon> Friend's stories </b-button>
+
+<!--STORYYY!-->
+  <div v-if="showStory" style="float: left; margin: 15px;">  
+         
+             <b-card class="post_look" v-for="st in stories" v-bind:key="st.idStory">
+                  <b-row >
+                        <h4 align="left"><b-icon icon="person" aria-hidden="true"></b-icon>  {{st.username}}</h4>
+                        </b-row>
+             <h6 align="left">{{st.location}}</h6>
+                      
+                 <div>
+                    <b-img v-if="!st.media.fileName.includes(videoText)" thumbnail  v-bind:src="st.media.imageByte" alt="Image 1"></b-img>
+                             <video v-if="st.media.fileName.includes(videoText)" autoplay controls v-bind:src="st.media.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
+
+                 </div>      
+                 
+                  <h4 align="left" style="margin-top:-5px;">{{st.description}}</h4>
+                   <h5 align="left"><span v-for="(tag,t) in st.tags" :key="t">
+                                        #{{tag.tagText}}
+                                    </span>
+                        </h5>
+           
+        </b-card>
+        
+        </div> 
 
          <!--FRIEND'S POSTS-->
 
@@ -364,6 +393,7 @@ export default {
         },
 
         value: "",
+         videoText: "mp4",
        notifications: [],
        notSeenNotification: 0,
         
@@ -373,7 +403,9 @@ export default {
 
         postovi:true,
         bp:false,
-
+         comment:[],
+         numberOfLikes :0,
+        numberOfDislikes:0,
 
         following: [],
         followingNum:0,
@@ -382,7 +414,10 @@ export default {
         visible: false,
 
         closeFriends: [],
-        showModalForCloseFriends: false
+        showModalForCloseFriends: false,
+
+        //showPost:true,
+        showStory:false,
 
     }
   },
@@ -393,8 +428,15 @@ export default {
         }
   },
   methods:{ 
-
-      allComment: function(post){
+        viewPost:function(){
+              this.postovi=true
+              this.showStory=false
+          },
+          viewStory:function(){
+              this.postovi=false
+              this.showStory=true
+          },
+         allComment: function(post){
             //alert("idemooo");
             //alert("logovani komentarise "+this.loggedUser.username);
             //alert("komentar "+this.comment);
@@ -827,8 +869,49 @@ mounted() {
                             }).catch(res => {                        
                                     console.log(res.response.data.message);
                                     });
-
-
+//FRIENDS POOOOOOSTS
+this.axios.get('/media/post/getPostOfFollowing/'+this.loggedUser.username)
+            .then(response => {
+                this.posts = response.data;
+                let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                 for(let j=0; j< this.posts[k].media.length; j++){
+                    if(!this.posts[k].media[j].fileName.includes(video)){
+                                console.log("usao je u if");
+                                this.posts[k].media[j].imageByte = 'data:image/jpeg;base64,' + this.posts[k].media[j].imageByte;
+                            }else{
+                                this.posts[k].media[j].imageByte = 'data:video/mp4;base64,' + this.posts[k].media[j].imageByte;       
+                            }  
+                            console.log("uslo");
+                        }
+                 }
+              
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
+///OTHER STORIES
+             this.axios.get('/media/story/getStoryOfFollowing/'+this.loggedUser.username)
+            .then(response => {
+                this.stories = response.data;
+                let video = "mp4";
+                for(let k=0; k< response.data.length; k++){
+                   if(!this.stories[k].media.fileName.includes(video)){
+                                console.log("usao je u if");
+                                this.stories[k].media.imageByte = 'data:image/jpeg;base64,' + this.stories[k].media.imageByte;
+                            }else{
+                                this.stories[k].media.imageByte = 'data:video/mp4;base64,' + this.stories[k].media.imageByte;       
+                            }  
+                            console.log("uslo");
+                        
+                 }
+              
+                
+              
+            }).catch(res => {
+                        alert("greskaa");
+                            console.log(res);
+                    });
 const notImportant =
 {
     username: this.loggedUser.username

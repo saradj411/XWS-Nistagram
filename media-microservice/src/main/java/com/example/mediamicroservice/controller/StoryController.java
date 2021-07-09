@@ -1,5 +1,6 @@
 package com.example.mediamicroservice.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +14,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.mediamicroservice.dto.FrontMediaDTO;
+import com.example.mediamicroservice.dto.FrontPostDTO;
 import com.example.mediamicroservice.dto.FrontStoryDTO;
+import com.example.mediamicroservice.dto.FrontTagDTO;
+import com.example.mediamicroservice.dto.ProfileeDTO;
 import com.example.mediamicroservice.dto.StoryDTO;
+import com.example.mediamicroservice.model.Media;
+import com.example.mediamicroservice.model.Post;
 import com.example.mediamicroservice.model.Story;
+import com.example.mediamicroservice.model.Tag;
 import com.example.mediamicroservice.repository.StoryRepository;
 import com.example.mediamicroservice.service.StoryService;
 import com.example.mediamicroservice.service.impl.StoryServiceImpl;
@@ -47,7 +55,7 @@ public class StoryController {
 	
 	@GetMapping(value = "/getMyStories/{username}")
     public ResponseEntity<List<FrontStoryDTO>> getMyStories(@PathVariable String username) {
-		System.out.println("uslooo");
+		
 		List<FrontStoryDTO> fronts=storyService.getMyStories(username);
        
         return fronts == null ?
@@ -57,7 +65,7 @@ public class StoryController {
 	
 	@GetMapping(value = "/getOtherStories/{username}/{myUsername}")
     public ResponseEntity<List<FrontStoryDTO>> getOtherStories(@PathVariable String username,@PathVariable String myUsername) {
-		System.out.println("uslooo");
+	
 		List<FrontStoryDTO> fronts=storyService.getOtherStories(username,myUsername);
        
         return fronts == null ?
@@ -67,7 +75,7 @@ public class StoryController {
 
 	@GetMapping(value = "/getMyHighlightStory/{username}")
     public ResponseEntity<List<FrontStoryDTO>> getMyHighlightStory(@PathVariable String username) {
-		System.out.println("uslooo");
+		
 		List<FrontStoryDTO> fronts=storyService.getMyHighlightStory(username);
        
         return fronts == null ?
@@ -77,7 +85,7 @@ public class StoryController {
 	
 	@GetMapping(value = "/getOtherHighlightStory/{username}/{myUsername}")
     public ResponseEntity<List<FrontStoryDTO>> getOtherHighlightStory(@PathVariable String username,@PathVariable String myUsername) {
-		System.out.println("uslooo");
+	
 		List<FrontStoryDTO> fronts=storyService.getOtherHighlightStory(username,myUsername);
        
         return fronts == null ?
@@ -92,5 +100,14 @@ public class StoryController {
 		
 		return  new ResponseEntity<Boolean>(true,HttpStatus.ACCEPTED);
 	}
+	//postovi  profila koje ja pratim
+			@GetMapping(value = "/getStoryOfFollowing/{username}")
+		    public  ResponseEntity<List<FrontStoryDTO>> getStoryOfFollowing(@PathVariable String username) {
+				List<FrontStoryDTO> fronts=storyService.getStoryOfFollowing(username);
+		        
+		        return fronts == null ?
+		                new ResponseEntity<>(HttpStatus.NOT_FOUND) :
+		                ResponseEntity.ok(fronts);
+		    }
 	
 }

@@ -14,4 +14,5 @@ public interface StoryService {
 	List<FrontStoryDTO> getMyStories(String username);
 	List<FrontStoryDTO> getOtherHighlightStory(String username,String myUsername);
 	List<FrontStoryDTO> getOtherStories(String username,String myUsername);
+	List<FrontStoryDTO> getStoryOfFollowing(String username);
 }

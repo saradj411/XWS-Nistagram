@@ -38,13 +38,13 @@
 
 
 
-<b-button v-show="this.userProfileClassInfo.privateProfil==false"  class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewPost()" >
+<b-button v-show="this.userProfileClassInfo.privateProfil==false"  v-if="!this.isBlocked" class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewPost()" >
      <b-icon icon="image" v-if="!this.isBlocked" aria-hidden="true"> </b-icon> Posts </b-button>
 
-<b-button v-show="this.userProfileClassInfo.privateProfil==false" class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewStory()" >
+<b-button v-show="this.userProfileClassInfo.privateProfil==false" v-if="!this.isBlocked" class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewStory()" >
      <b-icon icon="image" v-if="!this.isBlocked" aria-hidden="true"> </b-icon> Stories </b-button>
 
-<b-button v-show="this.userProfileClassInfo.privateProfil==false" class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewHighlihgts()" >
+<b-button v-show="this.userProfileClassInfo.privateProfil==false" v-if="!this.isBlocked" class="btn btn-dark" style="margin-top: 10px; margin-left:10px; width: 40%; color:white;" v-on:click="viewHighlihgts()" >
      <b-icon icon="image" v-if="!this.isBlocked" aria-hidden="true"> </b-icon> Highlihgts </b-button>
 
     </td>
@@ -65,7 +65,7 @@
 
     </div> 
 <!--STORYYY!-->
-  <div v-if="showStory" style="float: left; margin: 15px;" v-show="prikaz">  
+  <div v-if="showStory && !this.isBlocked" style="float: left; margin: 15px;" v-show="prikaz">  
          
              <b-card class="post_look" v-for="st in stories" v-bind:key="st.idStory">
                   <b-row >
@@ -89,7 +89,7 @@
         
         </div> 
 <!--HIGHLIGHTS!-->
-  <div v-if="showHighlights" style="float: left; margin: 15px;" v-show="prikaz"> 
+  <div v-if="showHighlights && !this.isBlocked" style="float: left; margin: 15px;" v-show="prikaz"> 
          
              <b-card class="post_look" v-for="h in highlights" v-bind:key="h.idStory">
                   <b-row >
@@ -116,7 +116,7 @@
 
 
 <!--Prikazi postove  profila ako ga pratim   v-show="this.userProfileClassInfo.privateProfil == false || this.followingStatus == true"-->
-<div v-if="showPost" style="float: left; margin: 15px;" v-show="prikaz">  
+<div v-if="showPost && !this.isBlocked"  style="float: left; margin: 15px;" v-show="prikaz">  
        
 
          <b-card class="post_look" v-for="post in posts" v-bind:key="post.fileName">
@@ -178,7 +178,7 @@
         
        </div>
 
-        <!--FRIEND'S POSTS   -->
+        <!--   -->
          
          
  <div  v-if="bp" style="margin-left:500px;background:lightgray;width:1100px;">  

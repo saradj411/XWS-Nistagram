@@ -16,8 +16,10 @@ import com.example.mediamicroservice.connections.ProfileConnection;
 import com.example.mediamicroservice.dto.FrontMediaDTO;
 import com.example.mediamicroservice.dto.FrontStoryDTO;
 import com.example.mediamicroservice.dto.FrontTagDTO;
+import com.example.mediamicroservice.dto.ProfileeDTO;
 import com.example.mediamicroservice.dto.StoryDTO;
 import com.example.mediamicroservice.model.Media;
+import com.example.mediamicroservice.model.Post;
 import com.example.mediamicroservice.model.Story;
 import com.example.mediamicroservice.model.Tag;
 import com.example.mediamicroservice.repository.MediaRepository;
@@ -370,6 +372,87 @@ public class StoryServiceImpl implements StoryService{
         	
         }
         return fronts;
+	}
+
+	@Override
+	public List<FrontStoryDTO> getStoryOfFollowing(String username) {
+		 ArrayList<ProfileeDTO> profiles= profileConnection.getAllFollowingProfile(username);
+	     List<Story> stories=storyRepository.findAll();
+	        
+		 List<Story> allStories=new ArrayList<Story>();
+
+		 
+	        List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
+	        List<Story> newStories=new ArrayList<Story>();
+	        
+	       
+	        for(ProfileeDTO profile:profiles) {
+	        	for(Story story:stories) {
+	        		if(story.getProfile().getUsername().equals(profile.getUsername())) {
+	        			allStories.add(story);
+	        			
+	        		}
+	        	}
+	        }
+	        
+	        for(Story s:allStories) {
+	        	Set<String> closeFriends=profileConnection.getAllCloseFriendsByUsername(s.getProfile().getUsername());
+	    		
+	    		if(s.getVisible24h()) {
+	    			
+	    			if(s.getVisibleForCloseFriends()) {
+	    				Boolean yes=false;
+	        			for(String closeUsername:closeFriends) {
+	        				if(closeUsername.equals(username)) {
+	        					yes=true;
+	        				}
+	        			}
+	        			if(yes) {
+	        				newStories.add(s);
+	        			}
+	        			
+	            	}else {
+	            		newStories.add(s);
+	            	}
+	    			
+	        	}
+	    }
+	        for(Story p:newStories) {
+	        	FrontStoryDTO front=new FrontStoryDTO();
+	        	front.setDate(p.getDate());
+	        	front.setDescription(p.getDescription());
+	        	front.setIdStory(p.getIdStory());
+	        	front.setLocation(p.getLocation());
+	        	front.setUsername(p.getProfile().getUsername());
+	        	
+	        	
+	        	FrontMediaDTO ee=new FrontMediaDTO();
+	        	Media a=p.getMedia();
+	        		FrontMediaDTO ff=new FrontMediaDTO();
+	        		
+	        		ff.setFileName(a.getFileName());
+	        		ff.setId(a.getId());
+	        		ff.setIdPost(a.getStory().getIdStory());
+	        		
+	        		 ee=getImagesFiles(ff);
+	        	
+	        	
+	        	front.setMedia(ff);
+	        	
+	        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+	        	for(Tag t:p.getTags()) {
+	        		FrontTagDTO tt=new FrontTagDTO();
+	        		tt.setIdPost(t.getStory().getIdStory());
+	        		tt.setTagText(t.getTagText());
+	        		lista1.add(tt);
+	        	}
+	        	front.setTags(lista1);
+	        	
+	        	fronts.add(front);
+	        	
+	        }
+	        return fronts;
+	      
 	}
 
 }
