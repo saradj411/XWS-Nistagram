@@ -90,12 +90,12 @@ public class FavoritesController {
         		
         	}
         	dto.setPosts(posts);
-        		dto.setFileName("collection.png");
+        	//dto.setFileName("collection.png");
         	favoritesDTO.add(dto);
         }
-        newFavoritesDTO=postImpl.getPicturesFiles(favoritesDTO);
-        return newFavoritesDTO == null ?
+        //newFavoritesDTO=postImpl.getPicturesFiles(favoritesDTO);
+        return favoritesDTO == null ?
                 new ResponseEntity<>(HttpStatus.NOT_FOUND) :
-                ResponseEntity.ok(newFavoritesDTO);
+                ResponseEntity.ok(favoritesDTO);
     }
 }

@@ -43,12 +43,14 @@
                    
              <h6 align="left">{{post.location}}</h6>
             
-                
-                 <div v-for="m in post.media" v-bind:key="m.imageBytes">
+                <div>
+                    <img src="../assets/collection.png" width="100px" style="margin: 10px; margin-top:20px;" height="100px">
+                </div>  
+                 <!--<div v-for="m in post.media" v-bind:key="m.imageBytes">
                     <b-img v-if="!m.fileName.includes(videoText)" thumbnail  v-bind:src="m.imageByte" alt="Image 1"></b-img>
                              <video v-if="m.fileName.includes(videoText)" autoplay controls v-bind:src="m.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
 
-                 </div>      
+                 </div>      !-->
                   <h4 align="left" style="margin-top:-5px;">{{post.description}}</h4>
                    <h5 align="left"><span v-for="(tag,t) in post.tags" :key="t">
                                         #{{tag.tagText}}
@@ -104,8 +106,8 @@ export default {
             this.axios.get('/media/favorites/findAllByProfile/'+this.loggedUser.username)
             .then(response => {
                 this.favorites = response.data;
-                let video = "mp4";
-                for(let k=0; k< response.data.length; k++){
+                //let video = "mp4";
+                /*for(let k=0; k< response.data.length; k++){
                     if(!this.favorites[k].fileName.includes(video)){
                                 console.log("usao je u if");
                                 this.favorites[k].imageByte = 'data:image/jpeg;base64,' + this.favorites[k].imageByte;
@@ -114,7 +116,7 @@ export default {
                             }  
                             console.log("uslo");
                         
-                 }
+                 }*/
                 
                 
               
