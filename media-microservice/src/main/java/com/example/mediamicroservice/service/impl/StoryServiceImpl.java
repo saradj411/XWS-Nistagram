@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.mediamicroservice.dto.FrontMediaDTO;
+import com.example.mediamicroservice.dto.FrontStoryDTO;
+import com.example.mediamicroservice.dto.FrontTagDTO;
 import com.example.mediamicroservice.dto.StoryDTO;
 import com.example.mediamicroservice.model.Media;
 import com.example.mediamicroservice.model.Story;
@@ -44,8 +46,19 @@ public class StoryServiceImpl implements StoryService{
 		story.setDate(LocalDateTime.now());
 		story.setDescription(storyDTO.getDescription());
 		story.setLocation(storyDTO.getLocation());
-		story.setVisibleForCloseFriends(storyDTO.getVisibleForCloseFriends());
-		story.setVisibleHighlights(storyDTO.getVisibleHighlights());
+		
+		if(storyDTO.getVisibleForCloseFriends()==null) {
+			story.setVisibleForCloseFriends(false);
+		}else {
+			story.setVisibleForCloseFriends(storyDTO.getVisibleForCloseFriends());
+		}
+		
+		if(storyDTO.getVisibleHighlights()==null) {
+			story.setVisibleHighlights(false);
+		}else {
+			story.setVisibleHighlights(storyDTO.getVisibleHighlights());
+		}
+		
 		story.setVisible24h(true);
 		story.setProfile(profileRep.getOneByUsername(username));
 		
@@ -122,7 +135,153 @@ public class StoryServiceImpl implements StoryService{
 	             s.setVisible24h(false);
 	                    
 	            }
+			 Story story=storyRepository.save(s);
+		}
+		
+	}
+
+	@Override
+	public List<FrontStoryDTO> getMyHighlightStory(String username) {
+		List<Story> stories=new ArrayList<Story>();
+        List<Story> userStories=storyRepository.findAllStoryByUser(username);
+        List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
+        
+        for(Story s:userStories) {
+        		if(s.getVisibleHighlights()) {
+        			stories.add(s);
+            	}
+        }
+        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+    	
+        for(Story p:stories) {
+        	FrontStoryDTO front=new FrontStoryDTO();
+        	front.setDate(p.getDate());
+        	front.setDescription(p.getDescription());
+        	front.setIdStory(p.getIdStory());
+        	front.setLocation(p.getLocation());
+        	front.setUsername(p.getProfile().getUsername());
+        	
+        	
+        	FrontMediaDTO ee=new FrontMediaDTO();
+        	Media a=p.getMedia();
+        		FrontMediaDTO ff=new FrontMediaDTO();
+        		
+        		ff.setFileName(a.getFileName());
+        		ff.setId(a.getId());
+        		ff.setIdPost(a.getStory().getIdStory());
+        		
+        		 ee=getImagesFiles(ff);
+        	
+        	
+        	front.setMedia(ff);
+        	
+        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+        	for(Tag t:p.getTags()) {
+        		FrontTagDTO tt=new FrontTagDTO();
+        		tt.setIdPost(t.getStory().getIdStory());
+        		tt.setTagText(t.getTagText());
+        		lista1.add(tt);
+        	}
+        	front.setTags(lista1);
+        	
+        	fronts.add(front);
+        	
+        }
+        return fronts;
+	}
+
+	@Override
+	public List<FrontStoryDTO> getMyStories(String username) {
+		 	List<Story> stories=storyRepository.findAllStoryByUser(username);
+	        List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
+	        
+	        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+	    	
+	        for(Story p:stories) {
+	        	FrontStoryDTO front=new FrontStoryDTO();
+	        	front.setDate(p.getDate());
+	        	front.setDescription(p.getDescription());
+	        	front.setIdStory(p.getIdStory());
+	        	front.setLocation(p.getLocation());
+	        	front.setUsername(p.getProfile().getUsername());
+	        	
+	        	
+	        	FrontMediaDTO ee=new FrontMediaDTO();
+	        	Media a=p.getMedia();
+	        		FrontMediaDTO ff=new FrontMediaDTO();
+	        		
+	        		ff.setFileName(a.getFileName());
+	        		ff.setId(a.getId());
+	        		ff.setIdPost(a.getStory().getIdStory());
+	        		
+	        		 ee=getImagesFiles(ff);
+	        	
+	        	
+	        	front.setMedia(ff);
+	        	
+	        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+	        	for(Tag t:p.getTags()) {
+	        		FrontTagDTO tt=new FrontTagDTO();
+	        		tt.setIdPost(t.getStory().getIdStory());
+	        		tt.setTagText(t.getTagText());
+	        		lista1.add(tt);
+	        	}
+	        	front.setTags(lista1);
+	        	
+	        	fronts.add(front);
+	        	
 	        }
+	        return fronts;
+	}
+
+	@Override
+	public List<FrontStoryDTO> getOtherHighlightStory(String username) {
+		List<Story> stories=new ArrayList<Story>();
+        List<Story> userStories=storyRepository.findAllStoryByUser(username);
+        List<FrontStoryDTO> fronts=new ArrayList<FrontStoryDTO>();
+        
+        for(Story s:userStories) {
+        		if(s.getVisibleHighlights()) {
+        			stories.add(s);
+            	}
+        }
+        //List<FrontMediaDTO> lista=new ArrayList<FrontMediaDTO>();
+    	
+        for(Story p:stories) {
+        	FrontStoryDTO front=new FrontStoryDTO();
+        	front.setDate(p.getDate());
+        	front.setDescription(p.getDescription());
+        	front.setIdStory(p.getIdStory());
+        	front.setLocation(p.getLocation());
+        	front.setUsername(p.getProfile().getUsername());
+        	
+        	
+        	FrontMediaDTO ee=new FrontMediaDTO();
+        	Media a=p.getMedia();
+        		FrontMediaDTO ff=new FrontMediaDTO();
+        		
+        		ff.setFileName(a.getFileName());
+        		ff.setId(a.getId());
+        		ff.setIdPost(a.getStory().getIdStory());
+        		
+        		 ee=getImagesFiles(ff);
+        	
+        	
+        	front.setMedia(ff);
+        	
+        	List<FrontTagDTO> lista1=new ArrayList<FrontTagDTO>();
+        	for(Tag t:p.getTags()) {
+        		FrontTagDTO tt=new FrontTagDTO();
+        		tt.setIdPost(t.getStory().getIdStory());
+        		tt.setTagText(t.getTagText());
+        		lista1.add(tt);
+        	}
+        	front.setTags(lista1);
+        	
+        	fronts.add(front);
+        	
+        }
+        return fronts;
 	}
 
 }
