@@ -21,6 +21,8 @@
                              <video v-if="m.fileName.includes(videoText)" autoplay controls v-bind:src="m.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
 
                  </div>      
+                 <h5 align="right" style="color:black"> <b-icon icon="exclamation" aria-hidden="true" align="right" style="color:black" @click="content1($event,post)"></b-icon>inappropriate content</h5>
+
                   <h4 align="left" style="margin-top:-5px;">{{post.description}}</h4>
                    <h5 align="left"><span v-for="(tag,t) in post.tags" :key="t">
                                         #{{tag.tagText}}
@@ -173,6 +175,22 @@ export default {
                 
    },
     methods:{
+         content1: async function(event,post){
+            this.axios.post('media/post/report/'+post.idPost,{ 
+                
+
+                }).then(response => {
+                    alert("Post was reported as inappropriate content!");
+                     
+                    console.log(response);                
+                }).catch(res => {
+                    alert("You have already saved this post");
+                    console.log(res.response.data.message);
+
+                });
+
+
+        },
          homePage: function(){
            window.location.href = "/profile";
         },

@@ -135,7 +135,7 @@
                              <video v-if="m.fileName.includes(videoText)" autoplay controls v-bind:src="m.imageByte" width="400" height="400" style="display:block; margin-left:auto; margin-right:auto"></video>
 
                  </div> 
-                             <h5 align="right"> <b-icon icon="exclamation" aria-hidden="true" align="right" @click="content($event,post)"></b-icon>inappropriate content</h5>
+<h5 align="right"> <b-icon icon="exclamation" aria-hidden="true" align="right" @click="content($event,post)"></b-icon>inappropriate content</h5>
      
                   <h4 align="left" style="margin-top:-5px;">{{post.description}}</h4>
                    <h5 align="left"><span v-for="(tag,t) in post.tags" :key="t">
@@ -828,6 +828,7 @@ mounted() {
                     {
                         username: this.loggedUser.username
                     }    
+                    
                     this.axios.post('/profile/api/profile/getProfileByUsername',info ,{ 
                             headers: {
                                 'Content-Type': 'application/json;charset=utf-8' 
